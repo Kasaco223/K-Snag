@@ -352,7 +352,7 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         const val QUICKJS_VERSION = "2025-04-26"
 
         /** Sube cuando cambia la autoprueba o el instalador: obliga a repetirla. */
-        private const val SELFTEST_PATCH = 1
+        private const val SELFTEST_PATCH = 2 // 2: lanzador sin env (toybox env se comía el -c de Python)
         private const val EXTRA_SPACE = 40L shl 20
         private const val PROBE_TIMEOUT = 60_000L
         private const val YTDLP_TIMEOUT = 60_000L

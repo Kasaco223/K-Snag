@@ -16,16 +16,17 @@ import kotlin.concurrent.thread
  * Corre Python (libpython.so de nativeLibraryDir) con el entorno del motor (diseño del motor §3):
  *
  * ```
- * /system/bin/setsid /system/bin/sh -c 'echo "KDPID:$$" >&2; exec "$@"' kd
- *     /system/bin/env LD_LIBRARY_PATH=<python>/usr/lib:<ffmpeg>/usr/lib <nl>/libpython.so <args…>
+ * /system/bin/setsid /system/bin/sh -c '<lanzador>' kd <nl>/libpython.so <args…>
+ * lanzador: echo "KDPID:$$" >&2; export LD_LIBRARY_PATH="$KD_LIBRARY_PATH"; unset KD_LIBRARY_PATH; exec "$@"
  * ```
  *
  * - `setsid` primero: el hijo de ProcessBuilder nunca es líder de grupo, así que setsid hace exec en el mismo
- *   proceso; `sh` y `env` también. KDPID es entonces el PID de Python, que encabeza su propia sesión y su
- *   propio grupo, y cancelar puede detener a Python y a sus hijos (FFmpeg, QuickJS) con una sola señal.
- * - `env` pone LD_LIBRARY_PATH solo para Python y sus hijos: toybox (sh, env, setsid) sigue con las
- *   bibliotecas del sistema.
- * - En el modo PID (sin setsid o si la prueba de sesión falla) no hay señales al grupo.
+ *   proceso; `sh` también. KDPID es entonces el PID de Python, que encabeza su propia sesión y su propio
+ *   grupo, y cancelar puede detener a Python y a sus hijos (FFmpeg, QuickJS) con una sola señal.
+ * - LD_LIBRARY_PATH lo exporta `sh` justo antes del exec: solo Python y sus hijos ven las bibliotecas del
+ *   motor, y toybox (setsid, sh) sigue con las del sistema. No se usa `env`: el de toybox toma como opciones
+ *   suyas los argumentos de Python (`-c`).
+ * - En el modo PID (sin setsid o si la prueba de sesión falla) falta solo `setsid`, y no hay señales al grupo.
  *
  * Nunca manda una señal a un grupo (-pid) sin comprobar antes, en /proc/<pid>/stat, que ese grupo es de esta
  * ejecución.
@@ -118,15 +119,15 @@ class PyRunner(private val dirs: EngineDirs) {
         val tmp = File(runDir, "tmp").apply { mkdirs() }
         dirs.home.mkdirs()
         val python = dirs.lib("libpython.so").path
-        val launcher = listOf(SH, "-c", "echo \"KDPID:\$\$\" >&2; exec \"\$@\"", "kd")
+        val launcher = listOf(SH, "-c", LAUNCHER, "kd", python) + args
         val command = when (mode) {
-            Mode.SESSION -> listOf(SETSID) + launcher + listOf(ENV, "LD_LIBRARY_PATH=${dirs.libraryPath()}", python) + args
-            Mode.PID -> launcher + listOf(python) + args
+            Mode.SESSION -> listOf(SETSID) + launcher
+            Mode.PID -> launcher
         }
         val builder = ProcessBuilder(command).directory(runDir)
         builder.environment().apply {
             remove("LD_LIBRARY_PATH")
-            if (mode == Mode.PID) put("LD_LIBRARY_PATH", dirs.libraryPath())
+            put("KD_LIBRARY_PATH", dirs.libraryPath())
             put("SSL_CERT_FILE", dirs.caFile.path)
             put("PYTHONHOME", dirs.pythonHome().path)
             put("HOME", dirs.home.path)
@@ -182,10 +183,13 @@ class PyRunner(private val dirs: EngineDirs) {
     companion object {
         const val SETSID = "/system/bin/setsid"
         const val SH = "/system/bin/sh"
-        const val ENV = "/system/bin/env"
         private const val MAX_LINES = 400
 
-        fun sessionToolsPresent(): Boolean = File(SETSID).exists() && File(ENV).exists()
+        /** Script de `sh -c`: anuncia su PID (el de Python, tras el exec) y le pasa las bibliotecas del motor. */
+        const val LAUNCHER =
+            "echo \"KDPID:\$\$\" >&2; export LD_LIBRARY_PATH=\"\$KD_LIBRARY_PATH\"; unset KD_LIBRARY_PATH; exec \"\$@\""
+
+        fun sessionToolsPresent(): Boolean = File(SETSID).exists()
 
         fun readStat(pid: Int): ProcStat? = runCatching { ProcStat.parse(File("/proc/$pid/stat").readText()) }.getOrNull()
     }

@@ -77,6 +77,9 @@ class EngineTest {
     fun t2_runnerGivesPythonItsOwnSessionAndEnvironment() {
         assumeTrue(pageSize == 4096L)
         ready()
+        // Con toybox setsid (Android 8+), Python tiene que quedar en su propia sesión: si no, cancelar no detiene
+        // a FFmpeg ni a QuickJS. Que caiga al modo PID es un error a corregir, no un respaldo aceptable aquí.
+        if (PyRunner.sessionToolsPresent()) assertEquals(PyRunner.Mode.SESSION, engine.runMode())
         val ownCgroup = File("/proc/self/cgroup").readText().trim()
         val code = "import os;print(os.getpid(),os.getpgrp(),os.getsid(0));" +
             "print(os.environ['SSL_CERT_FILE']);print(os.environ['TMPDIR']);" +
