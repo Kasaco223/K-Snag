@@ -14,6 +14,10 @@ de descargas llega en los próximos PR.
   las de la app son Apache-2.0 (AndroidX, Kotlin, corrutinas).
 - El resto del repositorio (la app de Windows, la web) sigue con la licencia MIT de la raíz. No copies
   código GPL fuera de `android/`.
+- Los componentes de terceros (el motor de youtubedl-android trae Python, FFmpeg y unas 70 bibliotecas)
+  están en [`third_party/components.json`](third_party/components.json), con sus textos de licencia en
+  `third_party/licenses/`. De ese inventario sale [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md); ver
+  [Avisos de terceros y espejo de fuentes](#avisos-de-terceros-y-espejo-de-fuentes).
 - Cada archivo propio de `android/` lleva este encabezado (en el formato de comentario de su lenguaje):
 
   ```text
@@ -40,7 +44,9 @@ android/
     src/main/                 código, recursos y manifiesto
     src/test/                 pruebas en la JVM
     src/androidTest/          pruebas instrumentadas (emulador o celular)
-  scripts/                    scripts de CI (repo, emulador, páginas de 16 KB)
+  scripts/                    scripts de CI (repo, emulador, páginas de 16 KB, avisos, espejo de fuentes)
+  third_party/                inventario de terceros (components.json) y textos de sus licencias
+  THIRD_PARTY_NOTICES.md      avisos de terceros, generados desde third_party/components.json
   tools/docker/               imagen para compilar en Docker
 ```
 
@@ -168,6 +174,9 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
      «Acerca de» › «Código fuente».
    - `scripts/ci_repo_checks.sh`: scripts ejecutables y con LF, encabezados SPDX, ninguna llave de firma
      salvo la de debug (fijada por SHA-256), `LICENSE` sin cambios y wrapper de Gradle fijado por SHA-256.
+     Además, el inventario de terceros válido y los avisos al día (`notices.py --check`) y, cuando el
+     catálogo traiga youtubedl-android, sus pins (`check_pins.py`) y el espejo de fuentes publicado
+     (`sources_mirror.py --verify`).
    - Instala `platforms;android-37.0` y `build-tools;36.0.0`; `setup-gradle` valida el wrapper.
    - `:core:test`, `:app:testGithubDebugUnitTest`, `:app:lintGithubDebug` (lint también revisa `:core`
      con el minSdk de la app) y los APK debug, qa y de pruebas.
@@ -191,10 +200,39 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
   fijadas por SHA de commit, con la versión en un comentario.
 - La CI de Windows (`ci.yml`) ignora los cambios que solo tocan Android.
 
+## Avisos de terceros y espejo de fuentes
+
+El APK con el motor redistribuye binarios GPL, LGPL y MPL (FFmpeg, x264, GLib, GnuTLS, Readline, SRT y
+otros). Por eso su código fuente tiene que estar publicado **antes** de que salga cualquier APK que los
+traiga, también un artefacto de CI: en un repo público, cualquiera con cuenta de GitHub los puede bajar.
+
+- **Inventario** (`third_party/components.json`): cada componente con su versión, licencia SPDX, fuente
+  (URL y SHA-256), receta de Termux y las rutas que cubre dentro de los paquetes del motor (`files`).
+  `"mirror": true` manda su fuente al espejo: es obligatorio para todo lo copyleft, y hoy va todo salvo
+  las bibliotecas del NDK (la GPLv3 cuenta como fuente correspondiente las bibliotecas que FFmpeg y Python
+  requieren, y así no dependemos de que cada sitio de descarga siga arriba).
+- **Avisos**: `python3 scripts/notices.py` regenera `THIRD_PARTY_NOTICES.md`; CI falla si no está al día
+  o si el inventario tiene un hueco (algo copyleft sin espejo, una licencia citada que falta o sobra).
+  `python3 scripts/notices.py --payload library-<v>.aar ffmpeg-<v>.aar` comprueba que cada archivo de los
+  paquetes del motor tenga dueño en el inventario (el workflow del espejo lo corre con los AAR de Maven
+  Central).
+- **Espejo**: Actions › **Android · fuentes de terceros** › *Run workflow* (desde `master`) arma el
+  borrador `mirror_release.tag` (hoy `android-sources-ytdl-0.18.1-r1`): cada fuente verificada contra su
+  SHA-256, el árbol completo de termux-packages en el commit fijado, `FUENTES.md` y `SHA256SUMS.txt`. Lo
+  revisas y lo publicas **como pre-release**; publicado, no se cambia más. Para corregirlo, sube la
+  revisión (`-r2`) en `components.json` y vuelve a correr el workflow.
+- Mientras Gradle no use youtubedl-android (se busca su coordenada Maven en el catálogo y en cada
+  `*.gradle.kts`), `sources_mirror.py --verify` y `check_pins.py` no exigen nada. Desde el PR que lo
+  agregue, CI falla si el espejo no está publicado y completo.
+- **Procedencia:** youtubedl-android no publicó con qué commit de Termux compiló sus binarios (#358, #363).
+  El inventario usa `termux-packages@8ddd9a7f`, cuyas recetas coinciden en versión y revisión con los
+  binarios (FFmpeg 7.1.1-r6, Python 3.12.11-r1). Las fuentes se verificaron contra esas recetas y, cuando
+  upstream firma, contra su firma GPG.
+
 ## Pendiente
 
 - `gradle/verification-metadata.xml` (SHA-256 de cada dependencia): se genera en Docker con la licencia
   del SDK aceptada, con `kdl-build --write-verification-metadata sha256 help :app:assembleGithubRelease
   :app:assembleGithubQa :app:assembleGithubDebugAndroidTest :app:lintGithubDebug :core:test`.
-- El motor (youtubedl-android), los avisos de terceros, el espejo de fuentes, la libwebp propia para
-  páginas de 16 KB, el pipeline de releases y el actualizador llegan en sus propios PR.
+- El motor (youtubedl-android), la libwebp propia para páginas de 16 KB, el pipeline de releases y el
+  actualizador llegan en sus propios PR.
