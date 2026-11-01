@@ -5,23 +5,66 @@
 // para que Gradle las cree con su ObjectFactory y sean compatibles con el configuration cache.
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URI
 import java.security.MessageDigest
+import java.util.zip.ZipFile
+
+private fun sha256(bytes: ByteArray): String =
+    MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
 
 /**
- * assets/licenses/gpl-3.0.txt: el texto de android/LICENSE, que la pantalla «Acerca de» muestra sin
- * conexión (los «avisos legales apropiados» de la GPL-3.0, §0 y §5 d).
+ * Baja por HTTPS y comprueba el SHA-256 fijado en engine-pins.properties. Conexión 30 s, lectura 60 s,
+ * 3 intentos (2 s y 4 s de espera), máximo 16 MB: un servidor lento no cuelga el build hasta su timeout.
+ * HttpURLConnection no sigue una redirección que cambie de https a http.
+ */
+fun fetchVerified(url: String, sha256: String, maxBytes: Int = 16 shl 20): ByteArray {
+    if (!url.startsWith("https://")) throw GradleException("Solo HTTPS: $url")
+    var last: IOException? = null
+    for (attempt in 1..3) {
+        try {
+            val conn = (URI(url).toURL().openConnection() as HttpURLConnection).apply {
+                connectTimeout = 30_000
+                readTimeout = 60_000
+                instanceFollowRedirects = true
+                setRequestProperty("User-Agent", "K-Downloader-build (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)")
+            }
+            val bytes = conn.inputStream.use { it.readNBytes(maxBytes + 1) }
+            if (bytes.size > maxBytes) throw GradleException("$url pesa más de $maxBytes bytes")
+            val got = sha256(bytes)
+            if (got != sha256.lowercase()) {
+                throw GradleException("SHA-256 distinto para $url: $got (engine-pins.properties dice $sha256)")
+            }
+            return bytes
+        } catch (e: IOException) {
+            last = e
+            if (attempt < 3) Thread.sleep(2_000L * attempt)
+        }
+    }
+    throw GradleException("No se pudo bajar $url tras 3 intentos", last)
+}
+
+/**
+ * assets/licenses/: el texto de android/LICENSE (gpl-3.0.txt), que «Acerca de» muestra sin conexión (los
+ * «avisos legales apropiados» de la GPL-3.0, §0 y §5 d), y los avisos de terceros: third_party/components.json
+ * y sus textos de licencia (third_party/licenses/), que el APK con el motor tiene que llevar consigo.
  *
- * Antes de copiarlo comprueba el SHA-256 del texto oficial de gnu.org: el APK nunca lleva una licencia
+ * Antes de copiar la GPL comprueba el SHA-256 del texto oficial de gnu.org: el APK nunca lleva una licencia
  * modificada por error (ci_repo_checks.sh revisa lo mismo en cada PR).
  */
 @CacheableTask
@@ -33,13 +76,17 @@ abstract class KdLicenseAssetsTask : DefaultTask() {
     @get:Input
     abstract val gplSha256: Property<String>
 
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val thirdParty: DirectoryProperty
+
     @get:OutputDirectory
     abstract val outputDir: DirectoryProperty
 
     @TaskAction
     fun copy() {
         val bytes = gplLicense.get().asFile.readBytes()
-        val actual = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+        val actual = sha256(bytes)
         if (actual != gplSha256.get().lowercase()) {
             throw GradleException(
                 "android/LICENSE no es el texto oficial de la GPL-3.0 (SHA-256 $actual, se esperaba " +
@@ -51,5 +98,92 @@ abstract class KdLicenseAssetsTask : DefaultTask() {
         val target = out.resolve("licenses/gpl-3.0.txt")
         target.parentFile.mkdirs()
         target.writeBytes(bytes)
+        val tp = thirdParty.get().asFile
+        tp.resolve("components.json").copyTo(out.resolve("licenses/third_party/components.json"))
+        tp.resolve("licenses").copyRecursively(out.resolve("licenses/third_party/texts"))
+    }
+}
+
+/** assets/kd/cacert.pem: los certificados raíz que usa el motor (SSL_CERT_FILE), fijados por SHA-256. */
+@CacheableTask
+abstract class KdEngineAssetsTask : DefaultTask() {
+    @get:Input
+    abstract val cacertUrl: Property<String>
+
+    @get:Input
+    abstract val cacertSha256: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val out = outputDir.get().asFile.apply { deleteRecursively(); mkdirs() }
+        out.resolve("kd").mkdirs()
+        out.resolve("kd/cacert.pem").writeBytes(fetchVerified(cacertUrl.get(), cacertSha256.get()))
+    }
+}
+
+/** res/raw/ytdlp: el yt-dlp (zipapp) que el motor instala en el primer inicio, sin red. */
+@CacheableTask
+abstract class KdResTask : DefaultTask() {
+    @get:Input
+    abstract val ytdlpUrl: Property<String>
+
+    @get:Input
+    abstract val ytdlpSha256: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val out = outputDir.get().asFile.apply { deleteRecursively(); mkdirs() }
+        out.resolve("raw").mkdirs()
+        out.resolve("raw/ytdlp").writeBytes(fetchVerified(ytdlpUrl.get(), ytdlpSha256.get()))
+    }
+}
+
+/**
+ * jniLibs del motor: copia los .so de jni/<abi>/ de los AAR de youtubedl-android (Python, FFmpeg, QuickJS y sus
+ * paquetes lib*.zip.so) para las ABI que publicamos. Nada más del AAR entra al APK: ni su código, ni sus
+ * recursos, ni sus dependencias. Gradle ya verificó cada AAR contra gradle/verification-metadata.xml.
+ */
+@CacheableTask
+abstract class KdPayloadTask : DefaultTask() {
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.NAME_ONLY)
+    abstract val aars: ConfigurableFileCollection
+
+    @get:Input
+    abstract val abis: ListProperty<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val out = outputDir.get().asFile.apply { deleteRecursively(); mkdirs() }
+        val wanted = abis.get().toSet()
+        val copied = mutableMapOf<String, String>()
+        for (aar in aars.files.sortedBy { it.name }) {
+            ZipFile(aar).use { zip ->
+                for (entry in zip.entries()) {
+                    val match = Regex("""jni/([^/]+)/([^/]+\.so)""").matchEntire(entry.name) ?: continue
+                    val (abi, name) = match.destructured
+                    if (abi !in wanted) continue
+                    val key = "$abi/$name"
+                    copied.put(key, aar.name)?.let { throw GradleException("$key viene de $it y de ${aar.name}") }
+                    val target = out.resolve(key)
+                    target.parentFile.mkdirs()
+                    zip.getInputStream(entry).use { input -> target.outputStream().use { input.copyTo(it) } }
+                }
+            }
+        }
+        val expected = listOf("libpython.so", "libpython.zip.so", "libqjs.so", "libffmpeg.so", "libffprobe.so", "libffmpeg.zip.so")
+        for (abi in wanted) {
+            val missing = expected.filter { "$abi/$it" !in copied }
+            if (missing.isNotEmpty()) throw GradleException("Los AAR del motor no traen $missing para $abi")
+        }
     }
 }

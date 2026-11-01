@@ -33,6 +33,13 @@ youtubedl-android no publicó qué commit exacto de Termux usó para compilar su
 las versiones y revisiones de sus recetas son las de los binarios. Si upstream publica otra cosa, el espejo
 se corrige con una revisión nueva (`-r2`), sin tocar la publicada.
 
+## Motor de descargas: yt-dlp y certificados (`res/raw/ytdlp`, `assets/kd/cacert.pem`)
+
+| Componente | Versión | Licencia | Código fuente | Textos | Notas |
+| --- | --- | --- | --- | --- | --- |
+| [yt-dlp](https://github.com/yt-dlp/yt-dlp) | 2026.10.29.232701 | Unlicense | [yt-dlp](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.10.29.232701/yt-dlp) | [`LICENSE`](third_party/licenses/yt-dlp/LICENSE), [`ejs-bundled-dependencies.txt`](third_party/licenses/yt-dlp/ejs-bundled-dependencies.txt) | Zipapp de Python puro (el archivo es su propia forma fuente); el motor lo actualiza solo. Incluye yt-dlp-ejs (Unlicense), que empaqueta meriyah (ISC) y astring (MIT). |
+| [Certificados raíz de Mozilla (vía curl), del motor](https://curl.se/docs/caextract.html) | 2026-10-20 | MPL-2.0 | [cacert-2026-10-20.pem](https://curl.se/ca/cacert-2026-10-20.pem) | [`MPL-2.0.txt`](third_party/licenses/common/MPL-2.0.txt) | Va sin cambios: el propio archivo es su forma fuente (MPL-2.0 §3.1). |
+
 ## Motor de descargas: Python (`libpython.zip.so`, `libpython.so`, `libqjs.so`)
 
 | Componente | Versión | Licencia | Código fuente | Textos | Notas |
@@ -121,7 +128,7 @@ se corrige con una revisión nueva (`-r2`), sin tocar la publicada.
 
 | Componente | Versión | Licencia | Código fuente | Textos | Notas |
 | --- | --- | --- | --- | --- | --- |
-| [youtubedl-android](https://github.com/yausername/youtubedl-android) | 0.18.1 | GPL-3.0-only | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `youtubedl-android-0.18.1.tar.gz` | [`LICENSE`](third_party/licenses/youtubedl-android/LICENSE) |  |
+| [youtubedl-android](https://github.com/yausername/youtubedl-android) | 0.18.1 | GPL-3.0-only | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `youtubedl-android-0.18.1.tar.gz` | [`LICENSE`](third_party/licenses/youtubedl-android/LICENSE) | Del AAR solo entran sus paquetes nativos (jni/): Python, FFmpeg, QuickJS y sus bibliotecas. Su código Java no va en el APK. |
 
 ## Dependencias Java y Kotlin (Maven)
 
@@ -131,6 +138,3 @@ se corrige con una revisión nueva (`-r2`), sin tocar la publicada.
 | Kotlin y kotlinx | `org.jetbrains.*:*` | Apache-2.0 |
 | Anotaciones y utilidades de Google (Guava listenablefuture, Error Prone) | `com.google.*:*` | Apache-2.0 |
 | JSpecify | `org.jspecify:*` | Apache-2.0 |
-| Jackson | `com.fasterxml.jackson.core:*` | Apache-2.0 |
-| Apache Commons IO | `commons-io:commons-io` | Apache-2.0 |
-| Apache Commons Compress | `org.apache.commons:commons-compress` | Apache-2.0 |

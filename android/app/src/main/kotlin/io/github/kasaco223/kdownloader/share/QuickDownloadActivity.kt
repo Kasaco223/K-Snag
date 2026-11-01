@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.kasaco223.kdownloader.KdlApp
 import io.github.kasaco223.kdownloader.MainActivity
 import io.github.kasaco223.kdownloader.ui.theme.KdTheme
 
@@ -27,6 +28,7 @@ class QuickDownloadActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         if (savedInstanceState == null) viewModel.reset(IncomingLinks.from(intent))
+        (application as KdlApp).engine.prepare() // para que el motor esté listo cuando lleguen las descargas
         setContent {
             KdTheme {
                 val link by viewModel.link.collectAsStateWithLifecycle()

@@ -16,4 +16,8 @@ object LicenseText {
         raw.replace("\r\n", "\n").split(BLANK_LINES)
             .map { block -> block.lines().joinToString(" ") { it.trim() }.trim() }
             .filter { it.isNotEmpty() }
+
+    /** Bloques separados por líneas en blanco, sin reacomodar (los textos de terceros traen listas y sangrías). */
+    fun blocks(raw: String): List<String> =
+        raw.replace("\r\n", "\n").split(BLANK_LINES).map { it.trimEnd() }.filter { it.isNotBlank() }
 }

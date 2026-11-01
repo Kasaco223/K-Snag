@@ -36,9 +36,11 @@ NOTICES = ANDROID / "THIRD_PARTY_NOTICES.md"
 REPO_URL = "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD"
 COPYLEFT = re.compile(r"\b(A?GPL|LGPL|MPL|EPL|CDDL|EUPL|OSL|CC-BY-SA|GFDL)-")
 PAYLOADS = ("libpython.zip.so", "libffmpeg.zip.so")
-FILE_RE = re.compile(r"^(jni:[^/]+|lib(python|ffmpeg)\.zip\.so:[^\s]+)$")
+FILE_RE = re.compile(r"^(jni:[^/]+|lib(python|ffmpeg)\.zip\.so:[^\s]+|apk:(res|assets)/[^\s]+)$")
 SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]*$")
 SECTIONS = [  # (título, prueba sobre el componente)
+    ("Motor de descargas: yt-dlp y certificados (`res/raw/ytdlp`, `assets/kd/cacert.pem`)",
+     lambda c: any(f.startswith("apk:") for f in c.get("files", []))),
     ("Motor de descargas: Python (`libpython.zip.so`, `libpython.so`, `libqjs.so`)",
      lambda c: any(f.startswith(("libpython.zip.so:", "jni:libpython", "jni:libqjs")) for f in c.get("files", []))
      and not any(f.startswith("libffmpeg.zip.so:") for f in c.get("files", []))),
@@ -218,7 +220,8 @@ def glob_re(pattern: str) -> re.Pattern:
 
 def payload(aars: list[str]) -> int:
     data = load()
-    pats = [(c["id"], f, glob_re(f)) for c in data["components"] for f in c.get("files", [])]
+    # Las rutas apk: (res/raw/ytdlp, assets/kd/cacert.pem) no salen de los AAR: aquí no se cuentan.
+    pats = [(c["id"], f, glob_re(f)) for c in data["components"] for f in c.get("files", []) if not f.startswith("apk:")]
     python_pats = {f for cid, f, _ in pats if cid == "python"}
     hits = {f: 0 for _, f, _ in pats}
     orphans = set()

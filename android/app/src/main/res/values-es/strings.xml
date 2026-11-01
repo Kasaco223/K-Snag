@@ -17,7 +17,7 @@
 
     <!-- Inicio (versión de prueba) -->
     <string name="home_test_build_title">Versión de prueba</string>
-    <string name="home_test_build_body">Esta versión todavía no descarga videos. Sirve para comprobar que K-Downloader se instala y se abre bien en tu celular. Las descargas llegarán en una próxima versión.</string>
+    <string name="home_test_build_body">Esta versión todavía no descarga videos. Ya prepara el motor de descargas (Python, FFmpeg y yt-dlp) para comprobar que funciona en tu celular. Las descargas llegarán en la próxima versión.</string>
     <string name="home_try_share_title">Prueba compartir un enlace</string>
     <string name="home_try_share_body">En YouTube u otra app, toca Compartir y elige K-Downloader. Te mostraremos el enlace que recibamos.</string>
     <string name="home_about">Acerca de y diagnóstico</string>
@@ -68,4 +68,41 @@
     <string name="diag_commit_unknown">Desconocido (compilación local)</string>
     <string name="diag_copy">Copiar detalles</string>
     <string name="diag_copied">Detalles copiados. Pégalos en tu reporte.</string>
+    <!-- Motor de descargas -->
+    <string name="engine_title">Motor de descargas</string>
+    <string name="engine_phase_check">Revisando el motor…</string>
+    <string name="engine_phase_unpack">Preparando el motor de descargas…</string>
+    <string name="engine_phase_finish">Terminando de preparar el motor…</string>
+    <string name="engine_phase_selftest">Probando el motor…</string>
+    <string name="engine_preparing_hint">Solo pasa la primera vez y después de cada actualización. Puedes salir de la app: sigue en segundo plano.</string>
+    <string name="engine_ready">Listo para descargar.</string>
+    <string name="engine_versions">yt-dlp %1$s (%2$s) · FFmpeg %3$s · Python %4$s · QuickJS %5$s · youtubedl-android %6$s</string>
+    <string name="engine_retry">Reintentar</string>
+    <string name="engine_repair">Reparar el motor</string>
+    <string name="engine_repairing">Reparando…</string>
+    <string name="engine_repair_hint">Si las descargas fallan con un error del motor, «Reparar» lo vuelve a preparar desde cero.</string>
+    <string name="engine_repair_done">El motor quedó reparado.</string>
+    <string name="engine_repair_busy">El motor está en uso. Inténtalo cuando terminen las descargas.</string>
+    <string name="engine_repair_failed">No pudimos reparar el motor. Revisa el mensaje en esta pantalla.</string>
+    <string name="engine_error_incompatible_title">Tu celular todavía no es compatible</string>
+    <string name="engine_error_incompatible_body">Tu celular usa páginas de memoria de 16 KB y una parte del motor todavía no funciona con eso. Lo estamos arreglando; llegará en una actualización.</string>
+    <string name="engine_error_disk_full_title">No hay espacio suficiente</string>
+    <string name="engine_error_disk_full_body">El motor necesita unos %1$s libres. Libera espacio y toca «Reintentar».</string>
+    <string name="engine_error_disk_full_generic">Libera espacio en tu celular y toca «Reintentar».</string>
+    <string name="engine_error_failed_title">No pudimos preparar el motor</string>
+    <string name="engine_error_failed_body">Toca «Reintentar». Si vuelve a pasar, copia el diagnóstico en «Acerca de» y envíanos el reporte.</string>
+    <string name="engine_error_timeout_body">La preparación tardó demasiado. Toca «Reintentar».</string>
+
+    <!-- Notificaciones -->
+    <string name="notif_channel_active">Trabajo en curso</string>
+    <string name="notif_channel_active_desc">Preparación del motor y descargas en curso</string>
+    <string name="notif_preparing_title">Preparando el motor de descargas</string>
+    <string name="notif_preparing_text">Solo la primera vez: tarda un momento.</string>
+
+    <!-- Avisos de terceros -->
+    <string name="about_third_party">Avisos de terceros</string>
+    <string name="third_party_title">Avisos de terceros</string>
+    <string name="third_party_lead">K-Downloader incluye software libre de otras personas, cada uno con su licencia. El código fuente de todos está publicado en GitHub, en el Release «Código fuente de terceros» del repositorio.</string>
+    <string name="third_party_load_failed">No pudimos abrir la lista. También está en el código fuente, en android/THIRD_PARTY_NOTICES.md.</string>
+    <string name="third_party_view">Ver %1$s</string>
 </resources>

@@ -13,6 +13,7 @@ appcompat = "1.8.0"        # AppCompatActivity y temas DayNight; idioma por app 
 coreKtx = "1.19.1"
 lifecycle = "2.11.0"
 coroutines = "1.11.0"
+youtubedl = "0.18.1"       # solo los paquetes nativos (jni/) de sus AAR: ver app/build.gradle.kts › kdPayload
 junit = "4.13.2"
 androidxTest = "1.7.0"
 androidxTestExtJunit = "1.3.0"
@@ -28,6 +29,10 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx"
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycle" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+# Motor de descargas: no son dependencias de compilación. El build toma de estos AAR solo jni/<abi>/*.so
+# (Python, FFmpeg, QuickJS); su código Java y sus dependencias no entran al APK.
+youtubedl-library = { module = "io.github.junkfood02.youtubedl-android:library", version.ref = "youtubedl" }
+youtubedl-ffmpeg = { module = "io.github.junkfood02.youtubedl-android:ffmpeg", version.ref = "youtubedl" }
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTest" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTest" }

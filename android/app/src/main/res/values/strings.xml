@@ -16,7 +16,7 @@
 
     <!-- Home (test build) -->
     <string name="home_test_build_title">Test build</string>
-    <string name="home_test_build_body">This build can\'t download videos yet. It\'s here to check that K-Downloader installs and opens correctly on your phone. Downloads are coming in a later version.</string>
+    <string name="home_test_build_body">This build can\'t download videos yet. It already prepares the download engine (Python, FFmpeg and yt-dlp) to check that it works on your phone. Downloads are coming in the next version.</string>
     <string name="home_try_share_title">Try sharing a link</string>
     <string name="home_try_share_body">In YouTube or another app, tap Share and pick K-Downloader. We\'ll show you the link we get.</string>
     <string name="home_about">About and diagnostics</string>
@@ -66,4 +66,41 @@
     <string name="diag_commit_unknown">Unknown (local build)</string>
     <string name="diag_copy">Copy details</string>
     <string name="diag_copied">Details copied. Paste them into your report.</string>
+    <!-- Download engine -->
+    <string name="engine_title">Download engine</string>
+    <string name="engine_phase_check">Checking the engine…</string>
+    <string name="engine_phase_unpack">Preparing the download engine…</string>
+    <string name="engine_phase_finish">Finishing the engine setup…</string>
+    <string name="engine_phase_selftest">Testing the engine…</string>
+    <string name="engine_preparing_hint">This only happens the first time and after each update. You can leave the app: it keeps going in the background.</string>
+    <string name="engine_ready">Ready to download.</string>
+    <string name="engine_versions">yt-dlp %1$s (%2$s) · FFmpeg %3$s · Python %4$s · QuickJS %5$s · youtubedl-android %6$s</string>
+    <string name="engine_retry">Try again</string>
+    <string name="engine_repair">Repair the engine</string>
+    <string name="engine_repairing">Repairing…</string>
+    <string name="engine_repair_hint">If downloads fail with an engine error, Repair sets it up again from scratch.</string>
+    <string name="engine_repair_done">The engine is repaired.</string>
+    <string name="engine_repair_busy">The engine is in use. Try again when the downloads finish.</string>
+    <string name="engine_repair_failed">We couldn\'t repair the engine. Check the message on this screen.</string>
+    <string name="engine_error_incompatible_title">Your phone isn\'t supported yet</string>
+    <string name="engine_error_incompatible_body">Your phone uses 16 KB memory pages, and part of the engine doesn\'t work with them yet. We\'re fixing it; it\'s coming in an update.</string>
+    <string name="engine_error_disk_full_title">Not enough space</string>
+    <string name="engine_error_disk_full_body">The engine needs about %1$s free. Free up some space and tap Try again.</string>
+    <string name="engine_error_disk_full_generic">Free up some space on your phone and tap Try again.</string>
+    <string name="engine_error_failed_title">We couldn\'t prepare the engine</string>
+    <string name="engine_error_failed_body">Tap Try again. If it happens again, copy the diagnostics in About and send us the report.</string>
+    <string name="engine_error_timeout_body">Preparing took too long. Tap Try again.</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_active">Work in progress</string>
+    <string name="notif_channel_active_desc">Engine setup and downloads in progress</string>
+    <string name="notif_preparing_title">Preparing the download engine</string>
+    <string name="notif_preparing_text">Only the first time: it takes a moment.</string>
+
+    <!-- Third-party notices -->
+    <string name="about_third_party">Third-party notices</string>
+    <string name="third_party_title">Third-party notices</string>
+    <string name="third_party_lead">K-Downloader includes free software by other people, each under its own license. The source code of all of it is published on GitHub, in the repository\'s “Third-party source code” release.</string>
+    <string name="third_party_load_failed">We couldn\'t open the list. It\'s also in the source code, in android/THIRD_PARTY_NOTICES.md.</string>
+    <string name="third_party_view">View %1$s</string>
 </resources>

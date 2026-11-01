@@ -31,7 +31,10 @@ cd /work/android
 status=0
 bash ./gradlew --console=plain "$@" || status=$?
 
-rm -rf /out/apk /out/reports /out/test-results
+rm -rf /out/apk /out/reports /out/test-results /out/verification-metadata.xml
+# Con --write-verification-metadata, Gradle reescribe gradle/verification-metadata.xml en /work: se deja en
+# /out para copiarlo al repo (el repo está montado solo de lectura).
+if [ -f gradle/verification-metadata.xml ]; then cp gradle/verification-metadata.xml /out/; fi
 if [ -d app/build/outputs/apk ]; then
   mkdir -p /out/apk && cp -r app/build/outputs/apk/. /out/apk/
 fi
