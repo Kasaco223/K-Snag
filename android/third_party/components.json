@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Inventario único de terceros de K-Downloader para Android. De aquí salen THIRD_PARTY_NOTICES.md (notices.py), el espejo de fuentes (sources_mirror.py) y la revisión de pins (check_pins.py). mirror=true: su fuente va al espejo (obligatorio para todo lo copyleft; hoy va todo salvo el NDK). files: rutas dentro de los payloads (jni:<lib> o <payload>.zip.so:<ruta>, con * y **).",
+  "_comment": "Inventario único de terceros de K-Downloader para Android. De aquí salen THIRD_PARTY_NOTICES.md (notices.py), el espejo de fuentes (sources_mirror.py) y la revisión de pins (check_pins.py). mirror=true: su fuente va al espejo (obligatorio para todo lo copyleft; hoy va todo salvo el NDK). files: rutas dentro de los payloads (jni:<lib> o <payload>.zip.so:<ruta>, con * y **) o del APK (apk:res/… o apk:assets/…).",
   "mirror_release": {
     "tag": "android-sources-ytdl-0.18.1-r1",
     "note": "Pre-release publicada y nunca modificada; una corrección sube la revisión (-r2, -r3…)."
@@ -36,15 +36,57 @@
         "io.github.junkfood02.youtubedl-android:ffmpeg:0.18.1": {
           "aar_sha256": "0a87ffa6cf912b0fe76c1a99b9107f543ee2f247935fae2c71f0822eb7bc5f49",
           "aar_size": 139371444
-        },
-        "io.github.junkfood02.youtubedl-android:common:0.18.1": {
-          "aar_sha256": "e0c0530bdbdf203e1598e900085d3582e27360731872872f3a67f23a9b24c0b5",
-          "aar_size": 5186
         }
       },
       "files": [],
       "license_files": [
         "youtubedl-android/LICENSE"
+      ],
+      "note": "Del AAR solo entran sus paquetes nativos (jni/): Python, FFmpeg, QuickJS y sus bibliotecas. Su código Java no va en el APK."
+    },
+    {
+      "id": "yt-dlp",
+      "name": "yt-dlp",
+      "version": "2026.10.29.232701",
+      "spdx": "Unlicense",
+      "mirror": false,
+      "homepage": "https://github.com/yt-dlp/yt-dlp",
+      "sources": [
+        {
+          "url": "https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.10.29.232701/yt-dlp",
+          "file": "yt-dlp",
+          "sha256": "966308057aa5f79ed09fead7609e46c8cf8fd89b23aeb2ef96989c6695a14724"
+        }
+      ],
+      "files": [
+        "apk:res/raw/ytdlp"
+      ],
+      "license_files": [
+        "yt-dlp/LICENSE",
+        "yt-dlp/ejs-bundled-dependencies.txt"
+      ],
+      "note": "Zipapp de Python puro (el archivo es su propia forma fuente); el motor lo actualiza solo. Incluye yt-dlp-ejs (Unlicense), que empaqueta meriyah (ISC) y astring (MIT)."
+    },
+    {
+      "id": "cacert",
+      "name": "Certificados raíz de Mozilla (vía curl), del motor",
+      "version": "2026-10-20",
+      "spdx": "MPL-2.0",
+      "mirror": false,
+      "mirror_exempt": "Va sin cambios: el propio archivo es su forma fuente (MPL-2.0 §3.1).",
+      "homepage": "https://curl.se/docs/caextract.html",
+      "sources": [
+        {
+          "url": "https://curl.se/ca/cacert-2026-10-20.pem",
+          "file": "cacert-2026-10-20.pem",
+          "sha256": "796f1389bfea13c0ed78f663b765baaff54a508e5483786bd6ece73c5e3e3cbe"
+        }
+      ],
+      "files": [
+        "apk:assets/kd/cacert.pem"
+      ],
+      "license_files": [
+        "common/MPL-2.0.txt"
       ]
     },
     {
@@ -2103,36 +2145,6 @@
       "spdx": "Apache-2.0",
       "mirror": false,
       "match": "org.jspecify:*",
-      "license_files": [
-        "common/Apache-2.0.txt"
-      ]
-    },
-    {
-      "id": "jackson",
-      "name": "Jackson",
-      "spdx": "Apache-2.0",
-      "mirror": false,
-      "match": "com.fasterxml.jackson.core:*",
-      "license_files": [
-        "common/Apache-2.0.txt"
-      ]
-    },
-    {
-      "id": "commons-io",
-      "name": "Apache Commons IO",
-      "spdx": "Apache-2.0",
-      "mirror": false,
-      "match": "commons-io:commons-io",
-      "license_files": [
-        "common/Apache-2.0.txt"
-      ]
-    },
-    {
-      "id": "commons-compress",
-      "name": "Apache Commons Compress",
-      "spdx": "Apache-2.0",
-      "mirror": false,
-      "match": "org.apache.commons:commons-compress",
       "license_files": [
         "common/Apache-2.0.txt"
       ]

@@ -31,19 +31,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
-/** El texto completo de la GPL-3.0 que va dentro del APK, para leerlo sin conexión. */
+/**
+ * Un texto de licencia que va dentro del APK, para leerlo sin conexión: por defecto la GPL-3.0 de la app; desde
+ * «Avisos de terceros», el de cada componente ([title] y [assetPath]).
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicenseScreen(onBack: () -> Unit) {
+fun LicenseScreen(onBack: () -> Unit, title: String? = null, assetPath: String = LicenseText.GPL_ASSET) {
     val context = LocalContext.current
-    val paragraphs by produceState<List<String>?>(initialValue = null, context) {
-        value = withContext(Dispatchers.IO) { readLicense(context) }
+    val isGpl = assetPath == LicenseText.GPL_ASSET
+    val paragraphs by produceState<List<String>?>(initialValue = null, context, assetPath) {
+        value = withContext(Dispatchers.IO) { readLicense(context, assetPath, reflow = isGpl) }
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.license_title)) },
+                title = { Text(title ?: stringResource(R.string.license_title)) },
                 navigationIcon = { BackButton(onBack) },
             )
         },
@@ -67,12 +71,14 @@ fun LicenseScreen(onBack: () -> Unit) {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    item {
-                        Text(
-                            text = stringResource(R.string.license_official_note),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                    if (isGpl) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.license_official_note),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                     items(text) { paragraph ->
                         Text(text = paragraph, style = MaterialTheme.typography.bodyMedium)
@@ -83,9 +89,15 @@ fun LicenseScreen(onBack: () -> Unit) {
     }
 }
 
-/** Párrafos de la licencia; vacío si el archivo no está (no debería pasar: lo genera el build). */
-private fun readLicense(context: Context): List<String> = try {
-    context.assets.open(LicenseText.GPL_ASSET).bufferedReader(Charsets.UTF_8).use { LicenseText.paragraphs(it.readText()) }
+/**
+ * Párrafos del texto; vacío si el archivo no está (no debería pasar: lo genera el build). La GPL se reacomoda
+ * al ancho de la pantalla; los textos de terceros se muestran con sus saltos de línea (listas, tablas).
+ */
+private fun readLicense(context: Context, assetPath: String, reflow: Boolean): List<String> = try {
+    context.assets.open(assetPath).bufferedReader(Charsets.UTF_8).use {
+        val text = it.readText()
+        if (reflow) LicenseText.paragraphs(text) else LicenseText.blocks(text)
+    }
 } catch (ignored: IOException) {
     emptyList()
 }

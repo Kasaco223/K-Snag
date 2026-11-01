@@ -88,14 +88,16 @@ jobs:
       - name: Páginas de 16 KB en las bibliotecas nativas (APK qa)
         run: python3 android/scripts/check_elf_alignment.py android/app/build/outputs/apk/github/qa/*.apk
 
-      # Hasta que lleguen el motor y el espejo de fuentes (PR-4/PR-3), la única biblioteca nativa permitida es
-      # la de Compose (androidx.graphics:graphics-path, Apache-2.0). Así no sale otro código nativo en los APK.
+      # Solo bibliotecas nativas conocidas: la de Compose (androidx.graphics:graphics-path, Apache-2.0) y las del
+      # motor (paquetes de youtubedl-android, con su código fuente en el espejo android-sources-ytdl-*). Así no
+      # sale otro código nativo en los APK sin pasar por el inventario de terceros.
       - name: Solo las bibliotecas nativas conocidas (APK debug y qa)
         run: |
           status=0
           for apk in android/app/build/outputs/apk/github/*/*.apk; do
             files=$(unzip -Z1 "$apk")
-            others=$(grep -E '^lib/' <<< "$files" | grep -vE '^lib/[^/]+/libandroidx\.graphics\.path\.so$' || true)
+            known='^lib/[^/]+/(libandroidx\.graphics\.path|libpython|libpython\.zip|libqjs|libffmpeg|libffprobe|libffmpeg\.zip)\.so$'
+            others=$(grep -E '^lib/' <<< "$files" | grep -vE "$known" || true)
             if [ -n "$others" ]; then
               echo "::error file=$apk::Bibliotecas nativas no permitidas todavía: $(paste -sd ' ' <<< "$others")"
               status=1

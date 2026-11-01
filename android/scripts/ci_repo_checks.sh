@@ -29,11 +29,12 @@ done < <(git ls-files -- android/gradlew 'android/*.sh')
 
 # 2) Encabezado SPDX en los archivos propios de android/ (GPL-3.0-or-later; GPL-3.0-only si se copió de un
 #    proyecto con esa licencia). No llevan encabezado: el texto de la licencia, los binarios, el wrapper
-#    de Gradle (archivos de Gradle, Apache-2.0) y los textos de licencia de terceros (third_party/licenses/).
+#    de Gradle (archivos de Gradle, Apache-2.0), gradle/verification-metadata.xml (lo reescribe Gradle) y los
+#    textos de licencia de terceros (third_party/licenses/).
 while IFS= read -r f; do
   [ -n "$f" ] || continue
   case "$f" in
-    android/LICENSE | android/gradlew | android/gradlew.bat | android/gradle/wrapper/* | android/third_party/licenses/*) continue ;;
+    android/LICENSE | android/gradlew | android/gradlew.bat | android/gradle/wrapper/* | android/gradle/verification-metadata.xml | android/third_party/licenses/*) continue ;;
   esac
   case "$f" in
     *.kt | *.kts | *.java | *.sh | *.py | *.xml | *.properties | *.toml | *.yaml | *.yml | *.pro | *.md | */Dockerfile) ;;

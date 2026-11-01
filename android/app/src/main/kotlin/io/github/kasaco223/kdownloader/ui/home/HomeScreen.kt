@@ -20,17 +20,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import io.github.kasaco223.kdownloader.R
+import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.ui.components.KdCard
 import io.github.kasaco223.kdownloader.ui.components.ScreenContent
 import io.github.kasaco223.kdownloader.ui.components.SectionTitle
+import io.github.kasaco223.kdownloader.ui.engine.EngineCard
 
 /**
- * Inicio de la versión de prueba: dice con honestidad que todavía no descarga y cómo probar lo que sí hace
- * (recibir un enlace al compartir). [receivedLink] es el enlace que llegó por kdownloader://download.
+ * Inicio de la versión de prueba: el estado del motor de descargas, y con honestidad que todavía no descarga
+ * y cómo probar lo que sí hace (recibir un enlace al compartir). [receivedLink] es el enlace que llegó por
+ * kdownloader://download.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(receivedLink: String?, onDismissLink: () -> Unit, onOpenAbout: () -> Unit) {
+fun HomeScreen(
+    receivedLink: String?,
+    onDismissLink: () -> Unit,
+    onOpenAbout: () -> Unit,
+    engineStatus: EngineStatus,
+    onRetryEngine: () -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -45,6 +54,7 @@ fun HomeScreen(receivedLink: String?, onDismissLink: () -> Unit, onOpenAbout: ()
     ) { innerPadding ->
         ScreenContent(innerPadding) {
             if (receivedLink != null) ReceivedLinkCard(url = receivedLink, onDismiss = onDismissLink)
+            EngineCard(status = engineStatus, onRetry = onRetryEngine)
             InfoCard(title = R.string.home_test_build_title, body = R.string.home_test_build_body)
             InfoCard(title = R.string.home_try_share_title, body = R.string.home_try_share_body)
             FilledTonalButton(onClick = onOpenAbout, modifier = Modifier.fillMaxWidth()) {

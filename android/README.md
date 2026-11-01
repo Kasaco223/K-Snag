@@ -4,14 +4,14 @@
 # K-Downloader para Android: guía para desarrollar
 
 Esta carpeta tiene la app de Android. Hoy es una **versión de prueba**: se instala, recibe enlaces al
-compartir y muestra la información legal y el diagnóstico del celular, pero **todavía no descarga**. El motor
-de descargas llega en los próximos PR.
+compartir, prepara el motor de descargas (Python, FFmpeg y yt-dlp) y lo prueba, y muestra la información legal
+y el diagnóstico del celular, pero **todavía no descarga**. Las descargas llegan en el próximo PR.
 
 ## Licencia
 
 - Todo el código propio de `android/` es **GPL-3.0-or-later** ([LICENSE](LICENSE), el texto oficial sin
-  cambios). El APK completo se distribuye bajo la GPL v3. Las dependencias conservan su licencia: hoy todas
-  las de la app son Apache-2.0 (AndroidX, Kotlin, corrutinas).
+  cambios). El APK completo se distribuye bajo la GPL v3. Las dependencias conservan su licencia: las de
+  la app son Apache-2.0 (AndroidX, Kotlin, corrutinas) y las del motor, las de cada componente.
 - El resto del repositorio (la app de Windows, la web) sigue con la licencia MIT de la raíz. No copies
   código GPL fuera de `android/`.
 - Los componentes de terceros (el motor de youtubedl-android trae Python, FFmpeg y unas 70 bibliotecas)
@@ -35,10 +35,12 @@ de descargas llega en los próximos PR.
 android/
   settings.gradle.kts, build.gradle.kts, gradle.properties
   version.properties          VERSION_NAME: la única fuente de la versión
+  engine-pins.properties      yt-dlp y cacert.pem que van en el APK (URL y SHA-256)
   gradle/libs.versions.toml   catálogo de versiones
+  gradle/verification-metadata.xml  SHA-256 de cada dependencia (Gradle rechaza cualquier otra)
   gradle/wrapper/, gradlew    Gradle 9.8.2 (distribución fijada por SHA-256)
-  buildSrc/                   tareas propias del build (KdTasks.kt)
-  core/                       Kotlin puro, sin android.*: lógica que se prueba en la JVM (hoy: Urls)
+  buildSrc/                   tareas propias del build (KdTasks.kt): motor, certificados, licencias
+  core/                       Kotlin puro, sin android.*: lógica que se prueba en la JVM (Urls, core/engine)
   app/                        la app (Compose, Material 3)
     debug.keystore            llave de debug, pública a propósito
     src/main/                 código, recursos y manifiesto
@@ -51,8 +53,35 @@ android/
 ```
 
 Paquetes de la app (`io.github.kasaco223.kdownloader`): `share/` (la hoja que aparece al compartir),
-`ui/` (pantallas y tema), `platform/` (diagnóstico, acciones del sistema), `contracts/` (contratos con
-el resto de la app).
+`ui/` (pantallas y tema), `platform/` (diagnóstico, acciones del sistema, canales de notificación),
+`contracts/` (contratos con el resto de la app), `engine/` (el motor) y `download/` (el servicio en primer
+plano).
+
+## El motor de descargas
+
+- **De dónde sale.** De los AAR de youtubedl-android (`gradle/libs.versions.toml` › `youtubedl`) solo se toman
+  sus paquetes nativos: `jni/<abi>/` con `libpython.so`, `libffmpeg.so`, `libffprobe.so`, `libqjs.so`
+  (lanzadores) y `libpython.zip.so` y `libffmpeg.zip.so` (Python, FFmpeg y sus bibliotecas). La tarea
+  `kdPayload` los copia a los jniLibs; el código Java, los recursos y las dependencias del AAR no entran al
+  APK. Gradle verifica cada AAR contra `gradle/verification-metadata.xml`, y `scripts/check_pins.py` cruza
+  ese SHA-256 con `third_party/components.json`.
+- **Qué agrega el build.** `res/raw/ytdlp` (yt-dlp, para el primer inicio sin red) y `assets/kd/cacert.pem`
+  (certificados raíz para Python), los dos fijados en `engine-pins.properties`; y los avisos de terceros en
+  `assets/licenses/third_party/`.
+- **Qué hace la app** (`engine/KdEngine.kt`), en un servicio en primer plano la primera vez:
+  1. revisa el espacio;
+  2. descomprime los paquetes en `noBackupFilesDir/kd/payload/`, sin los enlaces que taparían bibliotecas
+     del sistema (youtubedl-android #318);
+  3. instala los certificados y la copia verificada de yt-dlp;
+  4. se prueba: Python con sesión propia (`setsid`, para poder cancelar a FFmpeg y QuickJS junto con Python)
+     y SSL, `yt-dlp --version` y `ffmpeg -version`.
+  Después de eso, abrir la app solo revisa marcas y hashes. «Acerca de» › «Reparar el motor» lo rehace.
+- **Páginas de 16 KB.** Tres bibliotecas de WebP de FFmpeg vienen alineadas a 4 KB
+  (`scripts/elf_alignment_allowlist.txt`, `pending=M5`). Hasta que llegue nuestra libwebp (PR-9), en un
+  celular con páginas de 16 KB el motor queda en `engine_incompatible` y la app lo explica.
+- **Actualizar los pins.** Cambia la URL, la versión y el SHA-256 en `engine-pins.properties` (yt-dlp:
+  la línea `yt-dlp` de `SHA2-256SUMS` de su Release; cacert: `https://curl.se/ca/cacert.pem.sha256`) y la
+  misma entrada en `third_party/components.json`, y corre `python3 scripts/notices.py`.
 
 ## Compilar con Docker
 
@@ -180,12 +209,12 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
    - Instala `platforms;android-37.0` y `build-tools;36.0.0`; `setup-gradle` valida el wrapper.
    - `:core:test`, `:app:testGithubDebugUnitTest`, `:app:lintGithubDebug` (lint también revisa `:core`
      con el minSdk de la app) y los APK debug, qa y de pruebas.
-   - `scripts/check_elf_alignment.py`: toda biblioteca nativa de 64 bits debe cargar con páginas de 16 KB.
-     Hoy el APK solo trae la de Compose, `libandroidx.graphics.path.so` (androidx.graphics:graphics-path,
-     Apache-2.0), ya alineada a 16 KB. No hay código nativo propio, así que no hace falta el NDK
+   - `scripts/check_elf_alignment.py`: toda biblioteca nativa de 64 bits debe cargar con páginas de 16 KB,
+     también las que van dentro de los paquetes del motor, salvo las de `elf_alignment_allowlist.txt` (las
+     tres de WebP, `pending=M5`: aviso en CI). No hay código nativo propio, así que no hace falta el NDK
      (`keepDebugSymbols` deja los `.so` sin tocar).
-   - Hasta que lleguen el motor y el espejo de fuentes, el build falla si un APK trae cualquier otra
-     biblioteca nativa.
+   - El build falla si un APK trae una biblioteca nativa que no sea la de Compose
+     (`libandroidx.graphics.path.so`) o las del motor.
    - Artefactos: reportes (14 días) y `android-apk-<sha>` (7 días) con los tres APK debug (el `arm64-v8a`
      es el del celular), el qa x86_64 y el de pruebas. El APK de pruebas es solo para el emulador e incluye
      JUnit 4.13.2 (EPL-1.0) y Hamcrest 1.3 (BSD-3-Clause); su aviso
@@ -193,7 +222,8 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
 2. **emulator**: API 26 (`default`), API 36 (`google_apis`) y API 36 con páginas de 16 KB
    (`google_apis_ps16k`, informativo por ahora). No recompila: instala los APK del build y corre
    `scripts/ci_emulator.sh`, que ejecuta las pruebas instrumentadas, abre el build qa (R8) para ver que no
-   se cierre y, cuando el APK traiga el motor, corre su autoprueba.
+   se cierre, y corre la autoprueba del motor (`kdl.selftest`: una línea `KDL-SELFTEST` con `PASS {…}`).
+   En el emulador de 16 KB la autoprueba falla con `engine_incompatible` hasta M5: ese job es informativo.
 
 - Subir una rama no dispara la CI de Android: corre al abrir el PR (o en `master`).
 - Las acciones de terceros (`gradle/actions/setup-gradle` y `reactivecircus/android-emulator-runner`) van
@@ -231,8 +261,20 @@ traiga, también un artefacto de CI: en un repo público, cualquiera con cuenta 
 
 ## Pendiente
 
-- `gradle/verification-metadata.xml` (SHA-256 de cada dependencia): se genera en Docker con la licencia
-  del SDK aceptada, con `kdl-build --write-verification-metadata sha256 help :app:assembleGithubRelease
-  :app:assembleGithubQa :app:assembleGithubDebugAndroidTest :app:lintGithubDebug :core:test`.
-- El motor (youtubedl-android), la libwebp propia para páginas de 16 KB, el pipeline de releases y el
-  actualizador llegan en sus propios PR.
+- Las descargas, el actualizador de yt-dlp, la libwebp propia para páginas de 16 KB, el pipeline de
+  releases y el actualizador de la app llegan en sus propios PR.
+
+## Verificación de dependencias
+
+`gradle/verification-metadata.xml` guarda el SHA-256 de cada dependencia y plugin: Gradle rechaza cualquier
+otro archivo. Al agregar o cambiar una dependencia, regenéralo en Docker con las mismas tareas que corre la CI
+y copia el resultado al repo:
+
+```powershell
+docker compose -f android/tools/docker/compose.yaml run --rm kdl --write-verification-metadata sha256 `
+  help :core:test :app:testGithubDebugUnitTest :app:lintGithubDebug :app:assembleGithubDebug `
+  :app:assembleGithubQa :app:assembleGithubRelease :app:assembleGithubDebugAndroidTest
+Copy-Item android\build\docker-out\verification-metadata.xml android\gradle\
+```
+
+Revisa el diff antes del commit: cada artefacto nuevo tiene que ser uno que agregaste a propósito.

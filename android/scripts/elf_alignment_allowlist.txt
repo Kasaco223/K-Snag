@@ -1,0 +1,17 @@
+# ELF de 64 bits alineados a 4 KB dentro de los paquetes de youtubedl-android 0.18.1 (issue #365).
+# Formato: <abi>:<archivo del APK>!<miembro del paquete zip> <disposición>   (check_elf_alignment.py la comprueba)
+#   unused                   nadie lo carga (el script falla si entra al cierre de DT_NEEDED)
+#   replaced_by=lib/<abi>/X  la app lo reemplaza al iniciar con X, compilado por nosotros (contrato M5)
+#   pending=<hito>           sin arreglar: aviso en CI; error en versiones estables (--fail-on-pending)
+# Estas líneas NO se borran cuando llegue el arreglo: el APK sigue trayendo el original dentro del zip.
+# Al terminar M5, cada "pending=M5" pasa a "replaced_by=lib/<abi>/<mismo nombre>".
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpdecoder.so unused
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpdemux.so unused
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebp.so pending=M5
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpmux.so pending=M5
+arm64-v8a:libffmpeg.zip.so!usr/lib/libsharpyuv.so pending=M5
+x86_64:libffmpeg.zip.so!usr/lib/libwebpdecoder.so unused
+x86_64:libffmpeg.zip.so!usr/lib/libwebpdemux.so unused
+x86_64:libffmpeg.zip.so!usr/lib/libwebp.so pending=M5
+x86_64:libffmpeg.zip.so!usr/lib/libwebpmux.so pending=M5
+x86_64:libffmpeg.zip.so!usr/lib/libsharpyuv.so pending=M5

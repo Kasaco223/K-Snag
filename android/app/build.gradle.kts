@@ -29,6 +29,16 @@ val devAbi: String? = providers.gradleProperty("kdl.devAbi").orNull?.also {
     require(it in abiDigit) { "kdl.devAbi debe ser una de ${abiDigit.keys}" }
 }
 
+// ---- Motor: archivos fijados por SHA-256 (android/engine-pins.properties) ---------------------------------
+val pins: Properties = Properties().apply {
+    load(StringReader(providers.fileContents(rootProject.layout.projectDirectory.file("engine-pins.properties")).asText.get()))
+}
+fun pin(key: String): String = pins.getProperty(key)?.trim()?.takeIf { it.isNotEmpty() } ?: error("Falta $key en engine-pins.properties")
+val sha256Pattern = Regex("[0-9a-f]{64}")
+listOf("ytdlp.sha256", "cacert.sha256").forEach { require(sha256Pattern.matches(pin(it))) { "$it debe ser un SHA-256 en minúsculas" } }
+require(pin("ytdlp.channel") in setOf("nightly", "stable")) { "ytdlp.channel debe ser nightly o stable" }
+require(Regex("""\d{4}\.\d{2}\.\d{2}(\.\d{6})?""").matches(pin("ytdlp.version"))) { "ytdlp.version inválida" }
+
 // Commit del código fuente (CI: KDL_SOURCE_COMMIT). "Acerca de" enlaza al árbol de ese commit.
 val sourceCommit: String = providers.environmentVariable("KDL_SOURCE_COMMIT").orNull?.trim()
     ?.takeIf { Regex("[0-9A-Za-z._-]{1,64}").matches(it) } ?: "dev"
@@ -48,6 +58,13 @@ android {
         buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
         buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD\"")
         buildConfigField("String", "WEB_BASE", "\"https://kdownloader.vercel.app\"")
+        buildConfigField("String", "YOUTUBEDL_ANDROID_VERSION", "\"${libs.versions.youtubedl.get()}\"")
+        buildConfigField("String", "YTDLP_BUNDLED_VERSION", "\"${pin("ytdlp.version")}\"")
+        buildConfigField("String", "YTDLP_BUNDLED_CHANNEL", "\"${pin("ytdlp.channel")}\"")
+        buildConfigField("String", "YTDLP_BUNDLED_SHA256", "\"${pin("ytdlp.sha256")}\"")
+        buildConfigField("String", "CACERT_DATE", "\"${pin("cacert.date")}\"")
+        buildConfigField("String", "CACERT_SHA256", "\"${pin("cacert.sha256")}\"")
+        buildConfigField("boolean", "KD_TEST_HOOKS", "false")
         if (devAbi != null) ndk { abiFilters += devAbi } // un solo APK (-Pkdl.devAbi=…); nunca junto con splits
     }
 
@@ -89,6 +106,7 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
+            buildConfigField("boolean", "KD_TEST_HOOKS", "true") // ganchos para las pruebas del motor
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
             signingConfig = signingConfigs.getByName("debug")
@@ -107,7 +125,7 @@ android {
 
     packaging {
         jniLibs {
-            useLegacyPackaging = true     // el motor (más adelante) ejecuta lib*.so desde nativeLibraryDir
+            useLegacyPackaging = true     // el motor ejecuta lib*.so desde nativeLibraryDir (extractNativeLibs)
             keepDebugSymbols += "**/*.so" // sin strip: los binarios quedan idénticos a los publicados
         }
         resources {
@@ -141,7 +159,36 @@ android {
 val kdLicenseAssets = tasks.register<KdLicenseAssetsTask>("kdLicenseAssets") {
     gplLicense.set(rootProject.layout.projectDirectory.file("LICENSE"))
     gplSha256.set("3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986") // gnu.org/licenses/gpl-3.0.txt
+    thirdParty.set(rootProject.layout.projectDirectory.dir("third_party"))
     outputDir.set(layout.buildDirectory.dir("generated/kd/licenseAssets"))
+}
+val kdEngineAssets = tasks.register<KdEngineAssetsTask>("kdEngineAssets") {
+    cacertUrl.set(pin("cacert.url"))
+    cacertSha256.set(pin("cacert.sha256"))
+    outputDir.set(layout.buildDirectory.dir("generated/kd/engineAssets"))
+}
+val kdEngineRes = tasks.register<KdResTask>("kdEngineRes") {
+    ytdlpUrl.set(pin("ytdlp.url"))
+    ytdlpSha256.set(pin("ytdlp.sha256"))
+    outputDir.set(layout.buildDirectory.dir("generated/kd/engineRes"))
+}
+
+// Los AAR de youtubedl-android se resuelven aparte (sin dependencias transitivas): Gradle los verifica contra
+// gradle/verification-metadata.xml y kdPayload copia solo sus jni/<abi>/*.so. No son dependencias de compilación.
+val kdPayloadAars: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isTransitive = false
+}
+dependencies {
+    for (lib in listOf(libs.youtubedl.library, libs.youtubedl.ffmpeg)) {
+        val dep = lib.get()
+        kdPayloadAars("${dep.module}:${dep.versionConstraint.requiredVersion}@aar")
+    }
+}
+val kdPayload = tasks.register<KdPayloadTask>("kdPayload") {
+    aars.from(kdPayloadAars)
+    abis.set(listOf("arm64-v8a", "armeabi-v7a", "x86_64"))
+    outputDir.set(layout.buildDirectory.dir("generated/kd/jniLibs"))
 }
 
 androidComponents {
@@ -152,6 +199,9 @@ androidComponents {
             output.versionCode.set(baseCode * 10 + (abiDigit[abi] ?: 0))
         }
         variant.sources.assets?.addGeneratedSourceDirectory(kdLicenseAssets, KdLicenseAssetsTask::outputDir)
+        variant.sources.assets?.addGeneratedSourceDirectory(kdEngineAssets, KdEngineAssetsTask::outputDir)
+        variant.sources.res?.addGeneratedSourceDirectory(kdEngineRes, KdResTask::outputDir)
+        variant.sources.jniLibs?.addGeneratedSourceDirectory(kdPayload, KdPayloadTask::outputDir)
     }
 }
 

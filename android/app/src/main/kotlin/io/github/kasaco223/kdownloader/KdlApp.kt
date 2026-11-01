@@ -4,15 +4,27 @@ package io.github.kasaco223.kdownloader
 
 import android.app.Application
 import android.os.StrictMode
+import io.github.kasaco223.kdownloader.engine.KdEngine
+import io.github.kasaco223.kdownloader.platform.NotificationChannels
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 /**
- * La Application de K-Downloader. Más adelante arma aquí el grafo de dependencias (motor, cola de descargas,
- * ajustes) y los canales de notificación; en esta versión solo activa StrictMode en las compilaciones debug.
+ * La Application de K-Downloader: arma el motor (uno por proceso) y los canales de notificación. En las
+ * compilaciones debug activa StrictMode. La cola de descargas y los ajustes se suman más adelante.
  */
 class KdlApp : Application() {
+    /** Corrutinas que viven lo que el proceso (el motor, el servicio). */
+    val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    val engine: KdEngine by lazy { KdEngine(this, appScope) }
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) enableStrictMode()
+        NotificationChannels.ensure(this)
+        engine.warmUp() // solo revisa marcas y hashes, en segundo plano: nunca descomprime ni usa la red
     }
 
     /** Avisa en logcat (sin cerrar la app) de disco o red en el hilo principal y de recursos sin cerrar. */

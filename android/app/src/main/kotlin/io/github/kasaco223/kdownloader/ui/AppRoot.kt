@@ -10,6 +10,7 @@ import io.github.kasaco223.kdownloader.MainViewModel
 import io.github.kasaco223.kdownloader.Screen
 import io.github.kasaco223.kdownloader.ui.about.AboutScreen
 import io.github.kasaco223.kdownloader.ui.about.LicenseScreen
+import io.github.kasaco223.kdownloader.ui.about.ThirdPartyScreen
 import io.github.kasaco223.kdownloader.ui.home.HomeScreen
 
 /** Raíz de MainActivity: muestra la pantalla actual. «Atrás» solo se intercepta fuera del inicio. */
@@ -17,6 +18,9 @@ import io.github.kasaco223.kdownloader.ui.home.HomeScreen
 fun AppRoot(viewModel: MainViewModel) {
     val screen by viewModel.screen.collectAsStateWithLifecycle()
     val receivedLink by viewModel.receivedLink.collectAsStateWithLifecycle()
+    val engineStatus by viewModel.engineStatus.collectAsStateWithLifecycle()
+    val repair by viewModel.repair.collectAsStateWithLifecycle()
+    val licenseDoc by viewModel.licenseDoc.collectAsStateWithLifecycle()
 
     BackHandler(enabled = screen != Screen.HOME) { viewModel.back() }
 
@@ -25,11 +29,28 @@ fun AppRoot(viewModel: MainViewModel) {
             receivedLink = receivedLink,
             onDismissLink = viewModel::dismissLink,
             onOpenAbout = { viewModel.open(Screen.ABOUT) },
+            engineStatus = engineStatus,
+            onRetryEngine = viewModel::retryEngine,
         )
         Screen.ABOUT -> AboutScreen(
             onBack = { viewModel.back() },
             onOpenLicense = { viewModel.open(Screen.LICENSE) },
+            onOpenThirdParty = { viewModel.open(Screen.THIRD_PARTY) },
+            engineStatus = engineStatus,
+            onRetryEngine = viewModel::retryEngine,
+            repair = repair,
+            onRepair = viewModel::repairEngine,
+            onRepairShown = viewModel::repairShown,
         )
         Screen.LICENSE -> LicenseScreen(onBack = { viewModel.back() })
+        Screen.THIRD_PARTY -> ThirdPartyScreen(onBack = { viewModel.back() }, onOpenText = viewModel::openLicenseDoc)
+        Screen.THIRD_PARTY_TEXT -> {
+            val doc = licenseDoc
+            if (doc == null) {
+                viewModel.back()
+            } else {
+                LicenseScreen(onBack = { viewModel.back() }, title = doc.title, assetPath = doc.assetPath)
+            }
+        }
     }
 }
