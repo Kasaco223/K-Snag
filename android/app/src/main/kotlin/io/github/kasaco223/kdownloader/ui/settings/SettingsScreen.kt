@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +53,7 @@ fun SettingsScreen(
     engineUpdate: KdEngine.UpdateState,
     onCheckEngineUpdate: () -> Unit,
     onRollbackEngine: () -> Unit,
+    onWifiOnly: (Boolean) -> Unit,
     onRetryEngine: () -> Unit,
     onOpenAbout: () -> Unit,
 ) {
@@ -112,7 +114,11 @@ fun SettingsScreen(
         val wifiOnly by prefs.wifiOnly.collectAsStateWithLifecycle()
         KdCard {
             SectionTitle(stringResource(R.string.settings_downloads_title))
-            SwitchRow(wifiOnly, stringResource(R.string.settings_wifi_only), stringResource(R.string.settings_wifi_only_detail), prefs::setWifiOnly)
+            SwitchRow(wifiOnly, stringResource(R.string.settings_wifi_only), stringResource(R.string.settings_wifi_only_detail), onWifiOnly)
+            TextButton(onClick = { SystemActions.openBatterySettings(context) }) {
+                Text(stringResource(R.string.settings_battery))
+            }
+            Text(stringResource(R.string.settings_battery_detail), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
         EngineSettingsCard(prefs, engineStatus, engineUpdate, onCheckEngineUpdate, onRollbackEngine)

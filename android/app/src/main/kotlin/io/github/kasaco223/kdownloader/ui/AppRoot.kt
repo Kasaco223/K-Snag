@@ -60,6 +60,7 @@ fun AppRoot(viewModel: MainViewModel) {
     val analysis by viewModel.analysis.state.collectAsStateWithLifecycle()
     val onboarded by viewModel.prefs.onboarded.collectAsStateWithLifecycle()
     val engineUpdate by viewModel.engineUpdate.collectAsStateWithLifecycle()
+    val waitingForWifi by viewModel.waitingForWifi.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -100,6 +101,7 @@ fun AppRoot(viewModel: MainViewModel) {
                         engineUpdate = engineUpdate,
                         onCheckEngineUpdate = viewModel::checkEngineUpdate,
                         onRollbackEngine = viewModel::rollbackEngine,
+                        onWifiOnly = viewModel::setWifiOnly,
                         onRetryEngine = viewModel::retryEngine,
                         onOpenAbout = { viewModel.open(Screen.ABOUT) },
                     )
@@ -124,6 +126,7 @@ fun AppRoot(viewModel: MainViewModel) {
                         onRemoveHistory = viewModel::removeHistory,
                         onOpenItem = openItem,
                         onOpenDownloads = { viewModel.open(Screen.DOWNLOADS) },
+                        waitingForWifi = waitingForWifi,
                     )
                 }
             }

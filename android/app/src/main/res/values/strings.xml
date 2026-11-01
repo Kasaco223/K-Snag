@@ -251,4 +251,8 @@
     <string name="engine_update_rolled_back">Back on yt-dlp %1$s. The other version won\'t be installed again on its own.</string>
     <string name="engine_update_busy">The engine is busy. Try again when the downloads finish.</string>
     <string name="engine_update_failed">We couldn\'t check for an update. Check your connection and try again later.</string>
+    <!-- Background work -->
+    <string name="home_waiting_wifi">Waiting for Wi-Fi: you turned on “Only on Wi-Fi” in Settings.</string>
+    <string name="settings_battery">Keep downloads running in the background</string>
+    <string name="settings_battery_detail">Some phones (Xiaomi, Samsung, Huawei…) stop apps in the background to save battery. In that list, pick K-Downloader and choose “Don\'t optimize”.</string>
 </resources>

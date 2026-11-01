@@ -90,6 +90,9 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
 
         @Volatile var canceled = false
 
+        /** Android cortó el servicio (tiempo de dataSync): queda «interrumpido» y se retoma después. */
+        @Volatile var interrupted = false
+
         /** El vigilante cortó la ejecución porque yt-dlp no escribía nada hace [STALL_MS]. */
         @Volatile var stalled = false
 
@@ -105,6 +108,28 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
     @Volatile var startServiceOnEnqueue: Boolean = true
 
     fun hasQueued(): Boolean = _jobs.value.any { it.state == "queued" }
+
+    /** Hay descargas en cola pero «Solo con Wi-Fi» las hace esperar (para el aviso de Inicio). */
+    private val _waitingForWifi = MutableStateFlow(false)
+    val waitingForWifi: StateFlow<Boolean> = _waitingForWifi.asStateFlow()
+
+    /** Si ahora se puede descargar: sin «Solo con Wi-Fi», o con una red sin límite de datos. */
+    fun networkAllowed(): Boolean {
+        if (!prefs.wifiOnly.value) return true.also { _waitingForWifi.value = false }
+        val metered = context.getSystemService(android.net.ConnectivityManager::class.java)?.isActiveNetworkMetered ?: true
+        _waitingForWifi.value = metered && hasQueued()
+        return !metered
+    }
+
+    /**
+     * Android corta el servicio (se acabó el tiempo de dataSync): la descarga en curso se detiene sin borrar lo
+     * bajado y queda «interrumpida»; la próxima vez que se abra la app se retoma sola.
+     */
+    fun interruptActive() {
+        val r = running ?: return
+        r.interrupted = true
+        Thread { r.run?.cancel() }.start()
+    }
 
     // ------------------------------------------------------------------------------------------------ acciones
     suspend fun enqueue(rawUrl: String, option: String, allowDuplicate: Boolean = false, prefill: Prefill? = null): EnqueueResult = withContext(Dispatchers.IO) {
@@ -236,7 +261,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
 
     /** Arranca el servicio si hay algo en cola (al volver a la app, por ejemplo). */
     fun startService() {
-        if (!hasQueued()) return
+        if (!hasQueued() || !networkAllowed()) return
         try {
             ContextCompat.startForegroundService(context, Intent(context, DownloadService::class.java).setAction(DownloadService.ACTION_RUN))
         } catch (e: IllegalStateException) {
@@ -318,6 +343,10 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
             val lines = result.stdout + result.stderr
             val accepted = model.filePath?.let { acceptFile(it, home) }
             val already = ExitMapper.alreadyDownloadedPath(lines)?.let { acceptFile(it, home) }
+            if (r.interrupted) {
+                update(job.id) { it.copy(state = "interrupted", speed = null, eta = null) }
+                return
+            }
             when (val outcome = ExitMapper.map(r.canceled, null, result.exitCode, accepted, already, lines)) {
                 ExitMapper.Outcome.Canceled -> {
                     update(job.id) { it.copy(state = "canceled", finishedAt = System.currentTimeMillis(), speed = null, eta = null) }
@@ -480,9 +509,21 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
         runCatching { JsonFiles.save(jobsFile, "jobs", list, Job::toJson) }.onFailure { Log.w(TAG, "No se pudo guardar jobs.json", it) }
     }
 
-    /** Al abrir: lo que estaba corriendo cuando el proceso se cerró queda «interrumpido» (Reintentar lo retoma). */
+    /**
+     * Al abrir: lo que corría cuando el proceso se cerró (Android lo mató, se acabó el tiempo del servicio) vuelve
+     * a la cola y se retoma solo, hasta [MAX_RESUMES] veces; después queda «interrumpido» para «Reintentar».
+     */
     private fun loadJobs(): List<Job> = JsonFiles.load(jobsFile, "jobs", Job::fromJson).map {
-        if (it.isActive) it.copy(state = "interrupted", speed = null, eta = null) else it
+        if (it.isActive || it.state == "interrupted") {
+            val resumes = it.notes.count { n -> n == RESUME_NOTE }
+            if (resumes < MAX_RESUMES && it.attempts < RetryPolicy.MAX_ATTEMPTS) {
+                it.copy(state = "queued", speed = null, eta = null, notes = it.notes + RESUME_NOTE)
+            } else {
+                it.copy(state = "interrupted", speed = null, eta = null)
+            }
+        } else {
+            it
+        }
     }
 
     /** Los no terminados nunca se borran; de los terminados quedan los 200 más nuevos. */
@@ -526,6 +567,8 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine, 
         private const val STALL_MS = 10L * 60 * 1000
         private const val MIN_FREE_BYTES = 200L * 1024 * 1024
         private const val AUTO_NOTE = "auto:"
+        private const val RESUME_NOTE = "auto:resume"
+        private const val MAX_RESUMES = 3
 
         /** Tope de una lista (diseño, B.3 #13). */
         const val MAX_BATCH = 500

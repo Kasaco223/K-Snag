@@ -82,6 +82,14 @@ class MainViewModel(
     /** Todos los ajustes (Ajustes los lee y cambia directamente). */
     val prefs: UiPrefs = uiPrefs
 
+    /** Hay descargas esperando el Wi-Fi («Solo con Wi-Fi»). */
+    val waitingForWifi: StateFlow<Boolean> = queue.waitingForWifi
+
+    fun setWifiOnly(value: Boolean) {
+        uiPrefs.setWifiOnly(value)
+        queue.startService() // sin la restricción, lo que esperaba arranca
+    }
+
     suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult = request.urls?.let {
         queue.enqueueAll(it, request.option, request.allowDuplicate)
     } ?: queue.enqueue(request.url, request.option, request.allowDuplicate, request.prefill)

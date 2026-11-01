@@ -258,4 +258,8 @@
     <string name="engine_update_rolled_back">Volviste a yt-dlp %1$s. La otra versión no se va a volver a instalar sola.</string>
     <string name="engine_update_busy">El motor está en uso. Vuelve a intentarlo cuando terminen las descargas.</string>
     <string name="engine_update_failed">No pudimos buscar una actualización. Revisa tu conexión y vuelve a intentarlo más tarde.</string>
+    <!-- Segundo plano -->
+    <string name="home_waiting_wifi">Esperando el Wi-Fi: activaste «Solo con Wi-Fi» en Ajustes.</string>
+    <string name="settings_battery">Que las descargas sigan en segundo plano</string>
+    <string name="settings_battery_detail">Algunos celulares (Xiaomi, Samsung, Huawei…) detienen las apps en segundo plano para ahorrar batería. En esa lista, busca K-Downloader y elige «No optimizar».</string>
 </resources>

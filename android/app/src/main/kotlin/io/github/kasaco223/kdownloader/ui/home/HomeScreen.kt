@@ -3,6 +3,7 @@
 package io.github.kasaco223.kdownloader.ui.home
 
 import android.content.res.Resources
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -95,6 +96,7 @@ fun HomeScreen(
     onRemoveHistory: (String) -> Unit,
     onOpenItem: (HistoryItem) -> Unit,
     onOpenDownloads: () -> Unit,
+    waitingForWifi: Boolean = false,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -195,6 +197,17 @@ fun HomeScreen(
 
         if (running.isNotEmpty() || queued.isNotEmpty()) {
             ListHeader(stringResource(R.string.home_now))
+            if (waitingForWifi && running.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.home_waiting_wifi),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiaryContainer, RoundedCornerShape(12.dp))
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                )
+            }
             running.forEach { ActiveJobCard(it, onCancel) }
             queued.forEach { JobRow(it, onCancel, onRetry, onRemove) }
         }

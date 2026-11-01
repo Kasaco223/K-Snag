@@ -34,6 +34,25 @@ class KdlApp : Application() {
     /** Las pistas remotas del motor (engine.json). */
     val hints: HintsStore by lazy { HintsStore(java.io.File(engine.dirs.root, "hints.json"), engine) }
 
+    /** Con «Solo con Wi-Fi», cuando aparece una red sin límite de datos la cola arranca sola (mientras viva el proceso). */
+    private fun watchUnmeteredNetwork() {
+        val cm = getSystemService(android.net.ConnectivityManager::class.java) ?: return
+        val request = android.net.NetworkRequest.Builder()
+            .addCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(android.net.NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
+            .build()
+        runCatching {
+            cm.registerNetworkCallback(
+                request,
+                object : android.net.ConnectivityManager.NetworkCallback() {
+                    override fun onAvailable(network: android.net.Network) {
+                        if (uiPrefs.wifiOnly.value) queue.startService()
+                    }
+                },
+            )
+        }
+    }
+
     /**
      * Mantenimiento al volver a la app, en segundo plano: pistas del motor (una vez al día) y, si toca y no hay
      * descargas, buscar una versión nueva de yt-dlp. Con «Solo con Wi-Fi», la búsqueda espera una red sin límite.
@@ -60,6 +79,7 @@ class KdlApp : Application() {
         NotificationChannels.ensure(this)
         engine.warmUp() // solo revisa marcas y hashes, en segundo plano: nunca descomprime ni usa la red
         appScope.launch(Dispatchers.IO) { hints } // las pistas guardadas, para la cola y el análisis
+        watchUnmeteredNetwork()
     }
 
     /** Avisa en logcat (sin cerrar la app) de disco o red en el hilo principal y de recursos sin cerrar. */

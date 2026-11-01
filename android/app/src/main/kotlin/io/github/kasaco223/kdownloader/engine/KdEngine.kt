@@ -85,6 +85,7 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
 
     fun warmUp() {
         warmUpJob = scope.async(Dispatchers.IO) {
+            sweepOrphans()
             val ready = runCatching { quickCheck() }.getOrNull()
             if (ready != null && _status.value == EngineStatus.NotReady) _status.value = EngineStatus.Ready(ready)
             ready != null
@@ -251,6 +252,30 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         )
         is EngineStatus.Failed -> SelfTestLine.fail(s.error.code, s.error.detail)
         else -> SelfTestLine.fail(EngineErrors.UNKNOWN, s.toString())
+    }
+
+    /**
+     * Al arrancar el proceso: mata los Python, FFmpeg o QuickJS nuestros que quedaron vivos de un proceso anterior
+     * de la app (mismo UID, ejecutable dentro de nuestra carpeta de bibliotecas). Nunca a la app misma.
+     */
+    private fun sweepOrphans() {
+        val me = Os.getpid()
+        val uid = android.os.Process.myUid()
+        val names = listOf("/libpython.so", "/libffmpeg.so", "/libffprobe.so", "/libqjs.so")
+        File("/proc").listFiles { f -> f.name.all(Char::isDigit) }?.forEach { dir ->
+            val pid = dir.name.toIntOrNull() ?: return@forEach
+            if (pid == me) return@forEach
+            runCatching {
+                val status = File(dir, "status").readLines()
+                val procUid = status.firstOrNull { it.startsWith("Uid:") }?.split(Regex("\\s+"))?.getOrNull(1)?.toIntOrNull()
+                if (procUid != uid) return@forEach
+                val cmd0 = File(dir, "cmdline").readText().substringBefore('\u0000')
+                if (names.any { cmd0.endsWith(it) } && context.packageName in cmd0) {
+                    Log.w(TAG, "Proceso huérfano $pid ($cmd0): se termina")
+                    Os.kill(pid, OsConstants.SIGKILL)
+                }
+            }
+        }
     }
 
     // ------------------------------------------------------------------------------------------------ preparar
