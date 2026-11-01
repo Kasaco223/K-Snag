@@ -8,6 +8,9 @@
 #  1) Pruebas instrumentadas del APK debug x86_64.
 #  2) Build qa (R8, como release): abre sin cerrarse y, si el APK ya trae el motor (lib/*/libpython.so),
 #     corre su autoprueba: una línea con tag KDL-SELFTEST, "PASS {json}" (Log.i) o "FAIL ..." (Log.e).
+#     Con páginas de 16 KB, mientras elf_alignment_allowlist.txt tenga bibliotecas "pending=M5", lo esperado
+#     es "FAIL engine_incompatible" (la app lo explica); cualquier otro resultado es un error. Cuando M5 pase
+#     esas líneas a "replaced_by=", la excepción se apaga sola y se exige PASS también ahí.
 set -uo pipefail
 
 if [ "$#" -lt 2 ]; then
@@ -103,7 +106,19 @@ else
       sleep 5
     done
     echo "Autoprueba del motor: ${result:-sin respuesta}" | tee -a "$out/selftest.txt"
-    case "$result" in PASS*) ;; *) status=1 ;; esac
+    allowlist="$(dirname "$0")/elf_alignment_allowlist.txt"
+    if [ "${page_size:-}" = "16384" ] && grep -q 'pending=M5' "$allowlist" 2>/dev/null; then
+      case "$result" in
+        "FAIL engine_incompatible:"*)
+          echo "::notice::Páginas de 16 KB: engine_incompatible es lo esperado hasta M5 (libwebp propia)."
+          echo "Resultado esperado con páginas de 16 KB hasta M5" >> "$out/selftest.txt" ;;
+        *)
+          echo "::error::Con páginas de 16 KB se esperaba FAIL engine_incompatible (hasta M5) y llegó: ${result:-nada}"
+          status=1 ;;
+      esac
+    else
+      case "$result" in PASS*) ;; *) status=1 ;; esac
+    fi
   else
     echo "::notice::Autoprueba del motor omitida: el APK todavía no trae el motor (lib/*/libpython.so)."
     echo "Autoprueba del motor: omitida (el APK todavía no trae el motor)" >> "$out/selftest.txt"
