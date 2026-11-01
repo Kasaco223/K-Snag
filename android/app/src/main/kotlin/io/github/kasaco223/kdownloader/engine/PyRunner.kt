@@ -117,6 +117,7 @@ class PyRunner(private val dirs: EngineDirs) {
     /**
      * [args] van después de libpython.so (por ejemplo `-c …` o la ruta de yt-dlp). [onLine] recibe cada línea de
      * stdout y stderr (hasta 64 KiB) en el hilo lector: tiene que ser rápido y no lanzar excepciones.
+     * [stdoutFile]: stdout va completo a ese archivo (el `-J` del análisis es una sola línea enorme).
      */
     fun start(
         args: List<String>,
@@ -124,6 +125,7 @@ class PyRunner(private val dirs: EngineDirs) {
         mode: Mode,
         extraEnv: Map<String, String> = emptyMap(),
         onLine: ((String) -> Unit)? = null,
+        stdoutFile: File? = null,
     ): Run {
         val tmp = File(runDir, "tmp").apply { mkdirs() }
         dirs.home.mkdirs()
@@ -146,6 +148,7 @@ class PyRunner(private val dirs: EngineDirs) {
             put("PATH", (get("PATH") ?: "/system/bin") + ":" + dirs.nativeLibDir.path)
             putAll(extraEnv)
         }
+        if (stdoutFile != null) builder.redirectOutput(stdoutFile)
         val process = builder.start()
         process.outputStream.close() // stdin cerrado: yt-dlp nunca espera una respuesta
         return Run(process, mode, LineCollector(process.inputStream, "stdout", onLine), LineCollector(process.errorStream, "stderr", onLine))

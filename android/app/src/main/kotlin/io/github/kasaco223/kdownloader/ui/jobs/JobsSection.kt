@@ -79,7 +79,8 @@ fun stageText(res: Resources, stage: StageLabeler.Stage): String {
     }
 }
 
-fun optionLabel(res: Resources, option: String): String = res.getString(
+fun optionLabel(res: Resources, option: String): String = option.takeIf { it.startsWith("h") }?.drop(1)?.toIntOrNull()
+    ?.let { res.getString(R.string.option_height, it) } ?: res.getString(
     when (option) {
         "recommended" -> R.string.option_recommended
         "max" -> R.string.option_max

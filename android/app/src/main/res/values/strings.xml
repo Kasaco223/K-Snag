@@ -186,4 +186,33 @@
     <string name="settings_about">About K-Downloader</string>
     <string name="settings_about_detail">Version, licenses and diagnostics</string>
     <string name="quick_header">Download with K-Downloader</string>
+    <!-- Link analysis (PR-6) -->
+    <string name="analyze_loading">Checking the link…</string>
+    <string name="analyze_loading_hint">You can pick a format now; no need to wait.</string>
+    <string name="analyze_retry">Check again</string>
+    <string name="analyze_live">It\'s a live stream: you can download it once it ends.</string>
+    <string name="analyze_degraded">YouTube only offered low quality (360p) for this video. You can download it anyway or try again later.</string>
+    <string name="analyze_whole_list">Download the whole playlist</string>
+    <string name="analyze_only_video">Just this video</string>
+    <string name="analyze_playlist_cap">Only the first %1$d videos will be downloaded.</string>
+    <plurals name="analyze_playlist_videos">
+        <item quantity="one">1 video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+    <string name="analyze_timeout_title">Checking the link took too long</string>
+    <string name="analyze_timeout_body">Check your connection and try again. You can also download it without waiting.</string>
+    <string name="format_more">More qualities</string>
+    <plurals name="format_playlist_detail">
+        <item quantity="one">%1$s · %2$d video</item>
+        <item quantity="other">%1$s · %2$d videos</item>
+    </plurals>
+    <plurals name="download_queued_many">
+        <item quantity="one">Added 1 download to the queue.</item>
+        <item quantity="other">Added %d downloads to the queue.</item>
+    </plurals>
+    <plurals name="download_skipped">
+        <item quantity="one">1 was already in Downloads.</item>
+        <item quantity="other">%d were already in Downloads.</item>
+    </plurals>
+    <string name="option_height">Video %1$dp</string>
 </resources>

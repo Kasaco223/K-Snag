@@ -5,6 +5,7 @@ package io.github.kasaco223.kdownloader
 import android.app.Application
 import android.os.StrictMode
 import io.github.kasaco223.kdownloader.download.DownloadQueue
+import io.github.kasaco223.kdownloader.download.MediaAnalyzer
 import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.NotificationChannels
 import io.github.kasaco223.kdownloader.platform.UiPrefs
@@ -24,6 +25,9 @@ class KdlApp : Application() {
 
     /** La cola de descargas: lee kd/jobs.json la primera vez que se usa. */
     val queue: DownloadQueue by lazy { DownloadQueue(this, engine) }
+
+    /** El análisis previo de los enlaces (uno a la vez). */
+    val analyzer: MediaAnalyzer by lazy { MediaAnalyzer(engine, queue) }
 
     /** Preferencias de la interfaz (formato principal). */
     val uiPrefs: UiPrefs by lazy { UiPrefs(this) }

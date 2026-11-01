@@ -56,6 +56,7 @@ fun AppRoot(viewModel: MainViewModel) {
     val jobs by viewModel.jobs.collectAsStateWithLifecycle()
     val history by viewModel.history.collectAsStateWithLifecycle()
     val favorite by viewModel.favorite.collectAsStateWithLifecycle()
+    val analysis by viewModel.analysis.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -102,6 +103,10 @@ fun AppRoot(viewModel: MainViewModel) {
                         jobs = jobs,
                         history = history,
                         favorite = favorite,
+                        analysis = analysis,
+                        onAnalyze = { url, playlist -> viewModel.analysis.analyze(url, playlist) },
+                        onRetryAnalysis = viewModel.analysis::retry,
+                        onClearAnalysis = viewModel.analysis::clear,
                         enqueue = viewModel::enqueue,
                         onCancel = viewModel::cancel,
                         onRetry = viewModel::retry,

@@ -16,11 +16,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
 import kotlinx.coroutines.launch
 
-/** Un pedido de descarga: enlace, opción y si se acepta repetir una que ya está en Descargas. */
-data class DownloadRequest(val url: String, val option: String, val allowDuplicate: Boolean = false)
+/**
+ * Un pedido de descarga: enlace, opción y si se acepta repetir una que ya está en Descargas. [prefill] viene del
+ * análisis; [urls] es una lista entera (entonces [url] es el enlace de la lista).
+ */
+data class DownloadRequest(
+    val url: String,
+    val option: String,
+    val allowDuplicate: Boolean = false,
+    val prefill: DownloadQueue.Prefill? = null,
+    val urls: List<String>? = null,
+)
 
 /**
  * Encola una descarga desde un clic, pidiendo antes los permisos que hagan falta (contrato de la app con el
@@ -50,7 +60,7 @@ fun rememberDownloadStarter(
         scope.launch {
             val result = enqueue(request)
             onResult(request, result)
-            if (result is EnqueueResult.Queued) afterQueued()
+            if (result is EnqueueResult.Queued || (result is EnqueueResult.QueuedMany && result.queued > 0)) afterQueued()
         }
     }
 

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.ui.home
 
+import android.content.res.Resources
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -48,6 +50,11 @@ import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
 import io.github.kasaco223.kdownloader.platform.SystemActions
+import io.github.kasaco223.kdownloader.ui.analyze.AnalysisState
+import io.github.kasaco223.kdownloader.ui.analyze.MediaPreview
+import io.github.kasaco223.kdownloader.ui.analyze.isLive
+import io.github.kasaco223.kdownloader.ui.analyze.playlistUrls
+import io.github.kasaco223.kdownloader.ui.analyze.prefill
 import io.github.kasaco223.kdownloader.ui.components.BrandHeader
 import io.github.kasaco223.kdownloader.ui.components.GradientButton
 import io.github.kasaco223.kdownloader.ui.components.ScreenContent
@@ -59,6 +66,7 @@ import io.github.kasaco223.kdownloader.ui.jobs.HistoryRow
 import io.github.kasaco223.kdownloader.ui.jobs.JobRow
 import io.github.kasaco223.kdownloader.ui.jobs.ListHeader
 import io.github.kasaco223.kdownloader.ui.jobs.rememberDownloadStarter
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -76,6 +84,10 @@ fun HomeScreen(
     jobs: List<Job>,
     history: List<HistoryItem>,
     favorite: String,
+    analysis: AnalysisState,
+    onAnalyze: (url: String, playlist: Boolean?) -> Unit,
+    onRetryAnalysis: () -> Unit,
+    onClearAnalysis: () -> Unit,
     enqueue: suspend (DownloadRequest) -> EnqueueResult,
     onCancel: (String) -> Unit,
     onRetry: (String) -> Unit,
@@ -99,6 +111,7 @@ fun HomeScreen(
     val msgAlready = stringResource(R.string.download_already)
     val msgAgain = stringResource(R.string.download_again)
     val msgNoLink = stringResource(R.string.home_paste_empty)
+    val res = LocalResources.current
     lateinit var start: (DownloadRequest) -> Unit
     start = rememberDownloadStarter(enqueue) { request, result ->
         scope.launch {
@@ -111,12 +124,25 @@ fun HomeScreen(
                     val r = snackbar.showSnackbar("$msgAlready: ${result.item.displayName}", actionLabel = msgAgain, duration = SnackbarDuration.Long)
                     if (r == SnackbarResult.ActionPerformed) start(request.copy(allowDuplicate = true))
                 }
+                is EnqueueResult.QueuedMany -> {
+                    if (result.queued > 0) text = ""
+                    snackbar.showSnackbar(queuedManyText(res, result))
+                }
                 is EnqueueResult.Rejected -> snackbar.showSnackbar(if (result.code == "storage_permission") msgStorage else msgInvalid)
             }
         }
     }
     val link = text.trim()
     val urlOk = Urls.validate(link) != null
+    // Analiza el enlace apenas se deja de escribir (pegar o compartir lo deja listo de una vez).
+    LaunchedEffect(link, urlOk) {
+        if (urlOk) {
+            delay(400)
+            onAnalyze(link, null)
+        } else {
+            onClearAnalysis()
+        }
+    }
     val running = jobs.filter { it.state == "downloading" || it.state == "processing" }.sortedBy { it.createdAt }
     val queued = jobs.filter { it.state == "queued" }.sortedBy { it.createdAt }
     val problems = jobs.filter { it.state == "error" || it.state == "interrupted" }.sortedByDescending { it.createdAt }
@@ -133,7 +159,15 @@ fun HomeScreen(
         }
 
         if (urlOk) {
-            LinkReady(link = link, favorite = favorite, onClear = { text = "" }, onPick = { option -> start(DownloadRequest(link, option)) })
+            LinkReady(
+                link = link,
+                favorite = favorite,
+                analysis = analysis,
+                onClear = { text = "" },
+                onRetry = onRetryAnalysis,
+                onPlaylistMode = { onAnalyze(link, it) },
+                onPick = { option -> start(requestFor(link, option, analysis)) },
+            )
         } else {
             GradientButton(
                 onClick = {
@@ -179,9 +213,30 @@ fun HomeScreen(
     }
 }
 
-/** El enlace listo para bajar: el botón grande con el formato principal y los otros como chips. */
+/** El pedido para un formato: con lo que se sabe del análisis, o la lista entera si es una lista. */
+fun requestFor(link: String, option: String, analysis: AnalysisState): DownloadRequest {
+    val a = (analysis as? AnalysisState.Ready)?.takeIf { it.url == link }?.analysis ?: return DownloadRequest(link, option)
+    return if (a.summary.isPlaylist) DownloadRequest(link, option, urls = a.playlistUrls) else DownloadRequest(a.url, option, prefill = a.prefill())
+}
+
+/** "Se agregaron 12 videos a la cola (3 ya estaban en Descargas)". */
+fun queuedManyText(res: Resources, r: EnqueueResult.QueuedMany): String {
+    val queued = res.getQuantityString(R.plurals.download_queued_many, r.queued, r.queued)
+    return if (r.skipped > 0) queued + " " + res.getQuantityString(R.plurals.download_skipped, r.skipped, r.skipped) else queued
+}
+
+/** El enlace listo para bajar: lo que se sabe de él, el botón grande con el formato principal y los otros como chips. */
 @Composable
-private fun LinkReady(link: String, favorite: String, onClear: () -> Unit, onPick: (String) -> Unit) {
+private fun LinkReady(
+    link: String,
+    favorite: String,
+    analysis: AnalysisState,
+    onClear: () -> Unit,
+    onRetry: () -> Unit,
+    onPlaylistMode: (Boolean) -> Unit,
+    onPick: (String) -> Unit,
+) {
+    val ready = (analysis as? AnalysisState.Ready)?.takeIf { it.url == link }?.analysis
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
@@ -196,7 +251,15 @@ private fun LinkReady(link: String, favorite: String, onClear: () -> Unit, onPic
                     Icon(painterResource(R.drawable.ic_close), contentDescription = stringResource(R.string.home_clear_link), modifier = Modifier.size(20.dp))
                 }
             }
-            FormatChooser(favorite = favorite, onPick = onPick)
+            MediaPreview(analysis.takeIf { it !is AnalysisState.Idle } ?: AnalysisState.Loading(link, false), onRetry, onPlaylistMode)
+            FormatChooser(
+                favorite = favorite,
+                onPick = onPick,
+                enabled = !analysis.isLive,
+                tiles = ready?.tiles,
+                more = ready?.more.orEmpty(),
+                playlistCount = ready?.takeIf { it.summary.isPlaylist }?.playlistUrls?.size,
+            )
         }
     }
 }
