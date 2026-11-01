@@ -33,6 +33,7 @@ import io.github.kasaco223.kdownloader.ui.about.ThirdPartyScreen
 import io.github.kasaco223.kdownloader.ui.components.LocalThumbnails
 import io.github.kasaco223.kdownloader.ui.downloads.DownloadsScreen
 import io.github.kasaco223.kdownloader.ui.home.HomeScreen
+import io.github.kasaco223.kdownloader.ui.onboarding.WelcomeScreen
 import io.github.kasaco223.kdownloader.ui.settings.SettingsScreen
 import kotlinx.coroutines.launch
 
@@ -57,6 +58,7 @@ fun AppRoot(viewModel: MainViewModel) {
     val history by viewModel.history.collectAsStateWithLifecycle()
     val favorite by viewModel.favorite.collectAsStateWithLifecycle()
     val analysis by viewModel.analysis.state.collectAsStateWithLifecycle()
+    val onboarded by viewModel.prefs.onboarded.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -66,6 +68,11 @@ fun AppRoot(viewModel: MainViewModel) {
     }
 
     BackHandler(enabled = screen != Screen.HOME) { viewModel.back() }
+
+    if (!onboarded) {
+        WelcomeScreen(engineStatus = engineStatus, onRetryEngine = viewModel::retryEngine, onDone = { viewModel.prefs.setOnboarded(true) })
+        return
+    }
 
     CompositionLocalProvider(LocalThumbnails provides viewModel.thumbnails) {
         if (screen.isTab) {
@@ -87,8 +94,7 @@ fun AppRoot(viewModel: MainViewModel) {
                     )
                     Screen.SETTINGS -> SettingsScreen(
                         padding = padding,
-                        favorite = favorite,
-                        onFavorite = viewModel::setFavorite,
+                        prefs = viewModel.prefs,
                         engineStatus = engineStatus,
                         onRetryEngine = viewModel::retryEngine,
                         onOpenAbout = { viewModel.open(Screen.ABOUT) },

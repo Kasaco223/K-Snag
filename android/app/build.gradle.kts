@@ -58,6 +58,8 @@ android {
         buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
         buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD\"")
         buildConfigField("String", "WEB_BASE", "\"https://kdownloader.vercel.app\"")
+        // Enlace de donación (PayPal). Vacío: la app no muestra «Apoya K-Downloader».
+        buildConfigField("String", "DONATE_URL", "\"\"")
         buildConfigField("String", "YOUTUBEDL_ANDROID_VERSION", "\"${libs.versions.youtubedl.get()}\"")
         buildConfigField("String", "YTDLP_BUNDLED_VERSION", "\"${pin("ytdlp.version")}\"")
         buildConfigField("String", "YTDLP_BUNDLED_CHANNEL", "\"${pin("ytdlp.channel")}\"")

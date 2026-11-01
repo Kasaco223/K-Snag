@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.testing
 
+import android.app.Application
+import android.content.Context
 import androidx.test.runner.AndroidJUnitRunner
 
 /**
@@ -11,4 +13,10 @@ import androidx.test.runner.AndroidJUnitRunner
  *
  * En CI corre con `-e notAnnotation io.github.kasaco223.kdownloader.testing.NetworkTest`.
  */
-class KdlTestRunner : AndroidJUnitRunner()
+class KdlTestRunner : AndroidJUnitRunner() {
+    /** Las pruebas arrancan en Inicio: la bienvenida ya se vio (WelcomeTest la vuelve a mostrar). */
+    override fun callApplicationOnCreate(app: Application) {
+        app.getSharedPreferences("kd_ui", Context.MODE_PRIVATE).edit().putBoolean("onboarded", true).commit()
+        super.callApplicationOnCreate(app)
+    }
+}

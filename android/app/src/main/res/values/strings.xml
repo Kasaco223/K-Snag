@@ -215,4 +215,20 @@
         <item quantity="other">%d were already in Downloads.</item>
     </plurals>
     <string name="option_height">Video %1$dp</string>
+    <!-- Welcome, appearance and donations -->
+    <string name="welcome_title">Welcome to K-Downloader</string>
+    <string name="welcome_lead">Save videos and music from the internet to your phone, free and without ads.</string>
+    <string name="welcome_step1">Copy the link, or tap Share in YouTube or any other app.</string>
+    <string name="welcome_step2">Pick the format: video, best quality or audio.</string>
+    <string name="welcome_step3">It\'s saved to Downloads › K-Downloader.</string>
+    <string name="welcome_responsible_title">Responsible use</string>
+    <string name="welcome_responsible_body">Only download what you have the right to: your own content, content with a free license or with the author\'s permission. Respect copyright and the rules of each site. K-Downloader doesn\'t download DRM-protected content.</string>
+    <string name="welcome_accept">I understand</string>
+    <string name="welcome_start">Get started</string>
+    <string name="settings_theme_title">Appearance</string>
+    <string name="settings_theme_system">Same as the phone</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="donate_title">Support K-Downloader</string>
+    <string name="donate_detail">It\'s free and has no ads. If it helps you, a donation keeps it going.</string>
 </resources>

@@ -127,6 +127,11 @@ fun AboutScreen(
                 TextButton(onClick = { openPage(BuildConfig.WEB_BASE) }, modifier = Modifier.fillMaxWidth()) {
                     Text(stringResource(R.string.about_website))
                 }
+                if (BuildConfig.DONATE_URL.isNotEmpty()) {
+                    TextButton(onClick = { openPage(BuildConfig.DONATE_URL) }, modifier = Modifier.fillMaxWidth()) {
+                        Text(stringResource(R.string.donate_title))
+                    }
+                }
             }
             EngineCard(
                 status = engineStatus,

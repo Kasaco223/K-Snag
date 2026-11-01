@@ -79,6 +79,9 @@ class MainViewModel(
 
     fun setFavorite(option: String) = uiPrefs.setFavorite(option)
 
+    /** Todos los ajustes (Ajustes los lee y cambia directamente). */
+    val prefs: UiPrefs = uiPrefs
+
     suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult = request.urls?.let {
         queue.enqueueAll(it, request.option, request.allowDuplicate)
     } ?: queue.enqueue(request.url, request.option, request.allowDuplicate, request.prefill)

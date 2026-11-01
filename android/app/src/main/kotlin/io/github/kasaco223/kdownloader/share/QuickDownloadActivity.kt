@@ -21,6 +21,7 @@ import io.github.kasaco223.kdownloader.ui.home.queuedManyText
 import io.github.kasaco223.kdownloader.ui.home.requestFor
 import io.github.kasaco223.kdownloader.ui.jobs.rememberDownloadStarter
 import io.github.kasaco223.kdownloader.ui.theme.KdTheme
+import io.github.kasaco223.kdownloader.ui.theme.darkFor
 
 /**
  * Destino de «Compartir» (texto plano) y de la selección de texto (PROCESS_TEXT). Es pública: todo lo que
@@ -38,7 +39,8 @@ class QuickDownloadActivity : AppCompatActivity() {
         if (savedInstanceState == null) viewModel.reset(IncomingLinks.from(intent))
         (application as KdlApp).engine.prepare() // para que el motor esté listo cuando lleguen las descargas
         setContent {
-            KdTheme {
+            val theme by (application as KdlApp).uiPrefs.theme.collectAsStateWithLifecycle()
+            KdTheme(dark = darkFor(theme)) {
                 val link by viewModel.link.collectAsStateWithLifecycle()
                 val favorite by (application as KdlApp).uiPrefs.favorite.collectAsStateWithLifecycle()
                 val analysis by viewModel.analysis.state.collectAsStateWithLifecycle()

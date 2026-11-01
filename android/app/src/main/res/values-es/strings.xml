@@ -222,4 +222,20 @@
         <item quantity="other">%d ya estaban en Descargas.</item>
     </plurals>
     <string name="option_height">Video %1$dp</string>
+    <!-- Bienvenida, apariencia y donaciones -->
+    <string name="welcome_title">Te damos la bienvenida a K-Downloader</string>
+    <string name="welcome_lead">Guarda videos y música de internet en tu celular, gratis y sin anuncios.</string>
+    <string name="welcome_step1">Copia el enlace o toca Compartir en YouTube o en otra app.</string>
+    <string name="welcome_step2">Elige el formato: video, máxima calidad o audio.</string>
+    <string name="welcome_step3">Queda en Descargas › K-Downloader.</string>
+    <string name="welcome_responsible_title">Uso responsable</string>
+    <string name="welcome_responsible_body">Descarga solo lo que tienes derecho a guardar: contenido tuyo, con licencia libre o con permiso de su autor. Respeta los derechos de autor y las reglas de cada sitio. K-Downloader no descarga contenido protegido con DRM.</string>
+    <string name="welcome_accept">Entiendo</string>
+    <string name="welcome_start">Empezar</string>
+    <string name="settings_theme_title">Apariencia</string>
+    <string name="settings_theme_system">Igual que el celular</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Oscuro</string>
+    <string name="donate_title">Apoya K-Downloader</string>
+    <string name="donate_detail">Es gratis y sin anuncios. Si te sirve, una donación ayuda a que siga.</string>
 </resources>
