@@ -238,4 +238,24 @@
     <string name="settings_theme_dark">Oscuro</string>
     <string name="donate_title">Apoya K-Downloader</string>
     <string name="donate_detail">Es gratis y sin anuncios. Si te sirve, una donación ayuda a que siga.</string>
+    <!-- Ajustes: descargas y motor -->
+    <string name="settings_downloads_title">Descargas</string>
+    <string name="settings_wifi_only">Solo con Wi-Fi</string>
+    <string name="settings_wifi_only_detail">Las descargas esperan una red Wi-Fi (o sin límite de datos) para empezar.</string>
+    <string name="engine_settings_title">Motor de descargas</string>
+    <string name="engine_settings_version">yt-dlp %1$s (%2$s)</string>
+    <string name="engine_settings_auto">Actualizar el motor automáticamente</string>
+    <string name="engine_settings_auto_detail">YouTube cambia seguido y un yt-dlp nuevo lo arregla. Se revisa una vez al día y solo cuando no hay descargas.</string>
+    <string name="engine_channel_nightly">Nightly (recomendado)</string>
+    <string name="engine_channel_nightly_detail">Recibe los arreglos para YouTube el mismo día.</string>
+    <string name="engine_channel_stable">Estable</string>
+    <string name="engine_channel_stable_detail">Menos cambios, pero los arreglos llegan más tarde.</string>
+    <string name="engine_update_now">Buscar actualización ahora</string>
+    <string name="engine_rollback">Volver a yt-dlp %1$s</string>
+    <string name="engine_update_checking">Buscando una versión nueva…</string>
+    <string name="engine_update_uptodate">Tienes la última versión (%1$s).</string>
+    <string name="engine_update_done">Se actualizó a yt-dlp %1$s.</string>
+    <string name="engine_update_rolled_back">Volviste a yt-dlp %1$s. La otra versión no se va a volver a instalar sola.</string>
+    <string name="engine_update_busy">El motor está en uso. Vuelve a intentarlo cuando terminen las descargas.</string>
+    <string name="engine_update_failed">No pudimos buscar una actualización. Revisa tu conexión y vuelve a intentarlo más tarde.</string>
 </resources>

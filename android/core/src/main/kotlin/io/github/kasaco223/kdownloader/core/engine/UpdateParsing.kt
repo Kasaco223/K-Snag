@@ -8,7 +8,7 @@ package io.github.kasaco223.kdownloader.core.engine
  * `engine.json` (port de `hints.validate` de Windows).
  */
 object UpdateParsing {
-    private val TAG_IN_LOCATION = Regex("/releases/tag/([^/?#]+)$")
+    private val TAG_IN_LOCATION = Regex("""^(?:https://github\.com)?/[^/?#]+/[^/?#]+/releases/tag/([^/?#]+)$""")
     private val SHA256 = Regex("^[0-9a-fA-F]{64}$")
     private val PLAYER_CLIENT = Regex("^-?[a-z_]+(,-?[a-z_]+)*$")
 

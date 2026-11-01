@@ -35,6 +35,7 @@ import io.github.kasaco223.kdownloader.BuildConfig
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.platform.SystemActions
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
+import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.UiPrefs
 import io.github.kasaco223.kdownloader.ui.components.KdCard
 import io.github.kasaco223.kdownloader.ui.components.ScreenContent
@@ -48,6 +49,9 @@ fun SettingsScreen(
     padding: PaddingValues,
     prefs: UiPrefs,
     engineStatus: EngineStatus,
+    engineUpdate: KdEngine.UpdateState,
+    onCheckEngineUpdate: () -> Unit,
+    onRollbackEngine: () -> Unit,
     onRetryEngine: () -> Unit,
     onOpenAbout: () -> Unit,
 ) {
@@ -105,7 +109,13 @@ fun SettingsScreen(
                 }
             }
         }
-        EngineCard(status = engineStatus, onRetry = onRetryEngine)
+        val wifiOnly by prefs.wifiOnly.collectAsStateWithLifecycle()
+        KdCard {
+            SectionTitle(stringResource(R.string.settings_downloads_title))
+            SwitchRow(wifiOnly, stringResource(R.string.settings_wifi_only), stringResource(R.string.settings_wifi_only_detail), prefs::setWifiOnly)
+        }
+        if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
+        EngineSettingsCard(prefs, engineStatus, engineUpdate, onCheckEngineUpdate, onRollbackEngine)
         if (BuildConfig.DONATE_URL.isNotEmpty()) {
             LinkCard(R.drawable.ic_heart, R.string.donate_title, R.string.donate_detail) { SystemActions.openWebPage(context, BuildConfig.DONATE_URL) }
         }

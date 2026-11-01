@@ -26,7 +26,11 @@ import io.github.kasaco223.kdownloader.core.download.Presets
 import io.github.kasaco223.kdownloader.core.download.ProgressModel
 import io.github.kasaco223.kdownloader.core.download.long
 import io.github.kasaco223.kdownloader.core.download.str
+import io.github.kasaco223.kdownloader.core.download.RetryPolicy
 import io.github.kasaco223.kdownloader.engine.KdEngine
+import io.github.kasaco223.kdownloader.platform.UiPrefs
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -44,7 +48,7 @@ import java.util.UUID
  * primer plano. Guarda los trabajos en kd/jobs.json y lo terminado en kd/history.json. Los reintentos
  * automáticos, el análisis previo y la vuelta tras un cierre llegan en los próximos PR.
  */
-class DownloadQueue(private val context: Context, private val engine: KdEngine) {
+class DownloadQueue(private val context: Context, private val engine: KdEngine, private val prefs: UiPrefs) {
     sealed interface EnqueueResult {
         data class Queued(val id: String) : EnqueueResult
         data class AlreadyInDownloads(val item: HistoryItem) : EnqueueResult
@@ -85,6 +89,11 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         @Volatile var run: io.github.kasaco223.kdownloader.engine.PyRunner.Run? = null
 
         @Volatile var canceled = false
+
+        /** El vigilante cortó la ejecución porque yt-dlp no escribía nada hace [STALL_MS]. */
+        @Volatile var stalled = false
+
+        @Volatile var lastActivity = System.currentTimeMillis()
     }
 
     @Volatile private var running: Running? = null
@@ -244,6 +253,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         val r = Running(job.id)
         running = r
         val jobDir = File(jobsDir, job.id)
+        var retryDelay = 0L
         try {
             update(job.id) { it.copy(state = "downloading", attempts = it.attempts + 1, progress = null, error = null) }
             val status = engine.ensureReady()
@@ -251,6 +261,15 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
                 fail(job.id, engineError(status.error.code, status.error.detail))
                 return
             }
+            // Espacio: al menos 200 MB libres para los temporales (la descarga y la unión pueden duplicar el tamaño).
+            val free = runCatching { android.os.StatFs(dirs.root.path).availableBytes }.getOrDefault(Long.MAX_VALUE)
+            if (free < MIN_FREE_BYTES) {
+                fail(job.id, catalog.toJobError(catalog.byCode("disk_full", "libres: $free bytes")))
+                return
+            }
+            // Debajo del mínimo de yt-dlp: se intenta actualizar antes (como mucho cada hora).
+            val channel = prefs.engineChannel.value
+            if (prefs.autoUpdateEngine.value && engine.updateDue(channel)) runCatching { engine.updateYtdlp(channel) }
             val ytdlp = engine.activeYtdlp() ?: return fail(job.id, engineError("engine_failed", "sin yt-dlp activo"))
             val home = File(jobDir, "home").apply { mkdirs() }
             val temp = File(jobDir, "tmp").apply { mkdirs() }
@@ -258,11 +277,17 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
             val choice = Presets.optionToChoice(job.option) ?: return fail(job.id, catalog.toJobError(catalog.byCode("unknown")))
             val paths = Args.Paths(dirs.cache.apply { mkdirs() }.path, dirs.lib("libqjs.so").path, dirs.lib("libffmpeg.so").path, home.path, temp.path)
             val extra = if (BuildConfig.KD_TEST_HOOKS) testExtraArgs.filter { it == "--enable-file-urls" || it == "--limit-rate" || it.matches(Regex("\\d+[KM]")) } else emptyList()
-            val args = listOf(ytdlp.path) + Args.download(paths, job.url, choice, job.isYoutube, forceBest = job.forceBest, extra = extra)
+            val current = _jobs.value.firstOrNull { it.id == job.id } ?: job
+            val ytdlpNow = engine.activeYtdlp() ?: ytdlp
+            val args = listOf(ytdlpNow.path) + Args.download(
+                paths, job.url, choice, job.isYoutube, forceBest = current.forceBest, quiet = current.quiet,
+                playerClient = engine.hints.youtubePlayerClient, extra = extra,
+            )
             val model = ProgressModel(job.option, job.isYoutube)
             var lastEmit = 0L
             val result = engine.withLease {
                 val run = engine.runner.start(args, runDir, engine.runMode(), onLine = { line ->
+                    r.lastActivity = System.currentTimeMillis()
                     val ev = Kdl.parseLine(line) ?: return@start
                     val now = System.currentTimeMillis()
                     synchronized(model) { model.onEvent(ev, now) }
@@ -273,7 +298,22 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
                 })
                 r.run = run
                 if (r.canceled) run.cancel()
-                run.await(RUN_TIMEOUT_MS)
+                // Vigilante: si yt-dlp no escribe nada en STALL_MS (una conexión colgada), se corta y se reintenta.
+                val watchdog = scope.launch {
+                    while (isActive) {
+                        delay(30_000)
+                        if (System.currentTimeMillis() - r.lastActivity > STALL_MS) {
+                            r.stalled = true
+                            run.cancel()
+                            break
+                        }
+                    }
+                }
+                try {
+                    run.await(RUN_TIMEOUT_MS)
+                } finally {
+                    watchdog.cancel()
+                }
             }
             val lines = result.stdout + result.stderr
             val accepted = model.filePath?.let { acceptFile(it, home) }
@@ -285,8 +325,14 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
                 }
                 is ExitMapper.Outcome.Ok -> publish(job.id, File(outcome.path), jobDir, r)
                 is ExitMapper.Outcome.AlreadyDownloaded -> update(job.id) { it.copy(state = "done", progress = 1.0, notes = it.notes + outcome.note) }
-                ExitMapper.Outcome.Killed -> fail(job.id, catalog.toJobError(catalog.classify(lines)))
-                is ExitMapper.Outcome.Failed -> fail(job.id, errorFor(outcome.code, lines))
+                ExitMapper.Outcome.Killed, is ExitMapper.Outcome.Failed -> {
+                    val error = when {
+                        r.stalled -> catalog.toJobError(catalog.byCode("network", "sin actividad por ${STALL_MS / 60_000} min"))
+                        outcome is ExitMapper.Outcome.Failed -> errorFor(outcome.code, lines)
+                        else -> catalog.toJobError(catalog.classify(lines))
+                    }
+                    retryDelay = failOrRetry(job.id, error)
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error inesperado en el trabajo ${job.id}", e)
@@ -294,6 +340,30 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         } finally {
             running = null
         }
+        if (retryDelay > 0) delay(retryDelay)
+    }
+
+    /**
+     * Un error con acción automática ([RetryPolicy]) vuelve a la cola (actualizando yt-dlp, con «la mejor
+     * disponible» o en modo tranquilo); si no, queda como error. Devuelve cuánto esperar antes de seguir.
+     */
+    private suspend fun failOrRetry(id: String, error: JobError): Long {
+        val j = _jobs.value.firstOrNull { it.id == id } ?: return 0
+        val done = j.notes.filter { it.startsWith(AUTO_NOTE) }.map { it.removePrefix(AUTO_NOTE) }
+        val d = RetryPolicy.decide(error.code, error.auto, j.attempts, done)
+        if (d !is RetryPolicy.Decision.Retry) {
+            fail(id, error)
+            return 0
+        }
+        Log.i(TAG, "Trabajo $id: ${error.code} → ${d.action}")
+        if (d.updateEngine) runCatching { engine.updateYtdlp(prefs.engineChannel.value) }
+        update(id) {
+            it.copy(
+                state = "queued", error = null, progress = null, speed = null, eta = null, postprocessor = null,
+                forceBest = it.forceBest || d.forceBest, quiet = it.quiet || d.quiet, notes = it.notes + (AUTO_NOTE + d.action),
+            )
+        }
+        return d.delayMs
     }
 
     private fun publish(id: String, file: File, jobDir: File, r: Running) {
@@ -352,7 +422,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     }
 
     private fun ErrorCatalog.toJobError(c: ErrorCatalog.Classified) =
-        JobError(c.code, c.title("es"), c.message("es"), c.title("en"), c.message("en"), c.details)
+        JobError(c.code, c.title("es"), c.message("es"), c.title("en"), c.message("en"), c.details, c.auto)
 
     /** Error con textos de la app (strings.xml) en español e inglés. */
     internal fun localError(code: String, title: Int, body: Int, detail: String): JobError {
@@ -452,6 +522,10 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     companion object {
         private const val TAG = "DownloadQueue"
         private const val RUN_TIMEOUT_MS = 6L * 60 * 60 * 1000
+
+        private const val STALL_MS = 10L * 60 * 1000
+        private const val MIN_FREE_BYTES = 200L * 1024 * 1024
+        private const val AUTO_NOTE = "auto:"
 
         /** Tope de una lista (diseño, B.3 #13). */
         const val MAX_BATCH = 500

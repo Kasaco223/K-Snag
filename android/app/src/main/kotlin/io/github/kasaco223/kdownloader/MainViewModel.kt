@@ -10,13 +10,13 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import io.github.kasaco223.kdownloader.contracts.EngineController
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
 import io.github.kasaco223.kdownloader.download.MediaAnalyzer
 import io.github.kasaco223.kdownloader.download.Thumbnails
+import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.UiPrefs
 import io.github.kasaco223.kdownloader.ui.analyze.LinkAnalysis
 import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
@@ -51,7 +51,7 @@ enum class RepairOutcome { RUNNING, DONE, BUSY, FAILED }
  */
 class MainViewModel(
     private val savedState: SavedStateHandle,
-    private val engine: EngineController,
+    private val engine: KdEngine,
     private val queue: DownloadQueue,
     private val uiPrefs: UiPrefs,
     analyzer: MediaAnalyzer,
@@ -133,6 +133,17 @@ class MainViewModel(
     }
 
     fun retryEngine() = engine.retrySetup()
+
+    /** La última búsqueda de una versión nueva de yt-dlp (Ajustes › Motor). */
+    val engineUpdate: StateFlow<KdEngine.UpdateState> = engine.update
+
+    fun checkEngineUpdate() {
+        viewModelScope.launch { engine.updateYtdlp(prefs.engineChannel.value) }
+    }
+
+    fun rollbackEngine() {
+        viewModelScope.launch { engine.rollbackYtdlp() }
+    }
 
     fun repairEngine() {
         if (_repair.value == RepairOutcome.RUNNING) return

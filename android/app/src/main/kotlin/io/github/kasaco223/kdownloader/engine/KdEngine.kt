@@ -33,6 +33,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.io.IOException
+import io.github.kasaco223.kdownloader.core.engine.YtdlpVersion
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -50,6 +51,25 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
     private val versionCode: Long = installedVersionCode(context)
     private val installer = PayloadInstaller(dirs, versionCode)
     private val store = EngineStore(context, dirs)
+    private val updater = EngineUpdater(dirs, runner)
+
+    /** Lo que pasó con la última búsqueda de una versión nueva de yt-dlp (Ajustes › Motor). */
+    sealed interface UpdateState {
+        data object Idle : UpdateState
+        data object Checking : UpdateState
+        data class UpToDate(val version: String) : UpdateState
+        data class Updated(val version: String) : UpdateState
+        data class RolledBack(val version: String) : UpdateState
+        data object Busy : UpdateState
+        data class Failed(val reason: String) : UpdateState
+    }
+
+    private val _update = MutableStateFlow<UpdateState>(UpdateState.Idle)
+    val update: StateFlow<UpdateState> = _update.asStateFlow()
+    private val updateLock = Mutex()
+
+    /** Las pistas remotas (engine.json), que pone [HintsStore]. */
+    @Volatile var hints: io.github.kasaco223.kdownloader.core.engine.UpdateParsing.Hints = io.github.kasaco223.kdownloader.core.engine.UpdateParsing.Hints()
 
     private val _status = MutableStateFlow<EngineStatus>(EngineStatus.NotReady)
     override val status: StateFlow<EngineStatus> = _status.asStateFlow()
@@ -119,6 +139,85 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
             is EngineStatus.Failed -> Result.failure(EngineException(s.error))
             else -> Result.failure(EngineException(EngineError(EngineErrors.UNKNOWN, s.toString())))
         }
+    }
+
+    /** El mínimo de yt-dlp para [channel]: el de engine.json o el de la app. */
+    fun minimum(channel: String): String =
+        hints.minYtdlp[channel] ?: io.github.kasaco223.kdownloader.core.engine.UpdateParsing.MIN_YTDLP.getValue(channel)
+
+    /** Si toca buscar una versión nueva: 24 h desde la última vez, otro canal o por debajo del mínimo. */
+    fun updateDue(channel: String): Boolean {
+        val s = state
+        val active = s.active ?: return false
+        val below = YtdlpVersion.parse(active.version)?.let { it < YtdlpVersion.parse(minimum(channel))!! } == true
+        val wait = if (below) 3_600_000L else 24 * 3_600_000L
+        return active.channel != channel || System.currentTimeMillis() - s.checkedAt > wait
+    }
+
+    /**
+     * Busca y activa una versión nueva de yt-dlp (diseño del motor §4). Nunca con una descarga o un análisis
+     * corriendo ([UpdateState.Busy]). La anterior queda para «Volver a la versión anterior».
+     */
+    suspend fun updateYtdlp(channel: String): UpdateState = updateLock.withLock {
+        if (ensureReady() !is EngineStatus.Ready) return@withLock UpdateState.Failed("motor no listo").also { _update.value = it }
+        if (leases.get() > 0) return@withLock UpdateState.Busy.also { _update.value = it }
+        _update.value = UpdateState.Checking
+        val result = kotlinx.coroutines.withContext(Dispatchers.IO) {
+            leases.incrementAndGet()
+            try {
+                updater.check(state.active, channel, state.skipVersions, minimum(channel), runMode())
+            } finally {
+                leases.decrementAndGet()
+            }
+        }
+        val now = System.currentTimeMillis()
+        val out = when (result) {
+            is EngineUpdater.Result.UpToDate -> {
+                save(state.copy(checkedAt = now, lastError = null))
+                UpdateState.UpToDate(result.version)
+            }
+            is EngineUpdater.Result.Failed -> {
+                save(state.copy(checkedAt = now, lastError = result.reason))
+                UpdateState.Failed(result.reason)
+            }
+            is EngineUpdater.Result.Downloaded -> {
+                val prev = state.active
+                var next = state.copy(active = result.copy, previous = prev, checkedAt = now, lastError = null,
+                    skipVersions = state.skipVersions.filter { v -> YtdlpVersion.parse(v)?.let { it > YtdlpVersion.parse(result.copy.version)!! } == true }.toSet())
+                // La prueba de humo ya corrió: la autoprueba sigue valiendo para la versión nueva.
+                next = next.copy(selfTest = next.selfTest?.copy(key = selfTestKey(next)))
+                save(next)
+                pruneVersions()
+                _status.value = EngineStatus.Ready(versions(next))
+                UpdateState.Updated(result.copy.version)
+            }
+        }
+        _update.value = out
+        out
+    }
+
+    /** Vuelve a la copia anterior; la que se deja queda en la lista de descartadas (no vuelve sola). */
+    suspend fun rollbackYtdlp(): UpdateState = updateLock.withLock {
+        if (leases.get() > 0) return@withLock UpdateState.Busy.also { _update.value = it }
+        val prev = state.previous?.takeIf(store::verifies) ?: return@withLock UpdateState.Failed("sin versión anterior").also { _update.value = it }
+        val current = state.active
+        var next = state.copy(active = prev, previous = current, skipVersions = state.skipVersions + listOfNotNull(current?.version))
+        next = next.copy(selfTest = next.selfTest?.copy(key = selfTestKey(next)))
+        save(next)
+        _status.value = EngineStatus.Ready(versions(next))
+        UpdateState.RolledBack(prev.version).also { _update.value = it }
+    }
+
+    private fun save(next: EngineState) {
+        state = next
+        EngineState.save(dirs.stateFile, next)
+    }
+
+    /** Borra las copias que no son ni la activa ni la anterior (solo sin ejecuciones en curso). */
+    private fun pruneVersions() {
+        if (leases.get() > 0) return
+        val keep = setOfNotNull(state.active?.version, state.previous?.version)
+        dirs.ytdlp.listFiles()?.filter { it.isDirectory && it.name !in keep }?.forEach { it.deleteRecursively() }
     }
 
     /** La copia activa de yt-dlp, o null si el motor no está listo. */

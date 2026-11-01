@@ -231,4 +231,24 @@
     <string name="settings_theme_dark">Dark</string>
     <string name="donate_title">Support K-Downloader</string>
     <string name="donate_detail">It\'s free and has no ads. If it helps you, a donation keeps it going.</string>
+    <!-- Settings: downloads and engine -->
+    <string name="settings_downloads_title">Downloads</string>
+    <string name="settings_wifi_only">Only on Wi-Fi</string>
+    <string name="settings_wifi_only_detail">Downloads wait for a Wi-Fi network (or one without a data limit) to start.</string>
+    <string name="engine_settings_title">Download engine</string>
+    <string name="engine_settings_version">yt-dlp %1$s (%2$s)</string>
+    <string name="engine_settings_auto">Update the engine automatically</string>
+    <string name="engine_settings_auto_detail">YouTube changes often; a new yt-dlp fixes it. It\'s checked once a day and only when nothing is downloading.</string>
+    <string name="engine_channel_nightly">Nightly (recommended)</string>
+    <string name="engine_channel_nightly_detail">Gets fixes for YouTube the same day.</string>
+    <string name="engine_channel_stable">Stable</string>
+    <string name="engine_channel_stable_detail">Fewer changes, but fixes arrive later.</string>
+    <string name="engine_update_now">Check for an update now</string>
+    <string name="engine_rollback">Go back to yt-dlp %1$s</string>
+    <string name="engine_update_checking">Checking for a new version…</string>
+    <string name="engine_update_uptodate">You have the latest version (%1$s).</string>
+    <string name="engine_update_done">Updated to yt-dlp %1$s.</string>
+    <string name="engine_update_rolled_back">Back on yt-dlp %1$s. The other version won\'t be installed again on its own.</string>
+    <string name="engine_update_busy">The engine is busy. Try again when the downloads finish.</string>
+    <string name="engine_update_failed">We couldn\'t check for an update. Check your connection and try again later.</string>
 </resources>

@@ -59,6 +59,7 @@ fun AppRoot(viewModel: MainViewModel) {
     val favorite by viewModel.favorite.collectAsStateWithLifecycle()
     val analysis by viewModel.analysis.state.collectAsStateWithLifecycle()
     val onboarded by viewModel.prefs.onboarded.collectAsStateWithLifecycle()
+    val engineUpdate by viewModel.engineUpdate.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -96,6 +97,9 @@ fun AppRoot(viewModel: MainViewModel) {
                         padding = padding,
                         prefs = viewModel.prefs,
                         engineStatus = engineStatus,
+                        engineUpdate = engineUpdate,
+                        onCheckEngineUpdate = viewModel::checkEngineUpdate,
+                        onRollbackEngine = viewModel::rollbackEngine,
                         onRetryEngine = viewModel::retryEngine,
                         onOpenAbout = { viewModel.open(Screen.ABOUT) },
                     )

@@ -41,7 +41,7 @@ class EngineUpdater(private val dirs: EngineDirs, private val runner: PyRunner) 
             ?: return Result.Failed("sin tag en releases/latest")
         val activeVersion = active?.let { YtdlpVersion.parse(it.version) }
         val sameChannel = active?.channel == channel
-        if ((sameChannel && active?.version == latest) || latest in skip) return Result.UpToDate(active?.version ?: latest)
+        if ((sameChannel && active.version == latest) || latest in skip) return Result.UpToDate(active?.version ?: latest)
 
         var target = latest
         val spec = getText("https://github.com/$repo/releases/latest/download/_update_spec", 64 * 1024, allow404 = true)

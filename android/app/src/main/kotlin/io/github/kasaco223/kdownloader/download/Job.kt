@@ -15,6 +15,8 @@ data class JobError(
     val titleEn: String,
     val messageEn: String,
     val details: String,
+    /** La acción automática del catálogo (update_retry, fallback_best, retry_network, quiet_mode) o null. */
+    val auto: String? = null,
 ) {
     fun title(lang: String) = if (lang == "es") titleEs else titleEn
 
@@ -58,6 +60,8 @@ data class Job(
     val finishedAt: Long? = null,
     val attempts: Int = 0,
     val forceBest: Boolean = false,
+    /** Modo tranquilo (pausas entre pedidos) después de un límite de YouTube. */
+    val quiet: Boolean = false,
 ) {
     val isActive: Boolean get() = state == "downloading" || state == "processing"
     val isTerminal: Boolean get() = state == "done" || state == "error" || state == "canceled"
@@ -74,10 +78,10 @@ data class Job(
         putOpt("pending_uri", pendingUri)
         error?.let {
             put("error", JSONObject().put("code", it.code).put("title_es", it.titleEs).put("message_es", it.messageEs)
-                .put("title_en", it.titleEn).put("message_en", it.messageEn).put("details", it.details))
+                .put("title_en", it.titleEn).put("message_en", it.messageEn).put("details", it.details).putOpt("auto", it.auto))
         }
         put("notes", JSONArray(notes)); put("created_at", createdAt); putOpt("finished_at", finishedAt)
-        put("attempts", attempts); put("force_best", forceBest)
+        put("attempts", attempts); put("force_best", forceBest); put("quiet", quiet)
     }
 
     companion object {
@@ -98,11 +102,12 @@ data class Job(
             pendingUri = o.optStr("pending_uri"),
             error = o.optJSONObject("error")?.let {
                 JobError(it.optString("code"), it.optString("title_es"), it.optString("message_es"),
-                    it.optString("title_en"), it.optString("message_en"), it.optString("details"))
+                    it.optString("title_en"), it.optString("message_en"), it.optString("details"),
+                    if (it.isNull("auto")) null else it.optString("auto").takeIf { _ -> it.has("auto") })
             },
             notes = o.optJSONArray("notes")?.let { a -> (0 until a.length()).map { a.getString(it) } }.orEmpty(),
             createdAt = o.optLong("created_at"), finishedAt = if (o.has("finished_at") && !o.isNull("finished_at")) o.optLong("finished_at") else null,
-            attempts = o.optInt("attempts"), forceBest = o.optBoolean("force_best"),
+            attempts = o.optInt("attempts"), forceBest = o.optBoolean("force_best"), quiet = o.optBoolean("quiet"),
         )
     }
 }

@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         val app = application as KdlApp
         app.engine.prepare() // no hace nada si el motor ya está listo o preparándose
         app.queue.startService() // retoma lo que quedó en cola
+        app.onForeground() // pistas del motor y, si toca, una versión nueva de yt-dlp
     }
 
     /** scripts/ci_emulator.sh abre la app con --ez kdl.selftest true y lee la línea KDL-SELFTEST de logcat. */
