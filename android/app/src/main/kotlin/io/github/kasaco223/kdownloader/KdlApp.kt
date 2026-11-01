@@ -7,6 +7,7 @@ import android.os.StrictMode
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.NotificationChannels
+import io.github.kasaco223.kdownloader.platform.UiPrefs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,6 +24,9 @@ class KdlApp : Application() {
 
     /** La cola de descargas: lee kd/jobs.json la primera vez que se usa. */
     val queue: DownloadQueue by lazy { DownloadQueue(this, engine) }
+
+    /** Preferencias de la interfaz (formato principal). */
+    val uiPrefs: UiPrefs by lazy { UiPrefs(this) }
 
     override fun onCreate() {
         super.onCreate()

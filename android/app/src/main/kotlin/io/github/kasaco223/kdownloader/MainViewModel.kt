@@ -15,18 +15,24 @@ import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
+import io.github.kasaco223.kdownloader.download.Thumbnails
+import io.github.kasaco223.kdownloader.platform.UiPrefs
 import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-/** Pantallas de esta versión. La navegación completa (pestañas, Navigation 3) llega con el resto de la app. */
-enum class Screen(val parent: Screen?) {
-    HOME(null),
-    ABOUT(HOME),
+/**
+ * Pantallas de esta versión. Las tres pestañas ([isTab]) comparten la barra de abajo; «Atrás» desde Descargas o
+ * Ajustes vuelve a Inicio. Navigation 3 llega con el resto de la app.
+ */
+enum class Screen(val parent: Screen?, val isTab: Boolean = false) {
+    HOME(null, isTab = true),
+    DOWNLOADS(HOME, isTab = true),
+    SETTINGS(HOME, isTab = true),
+    ABOUT(SETTINGS),
     LICENSE(ABOUT),
-    HISTORY(HOME),
     THIRD_PARTY(ABOUT),
     THIRD_PARTY_TEXT(THIRD_PARTY),
 }
@@ -45,6 +51,7 @@ class MainViewModel(
     private val savedState: SavedStateHandle,
     private val engine: EngineController,
     private val queue: DownloadQueue,
+    private val uiPrefs: UiPrefs,
 ) : ViewModel() {
     private val _screen = MutableStateFlow(
         savedState.get<String>(KEY_SCREEN)?.let { name -> Screen.entries.firstOrNull { it.name == name } } ?: Screen.HOME,
@@ -62,6 +69,12 @@ class MainViewModel(
     val engineStatus: StateFlow<EngineStatus> = engine.status
     val jobs: StateFlow<List<Job>> = queue.jobs
     val history: StateFlow<List<HistoryItem>> = queue.history
+    val thumbnails: Thumbnails = queue.thumbnails
+
+    /** El formato del botón grande (Inicio y hoja de compartir). */
+    val favorite: StateFlow<String> = uiPrefs.favorite
+
+    fun setFavorite(option: String) = uiPrefs.setFavorite(option)
 
     suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult =
         queue.enqueue(request.url, request.option, request.allowDuplicate)
@@ -139,7 +152,7 @@ class MainViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as KdlApp
-                MainViewModel(createSavedStateHandle(), app.engine, app.queue)
+                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs)
             }
         }
     }

@@ -37,6 +37,7 @@ class QuickDownloadActivity : AppCompatActivity() {
         setContent {
             KdTheme {
                 val link by viewModel.link.collectAsStateWithLifecycle()
+                val favorite by (application as KdlApp).uiPrefs.favorite.collectAsStateWithLifecycle()
                 val queue = (application as KdlApp).queue
                 val start = rememberDownloadStarter(
                     enqueue = { queue.enqueue(it.url, it.option, it.allowDuplicate) },
@@ -44,6 +45,7 @@ class QuickDownloadActivity : AppCompatActivity() {
                 )
                 QuickDownloadSheet(
                     link = link,
+                    favorite = favorite,
                     onDownload = { option -> link.url?.let { start(DownloadRequest(it, option)) } },
                     onOpenApp = ::openApp,
                     onClose = ::finish,

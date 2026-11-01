@@ -63,7 +63,7 @@ class QuickDownloadActivityTest {
         )
         compose.onNodeWithText("https://youtu.be/aqz-KE-bpKQ?si=prueba").assertIsDisplayed()
         compose.onNodeWithText(context.resources.getQuantityString(R.plurals.quick_more_links, 2, 2)).assertIsDisplayed()
-        compose.onNodeWithText(context.getString(R.string.home_pick_format)).assertIsDisplayed()
+        compose.onNodeWithText(context.getString(R.string.format_other)).assertIsDisplayed()
         compose.onNodeWithText(context.getString(R.string.option_mp3)).assertIsDisplayed()
     }
 

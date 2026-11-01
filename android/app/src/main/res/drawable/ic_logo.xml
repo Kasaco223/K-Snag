@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- El logo de K-Downloader (packaging/assets/logo.svg): la K y la flecha sobre el degradado de la marca. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="256"
+    android:viewportHeight="256">
+    <path android:pathData="M64,8H192A56,56 0,0 1,248 64V192A56,56 0,0 1,192 248H64A56,56 0,0 1,8 192V64A56,56 0,0 1,64 8Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:type="linear"
+                android:startX="8"
+                android:startY="8"
+                android:endX="248"
+                android:endY="248">
+                <item android:offset="0" android:color="#FF6366F1" />
+                <item android:offset="0.55" android:color="#FF8B5CF6" />
+                <item android:offset="1" android:color="#FFF97362" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M68,52h34v60l52,-60h42l-60,66 34,39h-44l-24,-28v63H68z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:pathData="M132,178a46,46 0,1 0,92 0a46,46 0,1 0,-92 0z"
+        android:fillColor="#FFFFFFFF" />
+    <path
+        android:pathData="M168,150h20v28h16l-26,28 -26,-28h16z"
+        android:fillColor="#FF6366F1" />
+</vector>
