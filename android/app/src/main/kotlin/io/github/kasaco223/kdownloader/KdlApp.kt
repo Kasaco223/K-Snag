@@ -4,6 +4,7 @@ package io.github.kasaco223.kdownloader
 
 import android.app.Application
 import android.os.StrictMode
+import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.NotificationChannels
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,9 @@ class KdlApp : Application() {
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val engine: KdEngine by lazy { KdEngine(this, appScope) }
+
+    /** La cola de descargas: lee kd/jobs.json la primera vez que se usa. */
+    val queue: DownloadQueue by lazy { DownloadQueue(this, engine) }
 
     override fun onCreate() {
         super.onCreate()

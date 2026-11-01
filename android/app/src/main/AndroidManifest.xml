@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
-<!-- Permisos: solo los del servicio en primer plano que prepara el motor y su notificación (pedir la de
-     notificaciones llega con las descargas). Nunca: android:extractNativeLibs (lo decide el build), SMS,
-     accesibilidad ni lectura de notificaciones. El localeConfig lo genera el build (generateLocaleConfig). -->
+<!-- Permisos: red, el servicio en primer plano del motor y las descargas, su notificación (se pide después de la
+     primera descarga), mantener el celular despierto mientras baja, y escribir en Descargas solo en Android 8 y 9
+     (desde el 10 se usa MediaStore). Nunca: android:extractNativeLibs (lo decide el build), SMS, accesibilidad ni
+     lectura de notificaciones. El localeConfig lo genera el build (generateLocaleConfig). -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:name=".KdlApp"
@@ -70,5 +76,21 @@
             android:name=".download.DownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <!-- «Cancelar» de la notificación de descarga. -->
+        <receiver
+            android:name=".download.NotificationActionReceiver"
+            android:exported="false" />
+
+        <!-- Android 8 y 9: abrir lo descargado desde la notificación y el historial. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/kd_file_paths" />
+        </provider>
     </application>
 </manifest>

@@ -1,0 +1,450 @@
+{
+ "_comment": "Generado desde tests/test_errors.py (SAMPLES) y engine/errors.py de Windows: los mismos casos para Android.",
+ "samples": [
+  {
+   "code": "drm",
+   "lines": [
+    "ERROR: [generic] film: This video is DRM protected"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "drm",
+   "lines": [
+    "ERROR: [youtube] abc123def45: This video is drm protected and only images are available for download. use --list-formats to see them"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "members_only",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Join this channel to get access to members-only content like this video, and other exclusive perks."
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "members_only",
+   "lines": [
+    "ERROR: [youtube] abc123def45: This video is available to this channel's members on level: Fan (or any higher level). Join this channel to get access to members-only content and other exclusive perks."
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "payment",
+   "lines": [
+    "ERROR: [youtube] abc123def45: This video requires payment to watch."
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "payment",
+   "lines": [
+    "ERROR: [youtube] abc123def45: This video is only available to Music Premium members"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "age_restricted",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Sign in to confirm your age. This video may be inappropriate for some users. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "private",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Private video. Sign in if you've been granted access to this video. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "private",
+   "lines": [
+    "ERROR: [vimeo] 12345678: This video is private"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "bot_check",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Sign in to confirm you’re not a bot. Use --cookies-from-browser or --cookies for the authentication. See  https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp  for how to manually pass cookies"
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "bot_check",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Sign in to confirm you're not a bot. This helps protect our community. Learn more"
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "rate_limited",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This content isn’t available, try again later."
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "rate_limited",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This content isn't available, try again later."
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "rate_limited",
+   "lines": [
+    "ERROR: unable to download video data: HTTP Error 429: Too Many Requests"
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "rate_limited",
+   "lines": [
+    "ERROR: [tiktok] 7300000000000000000: You are being rate-limited, try again later"
+   ],
+   "action": "retry_later",
+   "auto": "quiet_mode"
+  },
+  {
+   "code": "login_required",
+   "lines": [
+    "ERROR: [instagram] C0abcdefgh: Requested content is not available, rate-limit reached or login required. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (instagram) to provide account credentials"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "login_required",
+   "lines": [
+    "ERROR: [twitter] 1700000000000000000: NSFW tweet requires authentication. Use --cookies, --cookies-from-browser, --username and --password, --netrc-cmd, or --netrc (twitter) to provide account credentials"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "login_required",
+   "lines": [
+    "ERROR: [facebook] 123456789: Login details are needed to download this content"
+   ],
+   "action": "cookies",
+   "auto": null
+  },
+  {
+   "code": "geo_blocked",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. The uploader has not made this video available in your country"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "geo_blocked",
+   "lines": [
+    "ERROR: [BBCiPlayer] p0abcdef: This video is not available from your location due to geo restriction. You might want to use a VPN or a proxy server (with --proxy) to workaround."
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "upcoming",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Premieres in 2 hours"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "upcoming",
+   "lines": [
+    "ERROR: [youtube] abc123def45: This live event will begin in a few moments."
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "not_live",
+   "lines": [
+    "ERROR: [youtube:tab] @SomeChannel: The channel is not currently live"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "removed",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This video has been removed by the uploader"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "removed",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This video is no longer available because the YouTube account associated with this video has been terminated."
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "copyright",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This video is no longer available due to a copyright claim by Some Label"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "copyright",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable. This video contains content from Some Label, who has blocked it on copyright grounds"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "format_unavailable",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Requested format is not available. Use --list-formats for a list of available formats"
+   ],
+   "action": "choose_quality",
+   "auto": "fallback_best"
+  },
+  {
+   "code": "http_403",
+   "lines": [
+    "ERROR: unable to download video data: HTTP Error 403: Forbidden"
+   ],
+   "action": "update_retry",
+   "auto": "update_retry"
+  },
+  {
+   "code": "http_403",
+   "lines": [
+    "[download] Got error: HTTP Error 403: Forbidden. Retrying fragment 1 (1/10)...",
+    "ERROR: fragment 1 not found, unable to continue; HTTP Error 403: Forbidden"
+   ],
+   "action": "update_retry",
+   "auto": "update_retry"
+  },
+  {
+   "code": "engine_outdated",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Unable to extract initial player response; please report this issue on  https://github.com/yt-dlp/yt-dlp/issues?q= , filling out the appropriate issue template. Confirm you are on the latest version using  yt-dlp -U"
+   ],
+   "action": "update_retry",
+   "auto": "update_retry"
+  },
+  {
+   "code": "engine_outdated",
+   "lines": [
+    "ERROR: [youtube] abc123def45: n challenge solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed."
+   ],
+   "action": "update_retry",
+   "auto": "update_retry"
+  },
+  {
+   "code": "unavailable",
+   "lines": [
+    "ERROR: [youtube] BaW_jenozKc: This video is unavailable"
+   ],
+   "action": "open_browser",
+   "auto": null
+  },
+  {
+   "code": "unavailable",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Video unavailable"
+   ],
+   "action": "open_browser",
+   "auto": null
+  },
+  {
+   "code": "ffmpeg_missing",
+   "lines": [
+    "ERROR: Postprocessing: ffprobe and ffmpeg not found. Please install or provide the path using --ffmpeg-location"
+   ],
+   "action": "repair_engine",
+   "auto": null
+  },
+  {
+   "code": "ffmpeg_missing",
+   "lines": [
+    "ERROR: You have requested merging of multiple formats but ffmpeg is not installed. Aborting due to --abort-on-error"
+   ],
+   "action": "repair_engine",
+   "auto": null
+  },
+  {
+   "code": "blocked_by_windows",
+   "lines": [
+    "Traceback (most recent call last):",
+    "OSError: [WinError 4551] An Application Control policy has blocked this file: 'C:\\Users\\Ana\\AppData\\Local\\K-Downloader\\engine\\deno\\v2.9.7\\deno.exe'"
+   ],
+   "action": "repair_engine",
+   "auto": null
+  },
+  {
+   "code": "blocked_by_windows",
+   "lines": [
+    "[WinError 4551] An Application Control policy has blocked this file"
+   ],
+   "action": "repair_engine",
+   "auto": null
+  },
+  {
+   "code": "antivirus",
+   "lines": [
+    "OSError: [WinError 225] Operation did not complete successfully because the file contains a virus or potentially unwanted software"
+   ],
+   "action": "repair_engine",
+   "auto": null
+  },
+  {
+   "code": "merge_failed",
+   "lines": [
+    "ERROR: Postprocessing: Conversion failed!"
+   ],
+   "action": "retry",
+   "auto": null
+  },
+  {
+   "code": "merge_failed",
+   "lines": [
+    "ERROR: Unable to merge formats: Error merging streams"
+   ],
+   "action": "retry",
+   "auto": null
+  },
+  {
+   "code": "disk_full",
+   "lines": [
+    "ERROR: unable to write data: [Errno 28] No space left on device"
+   ],
+   "action": "choose_folder",
+   "auto": null
+  },
+  {
+   "code": "disk_full",
+   "lines": [
+    "ERROR: unable to write data: [WinError 112] There is not enough space on the disk"
+   ],
+   "action": "choose_folder",
+   "auto": null
+  },
+  {
+   "code": "permission",
+   "lines": [
+    "ERROR: unable to open for writing: [Errno 13] Permission denied: 'C:\\Users\\Ana\\Videos\\a.mp4.part'"
+   ],
+   "action": "choose_folder",
+   "auto": null
+  },
+  {
+   "code": "permission",
+   "lines": [
+    "ERROR: Unable to rename file: [WinError 32] The process cannot access the file because it is being used by another process: 'a.temp.mp4' -> 'a.mp4'"
+   ],
+   "action": "choose_folder",
+   "auto": null
+  },
+  {
+   "code": "permission",
+   "lines": [
+    "ERROR: unable to create directory [WinError 5] Access is denied: 'C:\\Program Files\\x'"
+   ],
+   "action": "choose_folder",
+   "auto": null
+  },
+  {
+   "code": "ssl",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Unable to download API page: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006) (caused by CertificateVerifyFailed(\"[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed\"))"
+   ],
+   "action": "retry",
+   "auto": null
+  },
+  {
+   "code": "ssl",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Unable to download webpage: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:1006)>"
+   ],
+   "action": "retry",
+   "auto": null
+  },
+  {
+   "code": "network",
+   "lines": [
+    "ERROR: [youtube] abc123def45: Unable to download webpage: <urlopen error [Errno 11001] getaddrinfo failed> (caused by TransportError('<urlopen error [Errno 11001] getaddrinfo failed>'))"
+   ],
+   "action": "retry",
+   "auto": "retry_network"
+  },
+  {
+   "code": "network",
+   "lines": [
+    "ERROR: [download] Got error: The read operation timed out"
+   ],
+   "action": "retry",
+   "auto": "retry_network"
+  },
+  {
+   "code": "network",
+   "lines": [
+    "ERROR: unable to download video data: [WinError 10054] An existing connection was forcibly closed by the remote host (Connection reset)"
+   ],
+   "action": "retry",
+   "auto": "retry_network"
+  },
+  {
+   "code": "unsupported_url",
+   "lines": [
+    "ERROR: Unsupported URL: https://example.com/some/page"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "unsupported_url",
+   "lines": [
+    "ERROR: 'notaurl' is not a valid URL. Set --default-search \"ytsearch\" (or run  yt-dlp \"ytsearch:notaurl\" ) to search YouTube"
+   ],
+   "action": "none",
+   "auto": null
+  },
+  {
+   "code": "unknown",
+   "lines": [
+    "algo raro sin regla",
+    "ERROR: [youtube] abc123def45: Algo inesperado. See https://example.com/faq"
+   ],
+   "action": "retry",
+   "auto": null,
+   "message_es": "No pudimos completar la descarga. (Algo inesperado)"
+  },
+  {
+   "code": "unknown",
+   "lines": [
+    "\u001b[0;31mERROR:\u001b[0m [generic] x: rara"
+   ],
+   "action": "retry",
+   "auto": null,
+   "message_es": "No pudimos completar la descarga. (x: rara)"
+  }
+ ]
+}

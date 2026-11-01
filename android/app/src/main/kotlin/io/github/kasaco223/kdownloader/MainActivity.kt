@@ -37,7 +37,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        (application as KdlApp).engine.prepare() // no hace nada si el motor ya está listo o preparándose
+        val app = application as KdlApp
+        app.engine.prepare() // no hace nada si el motor ya está listo o preparándose
+        app.queue.startService() // retoma lo que quedó en cola
     }
 
     /** scripts/ci_emulator.sh abre la app con --ez kdl.selftest true y lee la línea KDL-SELFTEST de logcat. */

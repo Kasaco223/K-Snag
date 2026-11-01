@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
+import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import io.github.kasaco223.kdownloader.KdlApp
@@ -24,53 +25,131 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
- * Servicio en primer plano (tipo dataSync) del motor. En esta versión solo prepara el motor
- * ([ACTION_PREPARE]): descomprimir Python y FFmpeg tarda, y así sigue aunque la persona salga de la app.
- * Las descargas ([ACTION_RUN]) llegan con la cola. No se exporta.
+ * Servicio en primer plano (tipo dataSync) del motor y las descargas. No se exporta.
+ * - [ACTION_PREPARE]: prepara el motor (descomprimir Python y FFmpeg tarda; sigue aunque la persona salga).
+ * - [ACTION_RUN]: corre la cola, una descarga a la vez, hasta vaciarla.
  */
 class DownloadService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private var work: Job? = null
+    private var prepareWork: Job? = null
+    private var runWork: Job? = null
+    private var wakeLock: PowerManager.WakeLock? = null
+    private var lastNotify = 0L
+
+    // En el hilo principal: qué trabajo sigue en curso (el servicio se detiene cuando ninguno).
+    private var preparing = false
+    private var running = false
 
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         NotificationChannels.ensure(this)
         val type = if (Build.VERSION.SDK_INT >= 29) ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC else 0
-        ServiceCompat.startForeground(this, NOTIFICATION_ID, notification(null), type)
-        if (work?.isActive != true) {
-            val engine = (application as KdlApp).engine
-            work = scope.launch {
-                val updates = launch {
-                    engine.status.collectLatest { s ->
-                        if (s is EngineStatus.Preparing) {
-                            getSystemService(NotificationManager::class.java)?.notify(NOTIFICATION_ID, notification(s.progress))
-                        }
-                    }
-                }
-                engine.ensureReady()
-                updates.cancel()
-                ServiceCompat.stopForeground(this@DownloadService, ServiceCompat.STOP_FOREGROUND_REMOVE)
-                stopSelf()
+        val app = application as KdlApp
+        val initial = if (intent?.action == ACTION_RUN) DownloadNotifications.active(this, null) else preparing(null)
+        ServiceCompat.startForeground(this, NOTIFICATION_ID, initial, type)
+        when (intent?.action) {
+            ACTION_RUN -> if (!running) startRun(app)
+            else -> if (!preparing && !running) {
+                preparing = true
+                prepareWork = scope.launch { prepare(app) }
             }
         }
         return START_NOT_STICKY
     }
 
-    /** Android 15+: se acabó el tiempo de dataSync. Preparar el motor tarda mucho menos; se detiene igual. */
+    private suspend fun prepare(app: KdlApp) {
+        val engine = app.engine
+        val updates = scope.launch {
+            engine.status.collectLatest { s ->
+                if (s is EngineStatus.Preparing) notify(preparing(s.progress))
+            }
+        }
+        engine.ensureReady()
+        updates.cancel()
+        preparing = false
+        stopIfIdle()
+    }
+
+    private fun startRun(app: KdlApp) {
+        running = true
+        runWork = scope.launch { runQueue(app) }
+    }
+
+    private suspend fun runQueue(app: KdlApp) {
+        val queue = app.queue
+        val updates = scope.launch {
+            queue.jobs.collectLatest { list ->
+                val now = System.currentTimeMillis()
+                val active = list.firstOrNull { it.isActive }
+                if (now - lastNotify >= 1_000 || active == null) {
+                    lastNotify = now
+                    notify(DownloadNotifications.active(this@DownloadService, active))
+                }
+            }
+        }
+        withContext(Dispatchers.IO) {
+            while (true) {
+                val job = queue.nextQueued() ?: break
+                acquireWakeLock()
+                try {
+                    queue.runJob(job)
+                } finally {
+                    releaseWakeLock()
+                }
+            }
+        }
+        updates.cancel()
+        running = false
+        stopIfIdle()
+    }
+
+    private fun stopIfIdle() {
+        if (preparing || running) return
+        val app = application as KdlApp
+        if (app.queue.hasQueued()) { // llegó algo mientras terminaba la vuelta anterior
+            startRun(app)
+            return
+        }
+        ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        stopSelf()
+    }
+
+    private fun notify(n: Notification) {
+        getSystemService(NotificationManager::class.java)?.notify(NOTIFICATION_ID, n)
+    }
+
+    private fun acquireWakeLock() {
+        val pm = getSystemService(PowerManager::class.java) ?: return
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "kdownloader:download").apply {
+            setReferenceCounted(false)
+            acquire(30 * 60 * 1000L)
+        }
+    }
+
+    private fun releaseWakeLock() {
+        wakeLock?.takeIf { it.isHeld }?.release()
+        wakeLock = null
+    }
+
+    /** Android 15+: se acabó el tiempo de dataSync. La vuelta automática llega más adelante; por ahora se cancela lo que corre. */
     override fun onTimeout(startId: Int, fgsType: Int) {
+        val app = application as KdlApp
+        app.queue.jobs.value.firstOrNull { it.isActive }?.let { app.queue.cancel(it.id) }
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
     }
 
     override fun onDestroy() {
+        releaseWakeLock()
         scope.cancel()
         super.onDestroy()
     }
 
-    private fun notification(progress: Float?): Notification {
+    private fun preparing(progress: Float?): Notification {
         val open = PendingIntent.getActivity(
             this,
             0,
@@ -92,6 +171,7 @@ class DownloadService : Service() {
 
     companion object {
         const val ACTION_PREPARE = "io.github.kasaco223.kdownloader.action.PREPARE"
-        const val NOTIFICATION_ID = 1
+        const val ACTION_RUN = "io.github.kasaco223.kdownloader.action.RUN"
+        const val NOTIFICATION_ID = DownloadNotifications.ACTIVE_ID
     }
 }

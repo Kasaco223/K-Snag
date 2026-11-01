@@ -45,7 +45,9 @@ if [ "$only_selftest" != "--only-selftest" ]; then
   if [ -z "$app" ] || [ -z "$test_apk" ]; then
     echo "::error::Faltan los APK debug x86_64 o de pruebas en $apk_dir"
     status=1
-  elif ! adb install -r -t "$app" || ! adb install -r -t "$test_apk"; then
+  # -g: permisos concedidos desde la instalación (en Android 8 y 9, el de almacenamiento tiene que estar
+  # antes de que arranque el proceso para que la prueba de descarga pueda escribir en Descargas).
+  elif ! adb install -r -t -g "$app" || ! adb install -r -t "$test_apk"; then
     echo "::error::No se pudieron instalar los APK debug"
     status=1
   else

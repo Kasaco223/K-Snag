@@ -97,10 +97,11 @@ class UrlsTest {
         assertEquals(listOf("https://example.xn--55qx5d/"), Urls.extract("https://example.\u516C\u53F8/"))
     }
 
-    @Test(timeout = 5_000)
+    // Con la regex anterior, 40 000 «)» tardaban unos 7 s en la JVM (O(n²)): con estos 500 000 serían minutos.
+    // Lineal tarda 1-3 s según la carga de la máquina; el timeout atrapa cualquier regresión cuadrática sin
+    // depender de lo ocupada que esté la CI.
+    @Test(timeout = 10_000)
     fun longPunctuationRunsTakeLinearTime() {
-        // Con la regex anterior, 40 000 «)» tardaban unos 7 s en la JVM (O(n²)); en un celular, minutos.
-        val started = System.nanoTime()
         // Más largo que MAX_LENGTH: ningún enlace, pero la respuesta llega enseguida.
         assertEquals(emptyList<String>(), Urls.extract("https://a.bc/" + ")".repeat(500_000) + "x"))
         assertEquals(listOf("https://a.bc/"), Urls.extract("https://a.bc/" + ")".repeat(500_000)))
@@ -109,8 +110,6 @@ class UrlsTest {
         assertEquals(emptyList<String>(), Urls.coerce("a.".repeat(100_000) + "a/x"))
         assertEquals(emptyList<String>(), Urls.coerce("a".repeat(500_000) + ".b"))
         assertEquals(listOf("https://a.a.a.a/x"), Urls.coerce("a.a.a.a/x"))
-        val elapsedMs = (System.nanoTime() - started) / 1_000_000
-        assertTrue("tardó $elapsedMs ms", elapsedMs < 2_000)
     }
 
     @Test

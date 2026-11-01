@@ -12,6 +12,10 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import io.github.kasaco223.kdownloader.contracts.EngineController
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
+import io.github.kasaco223.kdownloader.download.DownloadQueue
+import io.github.kasaco223.kdownloader.download.HistoryItem
+import io.github.kasaco223.kdownloader.download.Job
+import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,6 +26,7 @@ enum class Screen(val parent: Screen?) {
     HOME(null),
     ABOUT(HOME),
     LICENSE(ABOUT),
+    HISTORY(HOME),
     THIRD_PARTY(ABOUT),
     THIRD_PARTY_TEXT(THIRD_PARTY),
 }
@@ -36,7 +41,11 @@ enum class RepairOutcome { RUNNING, DONE, BUSY, FAILED }
  * Pantalla actual, enlace recibido por kdownloader://download y estado del motor. La pantalla y el enlace viven
  * en SavedStateHandle: sobreviven a la rotación y a que Android cierre el proceso en segundo plano.
  */
-class MainViewModel(private val savedState: SavedStateHandle, private val engine: EngineController) : ViewModel() {
+class MainViewModel(
+    private val savedState: SavedStateHandle,
+    private val engine: EngineController,
+    private val queue: DownloadQueue,
+) : ViewModel() {
     private val _screen = MutableStateFlow(
         savedState.get<String>(KEY_SCREEN)?.let { name -> Screen.entries.firstOrNull { it.name == name } } ?: Screen.HOME,
     )
@@ -51,6 +60,21 @@ class MainViewModel(private val savedState: SavedStateHandle, private val engine
     val licenseDoc: StateFlow<LicenseDoc?> = _licenseDoc.asStateFlow()
 
     val engineStatus: StateFlow<EngineStatus> = engine.status
+    val jobs: StateFlow<List<Job>> = queue.jobs
+    val history: StateFlow<List<HistoryItem>> = queue.history
+
+    suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult =
+        queue.enqueue(request.url, request.option, request.allowDuplicate)
+
+    fun cancel(id: String) = queue.cancel(id)
+
+    fun retry(id: String) = queue.retry(id)
+
+    fun remove(id: String) = queue.remove(id)
+
+    fun clearFinished() = queue.clearFinished()
+
+    fun removeHistory(id: String) = queue.removeHistory(id)
 
     private val _repair = MutableStateFlow<RepairOutcome?>(null)
     val repair: StateFlow<RepairOutcome?> = _repair.asStateFlow()
@@ -113,7 +137,10 @@ class MainViewModel(private val savedState: SavedStateHandle, private val engine
         private const val KEY_DOC_TITLE = "licenseDocTitle"
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer { MainViewModel(createSavedStateHandle(), (this[APPLICATION_KEY] as KdlApp).engine) }
+            initializer {
+                val app = this[APPLICATION_KEY] as KdlApp
+                MainViewModel(createSavedStateHandle(), app.engine, app.queue)
+            }
         }
     }
 }

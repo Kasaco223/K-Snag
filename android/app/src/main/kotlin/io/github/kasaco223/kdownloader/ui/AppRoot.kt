@@ -11,6 +11,7 @@ import io.github.kasaco223.kdownloader.Screen
 import io.github.kasaco223.kdownloader.ui.about.AboutScreen
 import io.github.kasaco223.kdownloader.ui.about.LicenseScreen
 import io.github.kasaco223.kdownloader.ui.about.ThirdPartyScreen
+import io.github.kasaco223.kdownloader.ui.history.HistoryScreen
 import io.github.kasaco223.kdownloader.ui.home.HomeScreen
 
 /** Raíz de MainActivity: muestra la pantalla actual. «Atrás» solo se intercepta fuera del inicio. */
@@ -21,6 +22,8 @@ fun AppRoot(viewModel: MainViewModel) {
     val engineStatus by viewModel.engineStatus.collectAsStateWithLifecycle()
     val repair by viewModel.repair.collectAsStateWithLifecycle()
     val licenseDoc by viewModel.licenseDoc.collectAsStateWithLifecycle()
+    val jobs by viewModel.jobs.collectAsStateWithLifecycle()
+    val history by viewModel.history.collectAsStateWithLifecycle()
 
     BackHandler(enabled = screen != Screen.HOME) { viewModel.back() }
 
@@ -29,9 +32,17 @@ fun AppRoot(viewModel: MainViewModel) {
             receivedLink = receivedLink,
             onDismissLink = viewModel::dismissLink,
             onOpenAbout = { viewModel.open(Screen.ABOUT) },
+            onOpenHistory = { viewModel.open(Screen.HISTORY) },
             engineStatus = engineStatus,
             onRetryEngine = viewModel::retryEngine,
+            jobs = jobs,
+            enqueue = viewModel::enqueue,
+            onCancel = viewModel::cancel,
+            onRetry = viewModel::retry,
+            onRemove = viewModel::remove,
+            onClearFinished = viewModel::clearFinished,
         )
+        Screen.HISTORY -> HistoryScreen(items = history, onBack = { viewModel.back() }, onRemove = viewModel::removeHistory)
         Screen.ABOUT -> AboutScreen(
             onBack = { viewModel.back() },
             onOpenLicense = { viewModel.open(Screen.LICENSE) },

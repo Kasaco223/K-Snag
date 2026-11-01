@@ -34,4 +34,11 @@ dependencies {
 
 tasks.test {
     useJUnit()
+    // Datos de la app de Windows que las pruebas leen en su lugar (transcripciones de yt-dlp, catálogo de errores).
+    val repo = rootProject.layout.projectDirectory.dir("..")
+    jvmArgumentProviders += objects.newInstance(RepoRootArgs::class.java).apply {
+        repoRoot.set(repo)
+        fixtures.set(repo.dir("tests/fixtures"))
+        errorCatalog.set(repo.file("src/kdownloader/engine/errors_catalog.json"))
+    }
 }

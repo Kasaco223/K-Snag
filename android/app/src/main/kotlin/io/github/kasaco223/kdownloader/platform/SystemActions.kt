@@ -25,6 +25,26 @@ object SystemActions {
         }
     }
 
+    /** Abre un archivo descargado con la app que la persona elija. False si no hay ninguna (nunca lanza). */
+    fun openFile(context: Context, uri: String, mime: String?): Boolean {
+        val intent = Intent(Intent.ACTION_VIEW).setDataAndType(Uri.parse(uri), mime ?: "*/*")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        return try {
+            context.startActivity(intent)
+            true
+        } catch (ignored: ActivityNotFoundException) {
+            false
+        } catch (ignored: SecurityException) {
+            false
+        }
+    }
+
+    /** El texto del portapapeles, o null (Android 10+ solo lo deja leer con la app en primer plano). */
+    fun readClipboard(context: Context): String? = runCatching {
+        context.getSystemService(ClipboardManager::class.java)?.primaryClip?.takeIf { it.itemCount > 0 }
+            ?.getItemAt(0)?.coerceToText(context)?.toString()
+    }.getOrNull()
+
     /**
      * Copia [text] al portapapeles. Devuelve true si la app debe confirmarlo ella misma: desde Android 13 el
      * sistema ya muestra su propio aviso al copiar.

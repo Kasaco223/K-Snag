@@ -12,17 +12,11 @@
     <!-- Comunes -->
     <string name="common_close">Cerrar</string>
     <string name="common_back">Atrás</string>
-    <string name="common_dismiss">Ocultar</string>
     <string name="common_no_browser">No encontramos una app para abrir el enlace.</string>
 
     <!-- Inicio (versión de prueba) -->
-    <string name="home_test_build_title">Versión de prueba</string>
-    <string name="home_test_build_body">Esta versión todavía no descarga videos. Ya prepara el motor de descargas (Python, FFmpeg y yt-dlp) para comprobar que funciona en tu celular. Las descargas llegarán en la próxima versión.</string>
-    <string name="home_try_share_title">Prueba compartir un enlace</string>
-    <string name="home_try_share_body">En YouTube u otra app, toca Compartir y elige K-Downloader. Te mostraremos el enlace que recibamos.</string>
     <string name="home_about">Acerca de y diagnóstico</string>
     <string name="link_received_title">Recibimos este enlace</string>
-    <string name="link_not_yet">Esta versión de prueba todavía no descarga: las descargas llegarán en una próxima versión.</string>
 
     <!-- Hoja al compartir -->
     <string name="quick_pane_title">Compartir con K-Downloader</string>
@@ -105,4 +99,57 @@
     <string name="third_party_lead">K-Downloader incluye software libre de otras personas, cada uno con su licencia. El código fuente de todos está publicado en GitHub, en el Release «Código fuente de terceros» del repositorio.</string>
     <string name="third_party_load_failed">No pudimos abrir la lista. También está en el código fuente, en android/THIRD_PARTY_NOTICES.md.</string>
     <string name="third_party_view">Ver %1$s</string>
+    <!-- Inicio y descargas -->
+    <string name="home_link_title">Pega el enlace del video</string>
+    <string name="home_link_hint">https://…</string>
+    <string name="home_paste">Pegar</string>
+    <string name="home_pick_format">Elige el formato:</string>
+    <string name="option_recommended">Video (MP4)</string>
+    <string name="option_max">Máxima (MKV)</string>
+    <string name="option_mp3">Audio MP3</string>
+    <string name="option_m4a">Audio M4A</string>
+    <string name="download_queued">Descargando… Verás el avance en la notificación.</string>
+    <string name="download_invalid">Ese enlace no es válido. Copia el enlace completo del video.</string>
+    <string name="download_storage_denied">Sin el permiso de almacenamiento no podemos guardar en Descargas.</string>
+    <string name="download_already">Ya lo tenías en Descargas</string>
+    <string name="download_again">Descargar de nuevo</string>
+    <string name="common_no_app_for_file">No encontramos una app para abrir este archivo.</string>
+    <string name="jobs_title">Descargas</string>
+    <string name="jobs_clear_finished">Limpiar terminadas</string>
+    <string name="jobs_cancel">Cancelar</string>
+    <string name="jobs_retry">Reintentar</string>
+    <string name="jobs_open">Abrir</string>
+    <string name="jobs_remove">Quitar</string>
+    <string name="jobs_state_queued">En cola</string>
+    <string name="jobs_state_interrupted">Se interrumpió</string>
+    <string name="jobs_state_done">Lista</string>
+    <string name="jobs_state_error">No se pudo descargar</string>
+    <string name="jobs_state_canceled">Cancelada</string>
+    <string name="jobs_step_video">Video</string>
+    <string name="jobs_step_audio">Audio</string>
+    <string name="jobs_step_av">Descargando</string>
+    <string name="jobs_step_n_of">Paso %1$d de %2$d · %3$s</string>
+    <string name="jobs_pp_merger">Uniendo audio y video</string>
+    <string name="jobs_pp_extract_audio">Convirtiendo a MP3</string>
+    <string name="jobs_pp_extract_audio_m4a">Convirtiendo a M4A</string>
+    <string name="jobs_pp_embed_thumbnail">Agregando portada</string>
+    <string name="jobs_pp_metadata">Agregando información</string>
+    <string name="jobs_pp_publish">Guardando en Descargas</string>
+    <string name="jobs_pp_other">Terminando</string>
+    <string name="jobs_error_storage_title">No tenemos permiso para guardar</string>
+    <string name="jobs_error_storage_body">Dale a K-Downloader el permiso de almacenamiento y toca «Reintentar».</string>
+    <string name="jobs_error_live_title">Las transmisiones en vivo no se pueden descargar</string>
+    <string name="jobs_error_live_body">Cuando termine la transmisión, vuelve a intentarlo.</string>
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Todavía no descargaste nada. Lo que bajes aparecerá aquí.</string>
+    <string name="history_lead">Los archivos están en Descargas › K-Downloader. Quitar algo del historial no borra el archivo.</string>
+    <string name="history_remove">Quitar del historial</string>
+    <string name="notif_downloads_title">Descargando</string>
+    <string name="notif_action_cancel">Cancelar</string>
+    <string name="notif_done_title">Descarga lista</string>
+    <string name="notif_failed_title">No se pudo descargar</string>
+    <string name="notif_channel_done">Descargas listas</string>
+    <string name="notif_channel_done_desc">Avisa cuando termina una descarga</string>
+    <string name="notif_channel_problems">Problemas con descargas</string>
+    <string name="notif_channel_problems_desc">Avisa cuando una descarga falla</string>
 </resources>

@@ -163,6 +163,7 @@ val kdLicenseAssets = tasks.register<KdLicenseAssetsTask>("kdLicenseAssets") {
     outputDir.set(layout.buildDirectory.dir("generated/kd/licenseAssets"))
 }
 val kdEngineAssets = tasks.register<KdEngineAssetsTask>("kdEngineAssets") {
+    errorCatalog.set(rootProject.layout.projectDirectory.file("../src/kdownloader/engine/errors_catalog.json"))
     cacertUrl.set(pin("cacert.url"))
     cacertSha256.set(pin("cacert.sha256"))
     outputDir.set(layout.buildDirectory.dir("generated/kd/engineAssets"))

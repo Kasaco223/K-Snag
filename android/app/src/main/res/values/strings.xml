@@ -11,17 +11,11 @@
     <!-- Common -->
     <string name="common_close">Close</string>
     <string name="common_back">Back</string>
-    <string name="common_dismiss">Dismiss</string>
     <string name="common_no_browser">We couldn\'t find an app to open the link.</string>
 
     <!-- Home (test build) -->
-    <string name="home_test_build_title">Test build</string>
-    <string name="home_test_build_body">This build can\'t download videos yet. It already prepares the download engine (Python, FFmpeg and yt-dlp) to check that it works on your phone. Downloads are coming in the next version.</string>
-    <string name="home_try_share_title">Try sharing a link</string>
-    <string name="home_try_share_body">In YouTube or another app, tap Share and pick K-Downloader. We\'ll show you the link we get.</string>
     <string name="home_about">About and diagnostics</string>
     <string name="link_received_title">We received this link</string>
-    <string name="link_not_yet">This test build can\'t download yet: downloads are coming in a later version.</string>
 
     <!-- Share sheet -->
     <string name="quick_pane_title">Share with K-Downloader</string>
@@ -103,4 +97,57 @@
     <string name="third_party_lead">K-Downloader includes free software by other people, each under its own license. The source code of all of it is published on GitHub, in the repository\'s “Third-party source code” release.</string>
     <string name="third_party_load_failed">We couldn\'t open the list. It\'s also in the source code, in android/THIRD_PARTY_NOTICES.md.</string>
     <string name="third_party_view">View %1$s</string>
+    <!-- Home and downloads -->
+    <string name="home_link_title">Paste the video link</string>
+    <string name="home_link_hint">https://…</string>
+    <string name="home_paste">Paste</string>
+    <string name="home_pick_format">Pick a format:</string>
+    <string name="option_recommended">Video (MP4)</string>
+    <string name="option_max">Best (MKV)</string>
+    <string name="option_mp3">MP3 audio</string>
+    <string name="option_m4a">M4A audio</string>
+    <string name="download_queued">Downloading… You\'ll see the progress in the notification.</string>
+    <string name="download_invalid">That link isn\'t valid. Copy the full link of the video.</string>
+    <string name="download_storage_denied">Without the storage permission we can\'t save to Downloads.</string>
+    <string name="download_already">You already have it in Downloads</string>
+    <string name="download_again">Download again</string>
+    <string name="common_no_app_for_file">We couldn\'t find an app to open this file.</string>
+    <string name="jobs_title">Downloads</string>
+    <string name="jobs_clear_finished">Clear finished</string>
+    <string name="jobs_cancel">Cancel</string>
+    <string name="jobs_retry">Try again</string>
+    <string name="jobs_open">Open</string>
+    <string name="jobs_remove">Remove</string>
+    <string name="jobs_state_queued">Queued</string>
+    <string name="jobs_state_interrupted">Interrupted</string>
+    <string name="jobs_state_done">Done</string>
+    <string name="jobs_state_error">Couldn\'t download</string>
+    <string name="jobs_state_canceled">Canceled</string>
+    <string name="jobs_step_video">Video</string>
+    <string name="jobs_step_audio">Audio</string>
+    <string name="jobs_step_av">Downloading</string>
+    <string name="jobs_step_n_of">Step %1$d of %2$d · %3$s</string>
+    <string name="jobs_pp_merger">Merging audio and video</string>
+    <string name="jobs_pp_extract_audio">Converting to MP3</string>
+    <string name="jobs_pp_extract_audio_m4a">Converting to M4A</string>
+    <string name="jobs_pp_embed_thumbnail">Adding the cover</string>
+    <string name="jobs_pp_metadata">Adding details</string>
+    <string name="jobs_pp_publish">Saving to Downloads</string>
+    <string name="jobs_pp_other">Finishing</string>
+    <string name="jobs_error_storage_title">We don\'t have permission to save</string>
+    <string name="jobs_error_storage_body">Give K-Downloader the storage permission and tap Try again.</string>
+    <string name="jobs_error_live_title">Live streams can\'t be downloaded</string>
+    <string name="jobs_error_live_body">Try again when the stream has ended.</string>
+    <string name="history_title">History</string>
+    <string name="history_empty">You haven\'t downloaded anything yet. Your downloads will show up here.</string>
+    <string name="history_lead">Files are in Downloads › K-Downloader. Removing something from the history doesn\'t delete the file.</string>
+    <string name="history_remove">Remove from history</string>
+    <string name="notif_downloads_title">Downloading</string>
+    <string name="notif_action_cancel">Cancel</string>
+    <string name="notif_done_title">Download ready</string>
+    <string name="notif_failed_title">Couldn\'t download</string>
+    <string name="notif_channel_done">Finished downloads</string>
+    <string name="notif_channel_done_desc">Lets you know when a download finishes</string>
+    <string name="notif_channel_problems">Download problems</string>
+    <string name="notif_channel_problems_desc">Lets you know when a download fails</string>
 </resources>
