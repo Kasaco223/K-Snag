@@ -25,7 +25,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -42,13 +41,14 @@ import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.kasaco223.kdownloader.R
+import io.github.kasaco223.kdownloader.ui.home.FormatButtons
 
 /**
- * Hoja inferior de la actividad translúcida que aparece al compartir. En esta versión de prueba solo muestra
- * el enlace que recibió y explica que las descargas llegan más adelante.
+ * Hoja inferior de la actividad translúcida que aparece al compartir: el enlace que recibió y los cuatro
+ * formatos. Elegir uno encola la descarga y cierra la hoja; sigue en segundo plano con su notificación.
  */
 @Composable
-fun QuickDownloadSheet(link: SharedLink, onOpenApp: () -> Unit, onClose: () -> Unit) {
+fun QuickDownloadSheet(link: SharedLink, onDownload: (String) -> Unit, onOpenApp: () -> Unit, onClose: () -> Unit) {
     val title = stringResource(R.string.quick_pane_title)
     val appear = remember { MutableTransitionState(false).apply { targetState = true } }
     Box(Modifier.fillMaxSize()) {
@@ -85,9 +85,12 @@ fun QuickDownloadSheet(link: SharedLink, onOpenApp: () -> Unit, onClose: () -> U
                     ) {
                         when (val url = link.url) {
                             null -> NoLinkContent()
-                            else -> LinkContent(url = url, total = link.total)
+                            else -> {
+                                LinkContent(url = url, total = link.total)
+                                FormatButtons(enabled = true, onPick = onDownload)
+                            }
                         }
-                        Button(onClick = onOpenApp, modifier = Modifier.fillMaxWidth()) {
+                        OutlinedButton(onClick = onOpenApp, modifier = Modifier.fillMaxWidth()) {
                             Text(stringResource(R.string.quick_open_app))
                         }
                         OutlinedButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
@@ -123,7 +126,7 @@ private fun LinkContent(url: String, total: Int) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
-    Text(text = stringResource(R.string.link_not_yet), style = MaterialTheme.typography.bodyMedium)
+    Text(text = stringResource(R.string.home_pick_format), style = MaterialTheme.typography.bodyMedium)
 }
 
 @Composable

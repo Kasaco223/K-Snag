@@ -38,19 +38,19 @@ class DeepLinkTest {
     }
 
     @Test
-    fun deepLinkShowsTheReceivedLink() {
+    fun deepLinkFillsTheLinkBox() {
         val url = "https://youtu.be/aqz-KE-bpKQ?si=web"
         ActivityScenario.launch<MainActivity>(deepLink(Uri.encode(url))).use {
             compose.onNodeWithText(url).assertIsDisplayed()
-            compose.onNodeWithText(context.getString(R.string.link_received_title)).assertIsDisplayed()
+            compose.onNodeWithText(context.getString(R.string.home_link_title)).assertIsDisplayed()
         }
     }
 
     @Test
     fun deepLinkWithoutAWebLinkShowsTheUsualHome() {
         ActivityScenario.launch<MainActivity>(deepLink(Uri.encode("javascript:alert(1)"))).use {
-            compose.onNodeWithText(context.getString(R.string.home_test_build_title)).assertIsDisplayed()
-            compose.onAllNodesWithText(context.getString(R.string.link_received_title)).assertCountEquals(0)
+            compose.onNodeWithText(context.getString(R.string.home_link_title)).assertIsDisplayed()
+            compose.onAllNodesWithText("javascript:", substring = true).assertCountEquals(0)
         }
     }
 

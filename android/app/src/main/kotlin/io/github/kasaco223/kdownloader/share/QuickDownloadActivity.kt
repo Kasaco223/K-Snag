@@ -4,6 +4,7 @@ package io.github.kasaco223.kdownloader.share
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -12,6 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.kasaco223.kdownloader.KdlApp
 import io.github.kasaco223.kdownloader.MainActivity
+import io.github.kasaco223.kdownloader.R
+import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
+import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
+import io.github.kasaco223.kdownloader.ui.jobs.rememberDownloadStarter
 import io.github.kasaco223.kdownloader.ui.theme.KdTheme
 
 /**
@@ -32,7 +37,17 @@ class QuickDownloadActivity : AppCompatActivity() {
         setContent {
             KdTheme {
                 val link by viewModel.link.collectAsStateWithLifecycle()
-                QuickDownloadSheet(link = link, onOpenApp = ::openApp, onClose = ::finish)
+                val queue = (application as KdlApp).queue
+                val start = rememberDownloadStarter(
+                    enqueue = { queue.enqueue(it.url, it.option, it.allowDuplicate) },
+                    onResult = { _, result -> onEnqueued(result) },
+                )
+                QuickDownloadSheet(
+                    link = link,
+                    onDownload = { option -> link.url?.let { start(DownloadRequest(it, option)) } },
+                    onOpenApp = ::openApp,
+                    onClose = ::finish,
+                )
             }
         }
     }
@@ -47,6 +62,17 @@ class QuickDownloadActivity : AppCompatActivity() {
         super.onStop()
         // Nunca queda escondida detrás de otra app: si la persona sale, la hoja se cierra.
         if (!isChangingConfigurations) finish()
+    }
+
+    /** La descarga sigue en segundo plano: un aviso corto y la hoja se cierra. */
+    private fun onEnqueued(result: EnqueueResult) {
+        val text = when (result) {
+            is EnqueueResult.Queued -> R.string.download_queued
+            is EnqueueResult.AlreadyInDownloads -> R.string.download_already
+            is EnqueueResult.Rejected -> if (result.code == "storage_permission") R.string.download_storage_denied else R.string.download_invalid
+        }
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+        if (result !is EnqueueResult.Rejected || result.code != "storage_permission") finish()
     }
 
     private fun openApp() {

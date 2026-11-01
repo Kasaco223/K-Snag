@@ -114,8 +114,17 @@ class PyRunner(private val dirs: EngineDirs) {
         }
     }
 
-    /** [args] van después de libpython.so (por ejemplo `-c …` o la ruta de yt-dlp). */
-    fun start(args: List<String>, runDir: File, mode: Mode, extraEnv: Map<String, String> = emptyMap()): Run {
+    /**
+     * [args] van después de libpython.so (por ejemplo `-c …` o la ruta de yt-dlp). [onLine] recibe cada línea de
+     * stdout y stderr (hasta 64 KiB) en el hilo lector: tiene que ser rápido y no lanzar excepciones.
+     */
+    fun start(
+        args: List<String>,
+        runDir: File,
+        mode: Mode,
+        extraEnv: Map<String, String> = emptyMap(),
+        onLine: ((String) -> Unit)? = null,
+    ): Run {
         val tmp = File(runDir, "tmp").apply { mkdirs() }
         dirs.home.mkdirs()
         val python = dirs.lib("libpython.so").path
@@ -139,7 +148,7 @@ class PyRunner(private val dirs: EngineDirs) {
         }
         val process = builder.start()
         process.outputStream.close() // stdin cerrado: yt-dlp nunca espera una respuesta
-        return Run(process, mode, LineCollector(process.inputStream, "stdout"), LineCollector(process.errorStream, "stderr"))
+        return Run(process, mode, LineCollector(process.inputStream, "stdout", onLine), LineCollector(process.errorStream, "stderr", onLine))
     }
 
     fun run(args: List<String>, runDir: File, mode: Mode, timeoutMs: Long): Result = start(args, runDir, mode).await(timeoutMs)
@@ -158,12 +167,17 @@ class PyRunner(private val dirs: EngineDirs) {
     }
 
     /** Lee un flujo línea por línea en su propio hilo; guarda las últimas [MAX_LINES] (máximo 4 KiB cada una). */
-    class LineCollector(stream: InputStream, name: String) {
+    class LineCollector(stream: InputStream, name: String, private val onLine: ((String) -> Unit)? = null) {
         private val lines = ArrayDeque<String>()
         private val worker = thread(name = "kd-$name", isDaemon = true) {
             try {
                 stream.bufferedReader(Charsets.UTF_8).useLines { seq ->
                     seq.forEach { line ->
+                        try {
+                            onLine?.invoke(line.take(64 * 1024))
+                        } catch (e: RuntimeException) {
+                            android.util.Log.w("PyRunner", "Error al procesar una línea", e)
+                        }
                         synchronized(lines) {
                             lines.addLast(line.take(4096))
                             if (lines.size > MAX_LINES) lines.removeFirst()

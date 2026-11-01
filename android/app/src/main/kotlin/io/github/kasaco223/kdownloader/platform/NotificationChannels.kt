@@ -9,20 +9,33 @@ import io.github.kasaco223.kdownloader.R
 
 /**
  * Canales de notificación (contrato B.2). Crearlos es idempotente: Android solo actualiza nombre y descripción.
- * En esta versión solo existe el del trabajo en curso; los de descargas listas, problemas y actualizaciones
- * llegan con sus funciones.
+ * El de actualizaciones de la app llega con el actualizador.
  */
 object NotificationChannels {
     /** Trabajo en curso (preparar el motor, descargar): prioridad baja, sin sonido. Notificación id 1. */
     const val ACTIVE = "kd.active"
 
+    /** Descargas listas. */
+    const val DONE = "kd.done"
+
+    /** Descargas que fallaron. */
+    const val PROBLEMS = "kd.problems"
+
     fun ensure(context: Context) {
         val nm = context.getSystemService(NotificationManager::class.java) ?: return
-        nm.createNotificationChannel(
-            NotificationChannel(ACTIVE, context.getString(R.string.notif_channel_active), NotificationManager.IMPORTANCE_LOW).apply {
-                description = context.getString(R.string.notif_channel_active_desc)
-                setShowBadge(false)
-            },
+        nm.createNotificationChannels(
+            listOf(
+                NotificationChannel(ACTIVE, context.getString(R.string.notif_channel_active), NotificationManager.IMPORTANCE_LOW).apply {
+                    description = context.getString(R.string.notif_channel_active_desc)
+                    setShowBadge(false)
+                },
+                NotificationChannel(DONE, context.getString(R.string.notif_channel_done), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = context.getString(R.string.notif_channel_done_desc)
+                },
+                NotificationChannel(PROBLEMS, context.getString(R.string.notif_channel_problems), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = context.getString(R.string.notif_channel_problems_desc)
+                },
+            ),
         )
     }
 }

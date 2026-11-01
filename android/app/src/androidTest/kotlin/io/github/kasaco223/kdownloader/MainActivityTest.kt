@@ -25,9 +25,10 @@ class MainActivityTest {
     private fun text(id: Int): String = compose.activity.getString(id)
 
     @Test
-    fun homeSaysThisBuildCannotDownloadYet() {
-        compose.onNodeWithText(text(R.string.home_test_build_title)).assertIsDisplayed()
-        compose.onNodeWithText(text(R.string.home_test_build_body)).assertIsDisplayed()
+    fun homeShowsTheLinkBoxAndTheFormats() {
+        compose.onNodeWithText(text(R.string.home_link_title)).assertIsDisplayed()
+        compose.onNodeWithText(text(R.string.option_recommended)).assertIsDisplayed()
+        compose.onNodeWithText(text(R.string.option_mp3)).assertIsDisplayed()
     }
 
     @Test

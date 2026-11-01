@@ -3,9 +3,10 @@
 
 # K-Downloader para Android: guía para desarrollar
 
-Esta carpeta tiene la app de Android. Hoy es una **versión de prueba**: se instala, recibe enlaces al
-compartir, prepara el motor de descargas (Python, FFmpeg y yt-dlp) y lo prueba, y muestra la información legal
-y el diagnóstico del celular, pero **todavía no descarga**. Las descargas llegan en el próximo PR.
+Esta carpeta tiene la app de Android. Hoy es una **versión de prueba que ya descarga**: pegas o compartes un
+enlace, eliges el formato (Video MP4, Máxima MKV, MP3 o M4A) y el archivo queda en Descargas/K-Downloader. Lo
+que falta (analizar el enlace antes, listas, reintentos automáticos, seguir tras un cierre) llega en los
+próximos PR.
 
 ## Licencia
 
@@ -54,8 +55,24 @@ android/
 
 Paquetes de la app (`io.github.kasaco223.kdownloader`): `share/` (la hoja que aparece al compartir),
 `ui/` (pantallas y tema), `platform/` (diagnóstico, acciones del sistema, canales de notificación),
-`contracts/` (contratos con el resto de la app), `engine/` (el motor) y `download/` (el servicio en primer
-plano).
+`contracts/` (contratos con el resto de la app), `engine/` (el motor), `download/` (la cola, el servicio en
+primer plano, la publicación en Descargas y las notificaciones), `ui/jobs` y `ui/history`.
+
+## Las descargas
+
+- **`:core` (`core/download/`)**, sin Android y probado en la JVM con los datos de Windows:
+  - `Presets` y `Args`: los argumentos de yt-dlp, iguales byte a byte a `engine/presets.py`;
+  - `Kdl` (con `JsonStrict`): las líneas `KDL|…` de progreso;
+  - `ProgressModel`: el porcentaje, igual que `downloads._on_event`;
+  - `ExitMapper` y `ErrorCatalog`: el resultado y el error, con el mismo `errors_catalog.json`.
+  Las pruebas leen `tests/fixtures/ytdlp` (transcripciones reales) y
+  `core/src/test/resources/desktop_error_vectors.json` (los ejemplos de `tests/test_errors.py`).
+- **`DownloadQueue`**: una descarga a la vez, en `DownloadService` (primer plano, `dataSync`). Guarda
+  `kd/jobs.json` y `kd/history.json`; cada trabajo baja en `kd/jobs/<id>/` y `Publisher` lo pasa a
+  Descargas/K-Downloader (MediaStore desde Android 10; copia directa y FileProvider en Android 8 y 9, con el
+  permiso de almacenamiento).
+- **Permisos**: el de notificaciones se pide una vez, después de la primera descarga (Android 13+); sin él la
+  descarga sigue, solo sin avisos. En Android 8 y 9, el de almacenamiento se pide antes de encolar.
 
 ## El motor de descargas
 
@@ -261,7 +278,8 @@ traiga, también un artefacto de CI: en un repo público, cualquiera con cuenta 
 
 ## Pendiente
 
-- Las descargas, el actualizador de yt-dlp, la libwebp propia para páginas de 16 KB, el pipeline de
+- Analizar el enlace antes de bajar (calidades y tamaños), listas, reintentos automáticos, seguir tras un
+  cierre de la app, el actualizador de yt-dlp, la libwebp propia para páginas de 16 KB, el pipeline de
   releases y el actualizador de la app llegan en sus propios PR.
 
 ## Verificación de dependencias

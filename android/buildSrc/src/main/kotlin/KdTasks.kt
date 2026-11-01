@@ -104,9 +104,16 @@ abstract class KdLicenseAssetsTask : DefaultTask() {
     }
 }
 
-/** assets/kd/cacert.pem: los certificados raíz que usa el motor (SSL_CERT_FILE), fijados por SHA-256. */
+/**
+ * assets/kd/: cacert.pem (los certificados raíz del motor, SSL_CERT_FILE, fijados por SHA-256) y
+ * errors_catalog.json (el catálogo de errores de la app de Windows, sin cambios).
+ */
 @CacheableTask
 abstract class KdEngineAssetsTask : DefaultTask() {
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val errorCatalog: RegularFileProperty
+
     @get:Input
     abstract val cacertUrl: Property<String>
 
@@ -121,6 +128,7 @@ abstract class KdEngineAssetsTask : DefaultTask() {
         val out = outputDir.get().asFile.apply { deleteRecursively(); mkdirs() }
         out.resolve("kd").mkdirs()
         out.resolve("kd/cacert.pem").writeBytes(fetchVerified(cacertUrl.get(), cacertSha256.get()))
+        errorCatalog.get().asFile.copyTo(out.resolve("kd/errors_catalog.json"))
     }
 }
 
@@ -186,4 +194,24 @@ abstract class KdPayloadTask : DefaultTask() {
             if (missing.isNotEmpty()) throw GradleException("Los AAR del motor no traen $missing para $abi")
         }
     }
+}
+
+/**
+ * -Dkd.repoRoot=<raíz del repo> para las pruebas de :core, que leen en su lugar los datos de la app de Windows
+ * (tests/fixtures con transcripciones reales de yt-dlp y el catálogo de errores). Los declara como entradas:
+ * si cambian, las pruebas vuelven a correr.
+ */
+abstract class RepoRootArgs : org.gradle.process.CommandLineArgumentProvider {
+    @get:InputDirectory
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val fixtures: DirectoryProperty
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.NONE)
+    abstract val errorCatalog: RegularFileProperty
+
+    @get:org.gradle.api.tasks.Internal
+    abstract val repoRoot: DirectoryProperty
+
+    override fun asArguments() = listOf("-Dkd.repoRoot=${repoRoot.get().asFile.absolutePath}")
 }
