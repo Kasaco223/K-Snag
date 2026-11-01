@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,36 +20,43 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.kasaco223.kdownloader.R
-import io.github.kasaco223.kdownloader.ui.home.FormatButtons
+import io.github.kasaco223.kdownloader.core.Urls
+import io.github.kasaco223.kdownloader.ui.components.BrandHeader
+import io.github.kasaco223.kdownloader.ui.formats.FormatChooser
 
 /**
- * Hoja inferior de la actividad translúcida que aparece al compartir: el enlace que recibió y los cuatro
- * formatos. Elegir uno encola la descarga y cierra la hoja; sigue en segundo plano con su notificación.
+ * Hoja inferior de la actividad translúcida que aparece al compartir: el enlace que recibió, un botón grande con
+ * el formato principal y los otros tres como chips. Elegir uno encola la descarga y cierra la hoja; sigue en
+ * segundo plano con su notificación.
  */
 @Composable
-fun QuickDownloadSheet(link: SharedLink, onDownload: (String) -> Unit, onOpenApp: () -> Unit, onClose: () -> Unit) {
+fun QuickDownloadSheet(link: SharedLink, favorite: String, onDownload: (String) -> Unit, onOpenApp: () -> Unit, onClose: () -> Unit) {
     val title = stringResource(R.string.quick_pane_title)
     val appear = remember { MutableTransitionState(false).apply { targetState = true } }
     Box(Modifier.fillMaxSize()) {
@@ -80,21 +88,26 @@ fun QuickDownloadSheet(link: SharedLink, onDownload: (String) -> Unit, onOpenApp
                         Modifier
                             .verticalScroll(rememberScrollState())
                             .windowInsetsPadding(WindowInsets.navigationBars)
-                            .padding(horizontal = 24.dp, vertical = 20.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                            .padding(start = 20.dp, end = 20.dp, top = 10.dp, bottom = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
+                        Box(
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .size(width = 36.dp, height = 4.dp)
+                                .background(MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(2.dp)),
+                        )
+                        BrandHeader(logoSize = 24.dp, label = stringResource(R.string.quick_header))
                         when (val url = link.url) {
                             null -> NoLinkContent()
                             else -> {
                                 LinkContent(url = url, total = link.total)
-                                FormatButtons(enabled = true, onPick = onDownload)
+                                FormatChooser(favorite = favorite, onPick = onDownload)
                             }
                         }
-                        OutlinedButton(onClick = onOpenApp, modifier = Modifier.fillMaxWidth()) {
-                            Text(stringResource(R.string.quick_open_app))
-                        }
-                        OutlinedButton(onClick = onClose, modifier = Modifier.fillMaxWidth()) {
-                            Text(stringResource(R.string.common_close))
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            TextButton(onClick = onOpenApp) { Text(stringResource(R.string.quick_open_app)) }
+                            TextButton(onClick = onClose) { Text(stringResource(R.string.common_close)) }
                         }
                     }
                 }
@@ -103,20 +116,33 @@ fun QuickDownloadSheet(link: SharedLink, onDownload: (String) -> Unit, onOpenApp
     }
 }
 
+/** El enlace recibido: el sitio en grande y la dirección completa debajo (se puede seleccionar y copiar). */
 @Composable
 private fun LinkContent(url: String, total: Int) {
-    Text(
-        text = stringResource(R.string.link_received_title),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.semantics { heading() },
-    )
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        shape = MaterialTheme.shapes.small,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        SelectionContainer {
-            Text(text = url, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(12.dp))
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            Modifier
+                .size(56.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerHighest, RoundedCornerShape(14.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(painterResource(R.drawable.ic_video), contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(
+                text = Urls.host(url)?.removePrefix("www.")?.removePrefix("m.") ?: url,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.semantics { heading() },
+            )
+            SelectionContainer {
+                Text(
+                    text = url,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
     if (total > 1) {
@@ -126,7 +152,6 @@ private fun LinkContent(url: String, total: Int) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
-    Text(text = stringResource(R.string.home_pick_format), style = MaterialTheme.typography.bodyMedium)
 }
 
 @Composable

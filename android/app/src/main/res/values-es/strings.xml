@@ -14,10 +14,6 @@
     <string name="common_back">Atrás</string>
     <string name="common_no_browser">No encontramos una app para abrir el enlace.</string>
 
-    <!-- Inicio (versión de prueba) -->
-    <string name="home_about">Acerca de y diagnóstico</string>
-    <string name="link_received_title">Recibimos este enlace</string>
-
     <!-- Hoja al compartir -->
     <string name="quick_pane_title">Compartir con K-Downloader</string>
     <string name="quick_no_link_title">No encontramos un enlace</string>
@@ -100,10 +96,8 @@
     <string name="third_party_load_failed">No pudimos abrir la lista. También está en el código fuente, en android/THIRD_PARTY_NOTICES.md.</string>
     <string name="third_party_view">Ver %1$s</string>
     <!-- Inicio y descargas -->
-    <string name="home_link_title">Pega el enlace del video</string>
-    <string name="home_link_hint">https://…</string>
-    <string name="home_paste">Pegar</string>
-    <string name="home_pick_format">Elige el formato:</string>
+    <string name="home_link_title">¿Qué bajamos hoy?</string>
+    <string name="home_link_hint">o escribe el enlace aquí</string>
     <string name="option_recommended">Video (MP4)</string>
     <string name="option_max">Máxima (MKV)</string>
     <string name="option_mp3">Audio MP3</string>
@@ -115,7 +109,6 @@
     <string name="download_again">Descargar de nuevo</string>
     <string name="common_no_app_for_file">No encontramos una app para abrir este archivo.</string>
     <string name="jobs_title">Descargas</string>
-    <string name="jobs_clear_finished">Limpiar terminadas</string>
     <string name="jobs_cancel">Cancelar</string>
     <string name="jobs_retry">Reintentar</string>
     <string name="jobs_open">Abrir</string>
@@ -140,10 +133,6 @@
     <string name="jobs_error_storage_body">Dale a K-Downloader el permiso de almacenamiento y toca «Reintentar».</string>
     <string name="jobs_error_live_title">Las transmisiones en vivo no se pueden descargar</string>
     <string name="jobs_error_live_body">Cuando termine la transmisión, vuelve a intentarlo.</string>
-    <string name="history_title">Historial</string>
-    <string name="history_empty">Todavía no descargaste nada. Lo que bajes aparecerá aquí.</string>
-    <string name="history_lead">Los archivos están en Descargas › K-Downloader. Quitar algo del historial no borra el archivo.</string>
-    <string name="history_remove">Quitar del historial</string>
     <string name="notif_downloads_title">Descargando</string>
     <string name="notif_action_cancel">Cancelar</string>
     <string name="notif_done_title">Descarga lista</string>
@@ -152,4 +141,52 @@
     <string name="notif_channel_done_desc">Avisa cuando termina una descarga</string>
     <string name="notif_channel_problems">Problemas con descargas</string>
     <string name="notif_channel_problems_desc">Avisa cuando una descarga falla</string>
+    <!-- Inicio, pestañas y selector de formato (rediseño) -->
+    <string name="tab_home">Inicio</string>
+    <string name="tab_downloads">Descargas</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="home_lead">Pega un enlace o compártelo desde la app donde estás viendo el video.</string>
+    <string name="home_paste_link">Pegar enlace</string>
+    <string name="home_paste_empty">No hay un enlace copiado. Copia primero el enlace del video.</string>
+    <string name="home_link_ready">Enlace listo</string>
+    <string name="home_clear_link">Borrar el enlace</string>
+    <string name="home_now">Ahora</string>
+    <string name="home_problems">Necesitan atención</string>
+    <string name="home_recent">Recientes</string>
+    <string name="home_see_all">Ver todo</string>
+    <string name="home_empty_title">Aquí verás tus descargas</string>
+    <string name="home_empty_body">En YouTube o en otra app, toca Compartir y elige K-Downloader.</string>
+    <string name="format_action_recommended">Descargar video</string>
+    <string name="format_action_max">Descargar en máxima calidad</string>
+    <string name="format_action_mp3">Descargar audio MP3</string>
+    <string name="format_action_m4a">Descargar audio M4A</string>
+    <string name="format_detail_recommended">MP4 · hasta 1080p</string>
+    <string name="format_detail_max">MKV · 4K si existe</string>
+    <string name="format_detail_mp3">Suena en cualquier reproductor</string>
+    <string name="format_detail_m4a">Mejor calidad, más liviano</string>
+    <string name="format_favorite_detail">%1$s · tu formato principal</string>
+    <string name="format_other">Otras opciones</string>
+    <string name="jobs_eta">quedan %1$s</string>
+    <plurals name="downloads_count">
+        <item quantity="one">1 archivo en Descargas › K-Downloader</item>
+        <item quantity="many">%d archivos en Descargas › K-Downloader</item>
+        <item quantity="other">%d archivos en Descargas › K-Downloader</item>
+    </plurals>
+    <string name="downloads_filter_all">Todo</string>
+    <string name="downloads_filter_video">Videos</string>
+    <string name="downloads_filter_audio">Audio</string>
+    <string name="downloads_running">En curso</string>
+    <string name="downloads_done">Listas</string>
+    <string name="downloads_clear">Limpiar</string>
+    <string name="downloads_none_filtered">No hay nada con este filtro.</string>
+    <string name="downloads_history_note">Quitar algo de esta lista no borra el archivo.</string>
+    <string name="history_remove_named">Quitar %1$s de la lista</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_favorite_title">Formato principal</string>
+    <string name="settings_favorite_lead">Es el botón grande de Inicio y de la hoja que aparece al compartir.</string>
+    <string name="settings_folder_title">Dónde se guardan</string>
+    <string name="settings_folder_body">Descargas › K-Downloader. Tu galería y tu app de música los encuentran ahí.</string>
+    <string name="settings_about">Acerca de K-Downloader</string>
+    <string name="settings_about_detail">Versión, licencias y diagnóstico</string>
+    <string name="quick_header">Descargar con K-Downloader</string>
 </resources>

@@ -36,6 +36,7 @@ data class Job(
     val title: String? = null,
     val uploader: String? = null,
     val thumbnail: String? = null,
+    val duration: Long? = null,
     val state: String = "queued",
     val stepIndex: Int = 0,
     val stepTotal: Int = 0,
@@ -65,6 +66,7 @@ data class Job(
         put("id", id); put("url", url); put("option", option); put("container", container)
         put("is_youtube", isYoutube); put("site", site); putOpt("video_key", videoKey)
         putOpt("title", title); putOpt("uploader", uploader); putOpt("thumbnail", thumbnail)
+        putOpt("duration", duration)
         put("state", state); put("step_index", stepIndex); put("step_total", stepTotal); putOpt("step_kind", stepKind)
         putOpt("postprocessor", postprocessor); putOpt("progress", progress)
         put("downloaded", downloaded); put("total", total); putOpt("expected_size", expectedSize)
@@ -86,6 +88,7 @@ data class Job(
             container = o.optString("container", "mp4"), isYoutube = o.optBoolean("is_youtube"),
             site = o.optString("site"), videoKey = o.optStr("video_key"),
             title = o.optStr("title"), uploader = o.optStr("uploader"), thumbnail = o.optStr("thumbnail"),
+            duration = if (o.has("duration") && !o.isNull("duration")) o.optLong("duration") else null,
             state = o.optString("state", "queued"), stepIndex = o.optInt("step_index"), stepTotal = o.optInt("step_total"),
             stepKind = o.optStr("step_kind"), postprocessor = o.optStr("postprocessor"),
             progress = if (o.isNull("progress") || !o.has("progress")) null else o.optDouble("progress"),
@@ -117,10 +120,15 @@ data class HistoryItem(
     val mime: String,
     val size: Long,
     val finishedAt: Long,
+    val uploader: String? = null,
+    val duration: Long? = null,
 ) {
+    val isAudio: Boolean get() = mime.startsWith("audio/")
+
     fun toJson(): JSONObject = JSONObject().put("id", id).put("url", url).put("title", title).put("site", site)
         .putOpt("video_key", videoKey).put("option", option).put("display_name", displayName)
         .put("content_uri", contentUri).put("mime", mime).put("size", size).put("finished_at", finishedAt)
+        .putOpt("uploader", uploader).putOpt("duration", duration)
 
     companion object {
         fun fromJson(o: JSONObject) = HistoryItem(
@@ -128,6 +136,8 @@ data class HistoryItem(
             if (o.isNull("video_key")) null else o.optString("video_key").takeIf { o.has("video_key") },
             o.optString("option"), o.optString("display_name"), o.getString("content_uri"), o.optString("mime"),
             o.optLong("size"), o.optLong("finished_at"),
+            uploader = if (o.isNull("uploader")) null else o.optString("uploader").takeIf { o.has("uploader") },
+            duration = if (o.has("duration") && !o.isNull("duration")) o.optLong("duration") else null,
         )
     }
 }

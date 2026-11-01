@@ -27,7 +27,9 @@ import io.github.kasaco223.kdownloader.core.download.ProgressModel
 import io.github.kasaco223.kdownloader.core.download.long
 import io.github.kasaco223.kdownloader.core.download.str
 import io.github.kasaco223.kdownloader.engine.KdEngine
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,6 +59,10 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     private val jobsDir = File(dirs.root, "jobs")
     private val lock = Any()
     private var lastSave = 0L
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    /** Las miniaturas de trabajos e historial (kd/thumbs). */
+    val thumbnails = Thumbnails(File(dirs.root, "thumbs"), scope)
 
     private val _jobs = MutableStateFlow(loadJobs())
     val jobs: StateFlow<List<Job>> = _jobs.asStateFlow()
@@ -144,13 +150,17 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
             save(_jobs.value)
         }
         File(jobsDir, id).deleteRecursively()
+        dropThumbnails(listOf(id))
     }
 
     fun clearFinished() {
-        synchronized(lock) {
-            _jobs.value = _jobs.value.filterNot { it.isTerminal }
-            save(_jobs.value)
+        val cleared = synchronized(lock) {
+            val (done, keep) = _jobs.value.partition { it.isTerminal }
+            _jobs.value = keep
+            save(keep)
+            done.map { it.id }
         }
+        dropThumbnails(cleared)
     }
 
     fun removeHistory(id: String) {
@@ -158,6 +168,13 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
             _history.value = _history.value.filterNot { it.id == id }
             JsonFiles.save(historyFile, "items", _history.value, HistoryItem::toJson)
         }
+        dropThumbnails(listOf(id))
+    }
+
+    /** Borra las miniaturas que ya no usa ni un trabajo ni el historial. */
+    private fun dropThumbnails(ids: Collection<String>) {
+        val used = synchronized(lock) { _jobs.value.map { it.id }.toSet() + _history.value.map { it.id } }
+        thumbnails.delete(ids.filterNot { it in used })
     }
 
     /** Arranca el servicio si hay algo en cola (al volver a la app, por ejemplo). */
@@ -243,11 +260,14 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
             }
             val job = _jobs.value.first { it.id == id }
             val item = HistoryItem(id, job.url, job.title ?: p.displayName.substringBeforeLast('.'), job.site, job.videoKey,
-                job.option, p.displayName, p.uri, p.mime, p.size, now)
-            synchronized(lock) {
-                _history.value = (listOf(item) + _history.value.filterNot { it.id == id }).take(500)
+                job.option, p.displayName, p.uri, p.mime, p.size, now, uploader = job.uploader, duration = job.duration)
+            val dropped = synchronized(lock) {
+                val all = listOf(item) + _history.value.filterNot { it.id == id }
+                _history.value = all.take(500)
                 JsonFiles.save(historyFile, "items", _history.value, HistoryItem::toJson)
+                all.drop(500).map { it.id }
             }
+            dropThumbnails(dropped)
             jobDir.deleteRecursively()
             DownloadNotifications.done(context, item)
         } catch (e: Publisher.Canceled) {
@@ -297,6 +317,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
             Snapshot(model.state, model.stepIndex, model.stepTotal, model.stepKind, model.postprocessor, model.progress,
                 model.downloaded, model.total, model.speed, model.eta, model.meta, model.notes.toList())
         }
+        snapshot.meta?.str("thumbnail")?.let { thumbnails.fetch(id, it) }
         update(id, persistNow = false) { j ->
             j.copy(
                 state = snapshot.state, stepIndex = snapshot.stepIndex, stepTotal = snapshot.stepTotal,
@@ -305,6 +326,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
                 title = snapshot.meta?.str("title") ?: j.title,
                 uploader = snapshot.meta?.str("uploader") ?: snapshot.meta?.str("channel") ?: j.uploader,
                 thumbnail = snapshot.meta?.str("thumbnail") ?: j.thumbnail,
+                duration = snapshot.meta?.long("duration") ?: j.duration,
                 expectedSize = snapshot.meta?.let { it.long("filesize") ?: it.long("filesize_approx") } ?: j.expectedSize,
                 videoKey = snapshot.meta?.let { m ->
                     val ex = m.str("extractor_key")?.lowercase()
@@ -345,6 +367,10 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     /** Los no terminados nunca se borran; de los terminados quedan los 200 más nuevos. */
     private fun evict(list: List<Job>): List<Job> {
         val terminal = list.filter { it.isTerminal }.sortedByDescending { it.createdAt }.drop(200).map { it.id }.toSet()
+        if (terminal.isNotEmpty()) {
+            val inHistory = _history.value.map { it.id }.toSet()
+            thumbnails.delete(terminal.filterNot { it in inHistory })
+        }
         return list.filterNot { it.id in terminal }
     }
 
