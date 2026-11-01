@@ -41,8 +41,10 @@ class DownloadPipelineTest {
     fun setUp() {
         assumeTrue("El motor necesita páginas de 4 KB hasta M5", Os.sysconf(OsConstants._SC_PAGESIZE) == 4096L)
         if (Build.VERSION.SDK_INT <= 28) {
-            instrumentation.uiAutomation.executeShellCommand("pm grant ${app.packageName} ${Manifest.permission.WRITE_EXTERNAL_STORAGE}").close()
-            Thread.sleep(500)
+            // Respaldo de `adb install -g` (ci_emulator.sh): se espera a que el comando termine.
+            instrumentation.uiAutomation.executeShellCommand("pm grant ${app.packageName} ${Manifest.permission.WRITE_EXTERNAL_STORAGE}")
+                .use { pfd -> java.io.FileInputStream(pfd.fileDescriptor).use { it.readBytes() } }
+            Thread.sleep(1_000)
         }
         val status = runBlocking { withTimeout(300_000) { app.engine.ensureReady() } }
         assertTrue("$status", status is EngineStatus.Ready)

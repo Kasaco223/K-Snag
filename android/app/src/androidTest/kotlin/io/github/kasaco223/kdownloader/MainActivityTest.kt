@@ -8,6 +8,7 @@ import android.system.OsConstants
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -33,7 +34,7 @@ class MainActivityTest {
 
     @Test
     fun aboutShowsTheLegalNoticeAndTheDiagnostics() {
-        compose.onNodeWithText(text(R.string.home_about)).performScrollTo().performClick()
+        compose.onNodeWithContentDescription(text(R.string.home_about)).performClick() // el ícono (i) de la barra
         compose.onNodeWithText(text(R.string.about_copyright)).performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(text(R.string.about_gpl_notice)).performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(text(R.string.diag_title)).performScrollTo().assertIsDisplayed()
@@ -44,7 +45,7 @@ class MainActivityTest {
 
     @Test
     fun theLicenseOpensFromAbout() {
-        compose.onNodeWithText(text(R.string.home_about)).performScrollTo().performClick()
+        compose.onNodeWithContentDescription(text(R.string.home_about)).performClick() // el ícono (i) de la barra
         compose.onNodeWithText(text(R.string.about_view_license)).performScrollTo().performClick()
         // El texto se lee del APK en segundo plano; la primera página trae el título oficial.
         compose.waitUntil(timeoutMillis = 10_000) {
