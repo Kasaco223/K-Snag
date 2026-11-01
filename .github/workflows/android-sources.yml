@@ -1,0 +1,92 @@
+name: Android · fuentes de terceros
+
+# Arma el espejo del código fuente de los componentes de terceros del APK de Android (FFmpeg, Python, x264,
+# GLib, GnuTLS, Readline…) como BORRADOR pre-release (mirror_release.tag de components.json). Lo revisas y lo
+# publicas tú; publicado, no se cambia nunca (una corrección sube la revisión, -r2). Hasta que esté
+# publicado, ningún workflow sube un APK con el motor (sources_mirror.py --verify en ci_repo_checks.sh).
+# Inventario: android/third_party/components.json · Avisos: android/THIRD_PARTY_NOTICES.md
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-sources
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    name: Espejo de fuentes (borrador)
+    # El Release apunta al commit que corre: solo desde master.
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Inventario y avisos al día
+        run: python3 -I -X utf8 android/scripts/notices.py --check
+
+      - name: Cada archivo de los AAR de Maven Central tiene dueño en el inventario
+        run: |
+          set -euo pipefail
+          python3 -I - > "$RUNNER_TEMP/aars.txt" <<'EOF'
+          import json
+          data = json.load(open("android/third_party/components.json", encoding="utf-8"))
+          for c in data["components"]:
+              for coord, pin in (c.get("maven") or {}).items():
+                  group, name, version = coord.split(":")
+                  url = f"https://repo1.maven.org/maven2/{group.replace('.', '/')}/{name}/{version}/{name}-{version}.aar"
+                  print(url, pin["aar_sha256"], f"{name}-{version}.aar")
+          EOF
+          mkdir -p "$RUNNER_TEMP/aars"
+          while read -r url sha file; do
+            curl -fsSL --retry 3 -o "$RUNNER_TEMP/aars/$file" "$url"
+            echo "${sha}  $RUNNER_TEMP/aars/$file" | sha256sum -c -
+          done < "$RUNNER_TEMP/aars.txt"
+          python3 -I -X utf8 android/scripts/notices.py --payload "$RUNNER_TEMP"/aars/*.aar
+
+      - name: Árbol de termux-packages en el commit fijado (git archive)
+        run: |
+          set -euo pipefail
+          read -r commit name < <(python3 -I android/scripts/sources_mirror.py --recipes)
+          mkdir -p mirror "$RUNNER_TEMP/tp"
+          git -C "$RUNNER_TEMP/tp" init -q
+          git -C "$RUNNER_TEMP/tp" fetch -q --depth 1 https://github.com/termux/termux-packages "$commit"
+          git -C "$RUNNER_TEMP/tp" archive --format=tar.gz --prefix="${name%.tar.gz}/" -o "$GITHUB_WORKSPACE/mirror/$name" "$commit"
+          for must in build-package.sh scripts/ ndk-patches/ packages/ffmpeg/build.sh packages/python/build.sh; do
+            tar -tzf "mirror/$name" "${name%.tar.gz}/$must" > /dev/null
+          done
+          echo "Árbol de termux-packages: $(du -h "mirror/$name" | cut -f1)"
+
+      - name: Fuentes oficiales (cada una verificada contra components.json)
+        run: python3 -I -X utf8 android/scripts/sources_mirror.py --build mirror
+
+      - name: Crear el borrador (pre-release, nunca Latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          tag=$(python3 -I android/scripts/sources_mirror.py --tag)
+          if draft=$(gh release view "$tag" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$draft" != "true" ]; then
+              echo "::error::${tag} ya está publicado y no se cambia. Para corregirlo, sube la revisión (mirror_release.tag en components.json)."
+              exit 1
+            fi
+            echo "Ya había un borrador ${tag}: se borra y se arma de nuevo, sin archivos viejos."
+            gh release delete "$tag" --yes
+          fi
+          gh release create "$tag" mirror/* --draft --prerelease --latest=false --target "$GITHUB_SHA" \
+            --title "Código fuente de terceros · ${tag#android-sources-}" --notes-file mirror/FUENTES.md
+          {
+            echo "### Borrador listo: ${tag}"
+            echo ""
+            echo "$(find mirror -type f | wc -l) archivos, $(du -sh mirror | cut -f1)."
+            echo "Revísalo en https://github.com/${GH_REPO}/releases y publícalo **como pre-release** (sin marcar Latest)."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -28,12 +28,12 @@ while IFS= read -r f; do
 done < <(git ls-files -- android/gradlew 'android/*.sh')
 
 # 2) Encabezado SPDX en los archivos propios de android/ (GPL-3.0-or-later; GPL-3.0-only si se copió de un
-#    proyecto con esa licencia). No llevan encabezado: el texto de la licencia, los binarios y el wrapper
-#    de Gradle (archivos de Gradle, Apache-2.0).
+#    proyecto con esa licencia). No llevan encabezado: el texto de la licencia, los binarios, el wrapper
+#    de Gradle (archivos de Gradle, Apache-2.0) y los textos de licencia de terceros (third_party/licenses/).
 while IFS= read -r f; do
   [ -n "$f" ] || continue
   case "$f" in
-    android/LICENSE | android/gradlew | android/gradlew.bat | android/gradle/wrapper/*) continue ;;
+    android/LICENSE | android/gradlew | android/gradlew.bat | android/gradle/wrapper/* | android/third_party/licenses/*) continue ;;
   esac
   case "$f" in
     *.kt | *.kts | *.java | *.sh | *.py | *.xml | *.properties | *.toml | *.yaml | *.yml | *.pro | *.md | */Dockerfile) ;;
@@ -79,6 +79,18 @@ fi
 if ! grep -qE '^distributionUrl=https\\://services\.gradle\.org/distributions/gradle-[0-9.]+-bin\.zip$' "$props"; then
   err "$props" "distributionUrl debe ser una distribución -bin.zip de services.gradle.org"
 fi
+
+# 6) Inventario de terceros válido (todo lo copyleft con espejo, licencias citadas y presentes) y
+#    THIRD_PARTY_NOTICES.md al día con él.
+python3 -I -X utf8 android/scripts/notices.py --check || fail=1
+
+# 7) Los SHA-256 de los AAR de youtubedl-android: los mismos en components.json y en la verificación de
+#    Gradle. No hace nada mientras el catálogo no traiga youtubedl-android.
+python3 -I -X utf8 android/scripts/check_pins.py || fail=1
+
+# 8) Con youtubedl-android en el catálogo, el espejo de fuentes debe estar publicado y completo antes de que
+#    CI arme un APK con FFmpeg (los artefactos de un repo público ya son distribución). Sin él, no hace nada.
+python3 -I -X utf8 android/scripts/sources_mirror.py --verify || fail=1
 
 if [ "$fail" -eq 0 ]; then echo "Revisiones del repositorio: OK"; fi
 exit "$fail"

@@ -56,3 +56,11 @@ jobs:
       - name: sources_mirror.py (sin red)
         if: hashFiles('android/scripts/sources_mirror.py') != ''
         run: python3 -I -X utf8 android/scripts/tests/test_sources_mirror.py android/scripts/sources_mirror.py
+
+      - name: notices.py (sin red)
+        if: hashFiles('android/scripts/notices.py') != ''
+        run: python3 -I -X utf8 android/scripts/tests/test_notices.py android/scripts/notices.py
+
+      - name: check_pins.py (sin red)
+        if: hashFiles('android/scripts/check_pins.py') != ''
+        run: python3 -I -X utf8 android/scripts/tests/test_check_pins.py android/scripts/check_pins.py

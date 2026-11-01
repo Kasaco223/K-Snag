@@ -50,7 +50,9 @@ jobs:
           ref: ${{ env.KDL_SOURCE_COMMIT }}
           persist-credentials: false
 
-      - name: Revisar el repositorio (scripts, SPDX, llaves, licencia, wrapper)
+      - name: Revisar el repositorio (scripts, SPDX, llaves, licencias, wrapper, espejo de fuentes)
+        env:
+          GH_TOKEN: ${{ github.token }} # solo lectura: consulta el Release del espejo de fuentes
         run: bash android/scripts/ci_repo_checks.sh
 
       - name: Instalar Java 21
