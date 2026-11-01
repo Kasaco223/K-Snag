@@ -15,8 +15,10 @@ import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
+import io.github.kasaco223.kdownloader.download.MediaAnalyzer
 import io.github.kasaco223.kdownloader.download.Thumbnails
 import io.github.kasaco223.kdownloader.platform.UiPrefs
+import io.github.kasaco223.kdownloader.ui.analyze.LinkAnalysis
 import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,6 +54,7 @@ class MainViewModel(
     private val engine: EngineController,
     private val queue: DownloadQueue,
     private val uiPrefs: UiPrefs,
+    analyzer: MediaAnalyzer,
 ) : ViewModel() {
     private val _screen = MutableStateFlow(
         savedState.get<String>(KEY_SCREEN)?.let { name -> Screen.entries.firstOrNull { it.name == name } } ?: Screen.HOME,
@@ -76,8 +79,12 @@ class MainViewModel(
 
     fun setFavorite(option: String) = uiPrefs.setFavorite(option)
 
-    suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult =
-        queue.enqueue(request.url, request.option, request.allowDuplicate)
+    suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult = request.urls?.let {
+        queue.enqueueAll(it, request.option, request.allowDuplicate)
+    } ?: queue.enqueue(request.url, request.option, request.allowDuplicate, request.prefill)
+
+    /** El análisis del enlace de Inicio. */
+    val analysis = LinkAnalysis(viewModelScope, analyzer)
 
     fun cancel(id: String) = queue.cancel(id)
 
@@ -152,7 +159,7 @@ class MainViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as KdlApp
-                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs)
+                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs, app.analyzer)
             }
         }
     }

@@ -49,9 +49,15 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         data class Queued(val id: String) : EnqueueResult
         data class AlreadyInDownloads(val item: HistoryItem) : EnqueueResult
 
+        /** Una lista: [queued] trabajos nuevos y [skipped] que ya estaban en Descargas o no eran enlaces válidos. */
+        data class QueuedMany(val queued: Int, val skipped: Int) : EnqueueResult
+
         /** [code]: invalid o storage_permission (API 26-28 sin permiso para escribir en Descargas). */
         data class Rejected(val code: String) : EnqueueResult
     }
+
+    /** Lo que ya se sabe por el análisis: la tarjeta muestra título y miniatura antes de que arranque. */
+    data class Prefill(val title: String?, val uploader: String?, val duration: Double?, val thumbnail: String?, val thumbId: String?)
 
     private val dirs = engine.dirs
     private val jobsFile = File(dirs.root, "jobs.json")
@@ -92,33 +98,75 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     fun hasQueued(): Boolean = _jobs.value.any { it.state == "queued" }
 
     // ------------------------------------------------------------------------------------------------ acciones
-    suspend fun enqueue(rawUrl: String, option: String, allowDuplicate: Boolean = false): EnqueueResult = withContext(Dispatchers.IO) {
+    suspend fun enqueue(rawUrl: String, option: String, allowDuplicate: Boolean = false, prefill: Prefill? = null): EnqueueResult = withContext(Dispatchers.IO) {
         // Pruebas sin red (KD_TEST_HOOKS, solo debug): archivos locales con --enable-file-urls.
         val testFile = BuildConfig.KD_TEST_HOOKS && rawUrl.startsWith("file:///") && "--enable-file-urls" in testExtraArgs
         val url = if (testFile) rawUrl else Urls.validate(rawUrl)?.let { Urls.normalize(it) ?: it } ?: return@withContext EnqueueResult.Rejected("invalid")
         Presets.optionToChoice(option) ?: return@withContext EnqueueResult.Rejected("invalid")
         if (Build.VERSION.SDK_INT <= 28 && !hasStoragePermission()) return@withContext EnqueueResult.Rejected("storage_permission")
-        val isYoutube = Urls.isYoutube(url)
-        val key = if (isYoutube) Urls.guessVideoId(url)?.let { "youtube:$it" } else null
+        val key = if (Urls.isYoutube(url)) Urls.guessVideoId(url)?.let { "youtube:$it" } else null
         if (!allowDuplicate && key != null) {
             _history.value.firstOrNull { it.videoKey == key && it.option == option && fileExists(it.contentUri) }
                 ?.let { return@withContext EnqueueResult.AlreadyInDownloads(it) }
         }
-        val job = Job(
-            id = UUID.randomUUID().toString().replace("-", "").take(8),
-            url = url,
-            option = option,
-            container = Presets.containerFor(option, Presets.optionToChoice(option)?.height),
-            isYoutube = isYoutube,
-            site = siteName(url),
-            videoKey = key,
-        )
+        val job = newJob(url, option, key, prefill)
         synchronized(lock) {
             _jobs.value = (listOf(job) + _jobs.value).let(::evict)
             save(_jobs.value)
         }
         if (startServiceOnEnqueue) startService()
         EnqueueResult.Queued(job.id)
+    }
+
+    /**
+     * Toda una lista (como mucho [MAX_BATCH] videos), en orden. Se saltan los enlaces inválidos y, salvo
+     * [allowDuplicate], los videos que ya están en Descargas con el mismo formato.
+     */
+    suspend fun enqueueAll(urls: List<String>, option: String, allowDuplicate: Boolean = false): EnqueueResult = withContext(Dispatchers.IO) {
+        Presets.optionToChoice(option) ?: return@withContext EnqueueResult.Rejected("invalid")
+        if (Build.VERSION.SDK_INT <= 28 && !hasStoragePermission()) return@withContext EnqueueResult.Rejected("storage_permission")
+        val have = _history.value.filter { it.option == option && it.videoKey != null }.map { it.videoKey }.toSet()
+        var skipped = 0
+        val now = System.currentTimeMillis()
+        val jobs = urls.take(MAX_BATCH).mapIndexedNotNull { i, raw ->
+            val url = Urls.validate(raw)?.let { Urls.normalize(it) ?: it }
+            val key = url?.takeIf { Urls.isYoutube(it) }?.let { Urls.guessVideoId(it) }?.let { "youtube:$it" }
+            if (url == null || (!allowDuplicate && key != null && key in have)) {
+                skipped++
+                null
+            } else {
+                newJob(url, option, key, null).copy(createdAt = now + i) // el orden de la lista
+            }
+        }
+        if (jobs.isEmpty()) return@withContext EnqueueResult.QueuedMany(0, skipped)
+        synchronized(lock) {
+            _jobs.value = (jobs.reversed() + _jobs.value).let(::evict)
+            save(_jobs.value)
+        }
+        if (startServiceOnEnqueue) startService()
+        EnqueueResult.QueuedMany(jobs.size, skipped)
+    }
+
+    private fun newJob(url: String, option: String, key: String?, prefill: Prefill?): Job {
+        val id = UUID.randomUUID().toString().replace("-", "").take(8)
+        prefill?.thumbId?.let { from ->
+            val src = thumbnails.file(from)
+            if (src.isFile) runCatching { src.copyTo(thumbnails.file(id), overwrite = true) }
+        }
+        if (!thumbnails.file(id).exists()) prefill?.thumbnail?.let { thumbnails.fetch(id, it) }
+        return Job(
+            id = id,
+            url = url,
+            option = option,
+            container = Presets.containerFor(option, Presets.optionToChoice(option)?.height),
+            isYoutube = Urls.isYoutube(url),
+            site = siteName(url),
+            videoKey = key,
+            title = prefill?.title?.takeIf { it.isNotBlank() },
+            uploader = prefill?.uploader?.takeIf { it.isNotBlank() },
+            duration = prefill?.duration?.toLong(),
+            thumbnail = prefill?.thumbnail,
+        )
     }
 
     fun cancel(id: String) {
@@ -288,13 +336,16 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         _jobs.value.firstOrNull { it.id == id }?.let { DownloadNotifications.failed(context, it) }
     }
 
+    /** El error de una salida de yt-dlp con el catálogo de Windows (también para el análisis). */
+    fun classify(lines: List<String>): JobError = catalog.toJobError(catalog.classify(lines))
+
     private fun errorFor(code: String?, lines: List<String>): JobError = when (code) {
         null -> catalog.toJobError(catalog.classify(lines))
         "live_unsupported" -> localError(code, R.string.jobs_error_live_title, R.string.jobs_error_live_body, lines.takeLast(20).joinToString("\n"))
         else -> catalog.toJobError(catalog.byCode(code, lines.takeLast(30).joinToString("\n")))
     }
 
-    private fun engineError(code: String, detail: String): JobError = when (code) {
+    internal fun engineError(code: String, detail: String): JobError = when (code) {
         "engine_incompatible" -> localError(code, R.string.engine_error_incompatible_title, R.string.engine_error_incompatible_body, detail)
         "disk_full" -> localError(code, R.string.engine_error_disk_full_title, R.string.engine_error_disk_full_generic, detail)
         else -> localError(code, R.string.engine_error_failed_title, R.string.engine_error_failed_body, detail)
@@ -304,7 +355,7 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
         JobError(c.code, c.title("es"), c.message("es"), c.title("en"), c.message("en"), c.details)
 
     /** Error con textos de la app (strings.xml) en español e inglés. */
-    private fun localError(code: String, title: Int, body: Int, detail: String): JobError {
+    internal fun localError(code: String, title: Int, body: Int, detail: String): JobError {
         fun text(lang: String, res: Int) = context.createConfigurationContext(Configuration(context.resources.configuration).apply {
             setLocale(Locale.forLanguageTag(lang))
         }).getString(res)
@@ -401,5 +452,8 @@ class DownloadQueue(private val context: Context, private val engine: KdEngine) 
     companion object {
         private const val TAG = "DownloadQueue"
         private const val RUN_TIMEOUT_MS = 6L * 60 * 60 * 1000
+
+        /** Tope de una lista (diseño, B.3 #13). */
+        const val MAX_BATCH = 500
     }
 }

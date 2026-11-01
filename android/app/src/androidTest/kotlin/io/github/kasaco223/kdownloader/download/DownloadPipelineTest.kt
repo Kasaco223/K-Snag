@@ -109,6 +109,35 @@ class DownloadPipelineTest {
     }
 
     @Test
+    fun analyzingALocalFileGivesTitleAndFormats() {
+        app.analyzer.testExtraArgs = listOf("--enable-file-urls")
+        try {
+            val r = runBlocking { withTimeout(180_000) { app.analyzer.analyze(Uri.fromFile(fixture).toString()) } }
+            assertTrue("$r", r is MediaAnalyzer.Result.Ok)
+            val a = (r as MediaAnalyzer.Result.Ok).analysis
+            assertTrue(a.summary.title, a.summary.title.contains("prueba"))
+            assertTrue(a.tiles.first { it.key == "recommended" }.available)
+            assertTrue(a.tiles.first { it.key == "mp3" }.available)
+            // La carpeta del análisis no queda.
+            assertTrue(File(app.engine.dirs.root, "probes").listFiles().orEmpty().isEmpty())
+        } finally {
+            app.analyzer.testExtraArgs = emptyList()
+        }
+    }
+
+    @Test
+    fun prefillGivesTheJobItsTitleBeforeItStarts() {
+        val prefill = DownloadQueue.Prefill("Título del análisis", "Canal", 12.0, null, null)
+        val r = runBlocking { queue.enqueue(Uri.fromFile(fixture).toString(), "mp3", allowDuplicate = true, prefill = prefill) }
+        val id = (r as DownloadQueue.EnqueueResult.Queued).id
+        val job = queue.jobs.value.first { it.id == id }
+        assertEquals("Título del análisis", job.title)
+        assertEquals(12L, job.duration)
+        queue.cancel(id)
+        queue.remove(id)
+    }
+
+    @Test
     fun mp3IsConvertedAndPublished() {
         val job = download("mp3")
         assertEquals("audio/mpeg", job.mime)

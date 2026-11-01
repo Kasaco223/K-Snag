@@ -47,6 +47,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.core.Urls
+import io.github.kasaco223.kdownloader.ui.analyze.AnalysisState
+import io.github.kasaco223.kdownloader.ui.analyze.MediaPreview
+import io.github.kasaco223.kdownloader.ui.analyze.isLive
+import io.github.kasaco223.kdownloader.ui.analyze.playlistUrls
 import io.github.kasaco223.kdownloader.ui.components.BrandHeader
 import io.github.kasaco223.kdownloader.ui.formats.FormatChooser
 
@@ -56,7 +60,16 @@ import io.github.kasaco223.kdownloader.ui.formats.FormatChooser
  * segundo plano con su notificación.
  */
 @Composable
-fun QuickDownloadSheet(link: SharedLink, favorite: String, onDownload: (String) -> Unit, onOpenApp: () -> Unit, onClose: () -> Unit) {
+fun QuickDownloadSheet(
+    link: SharedLink,
+    favorite: String,
+    analysis: AnalysisState,
+    onRetryAnalysis: () -> Unit,
+    onPlaylistMode: (Boolean) -> Unit,
+    onDownload: (String) -> Unit,
+    onOpenApp: () -> Unit,
+    onClose: () -> Unit,
+) {
     val title = stringResource(R.string.quick_pane_title)
     val appear = remember { MutableTransitionState(false).apply { targetState = true } }
     Box(Modifier.fillMaxSize()) {
@@ -102,7 +115,16 @@ fun QuickDownloadSheet(link: SharedLink, favorite: String, onDownload: (String) 
                             null -> NoLinkContent()
                             else -> {
                                 LinkContent(url = url, total = link.total)
-                                FormatChooser(favorite = favorite, onPick = onDownload)
+                                MediaPreview(analysis, onRetryAnalysis, onPlaylistMode, compact = true)
+                                val ready = (analysis as? AnalysisState.Ready)?.takeIf { it.url == url }?.analysis
+                                FormatChooser(
+                                    favorite = favorite,
+                                    onPick = onDownload,
+                                    enabled = !analysis.isLive,
+                                    tiles = ready?.tiles,
+                                    more = ready?.more.orEmpty(),
+                                    playlistCount = ready?.takeIf { it.summary.isPlaylist }?.playlistUrls?.size,
+                                )
                             }
                         }
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
