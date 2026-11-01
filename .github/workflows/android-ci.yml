@@ -140,15 +140,15 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 40
-    # El de 16 KB es informativo hasta que llegue la libwebp propia (motor con páginas de 16 KB).
-    continue-on-error: ${{ matrix.informative }}
+    # Los tres son obligatorios. En el de 16 KB, hasta M5 (libwebp propia), el motor tiene que responder
+    # engine_incompatible: ci_emulator.sh lo da por bueno solo mientras la allowlist tenga "pending=M5".
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { name: "API 26 (minSdk)", api: 26, target: default, informative: false }
-          - { name: "API 36 (targetSdk)", api: 36, target: google_apis, informative: false }
-          - { name: "API 36 con páginas de 16 KB", api: 36, target: google_apis_ps16k, informative: true }
+          - { name: "API 26 (minSdk)", api: 26, target: default }
+          - { name: "API 36 (targetSdk)", api: 36, target: google_apis }
+          - { name: "API 36 con páginas de 16 KB", api: 36, target: google_apis_ps16k }
     steps:
       - name: Descargar los scripts
         uses: actions/checkout@v7

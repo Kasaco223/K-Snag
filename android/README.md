@@ -237,10 +237,11 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
      JUnit 4.13.2 (EPL-1.0) y Hamcrest 1.3 (BSD-3-Clause); su aviso
      (`app/src/androidTest/THIRD-PARTY-NOTICES.txt`) va en el mismo artefacto.
 2. **emulator**: API 26 (`default`), API 36 (`google_apis`) y API 36 con páginas de 16 KB
-   (`google_apis_ps16k`, informativo por ahora). No recompila: instala los APK del build y corre
+   (`google_apis_ps16k`), los tres obligatorios. No recompila: instala los APK del build y corre
    `scripts/ci_emulator.sh`, que ejecuta las pruebas instrumentadas, abre el build qa (R8) para ver que no
    se cierre, y corre la autoprueba del motor (`kdl.selftest`: una línea `KDL-SELFTEST` con `PASS {…}`).
-   En el emulador de 16 KB la autoprueba falla con `engine_incompatible` hasta M5: ese job es informativo.
+   En el emulador de 16 KB, mientras `elf_alignment_allowlist.txt` tenga líneas `pending=M5`, lo esperado
+   es `FAIL engine_incompatible` (y cualquier otro resultado falla); con M5 se exige `PASS` también ahí.
 
 - Subir una rama no dispara la CI de Android: corre al abrir el PR (o en `master`).
 - Las acciones de terceros (`gradle/actions/setup-gradle` y `reactivecircus/android-emulator-runner`) van
