@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>K-Downloader para Android · Descarga e instalación</title>
+  <meta name="description" content="Descarga K-Downloader para Android: comparte un video desde YouTube u otra app, elige MP4, máxima calidad, MP3 o M4A y queda en tu carpeta Descargas. Gratis, sin anuncios y de código abierto.">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#101218" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
+  <link rel="canonical" href="https://kdownloader.vercel.app/android">
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_419">
+  <meta property="og:site_name" content="K-Downloader">
+  <meta property="og:title" content="K-Downloader para Android">
+  <meta property="og:description" content="Comparte un video a K-Downloader, elige el formato y listo. Gratis, sin anuncios y de código abierto.">
+  <meta property="og:url" content="https://kdownloader.vercel.app/android">
+  <meta property="og:image" content="https://kdownloader.vercel.app/assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/docs.css">
+  <link rel="preload" href="/data/android.json" as="fetch" type="application/json" crossorigin="anonymous">
+  <script type="module" src="/js/android-page.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="/" aria-label="K-Downloader, inicio">
+        <img src="/assets/logo.svg" alt="" width="32" height="32">
+        <span>K-Downloader</span>
+      </a>
+      <nav class="site-nav" aria-label="Principal">
+        <a class="nav-optional" href="/">Inicio</a>
+        <a class="nav-optional" href="/android" aria-current="page">Android</a>
+        <a class="nav-optional" href="/ayuda">Ayuda</a>
+        <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD" rel="noopener">
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-github"/></svg>
+          <span class="nav-github-label">GitHub</span>
+        </a>
+        <a class="btn btn-primary btn-sm" href="/android/descargar" data-apk="arm64-v8a">Descargar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="page-hero" aria-labelledby="android-title">
+      <div class="page-hero-bg" aria-hidden="true"></div>
+      <div class="container">
+        <p class="eyebrow"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-smartphone"/></svg>Android</p>
+        <h1 class="page-title" id="android-title">K-Downloader para Android</h1>
+        <p class="page-lead">En YouTube o en cualquier app, toca <strong>Compartir › K-Downloader</strong>, elige el formato y listo: el archivo queda en tu carpeta <strong>Descargas › K-Downloader</strong>. También puedes pegar el enlace.</p>
+
+        <div class="apk-cta">
+          <a class="btn btn-primary btn-lg" id="apk-main" href="/android/descargar">
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>
+            Descargar APK
+          </a>
+          <p class="page-meta">
+            Versión <span data-android-version>más reciente</span> · <span id="apk-main-size">unos 60 MB</span> · Android 8 o superior
+          </p>
+        </div>
+
+        <div class="callout warning" data-show-on="ios" hidden>
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
+          <div>
+            <p><strong>En iPhone y iPad no es posible.</strong> Apple solo permite instalar apps desde su App Store, y sus reglas no aceptan apps que descarguen videos de YouTube.</p>
+            <p>Puedes usar K-Downloader en un celular Android o en una PC con Windows: <a href="/">descárgalo para Windows</a>.</p>
+          </div>
+        </div>
+        <div class="callout" data-show-on="windows other" hidden>
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-smartphone"/></svg>
+          <p><strong>¿Estás en tu PC?</strong> Abre <strong>kdownloader.vercel.app/android</strong> en tu celular Android, o envíate este enlace. El archivo APK se instala en el celular, no en la PC.</p>
+        </div>
+        <div class="callout warning" data-inapp-tip hidden>
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
+          <p><strong>¿No empieza la descarga?</strong> Estás en el navegador de otra app (Instagram, Facebook, TikTok…). Toca <strong>⋮</strong> y elige <strong>Abrir en el navegador</strong> o <strong>Abrir en Chrome</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Instalar ============ -->
+    <section class="docs-section" id="instalar" aria-labelledby="instalar-title">
+      <div class="container">
+        <div class="docs-head">
+          <div>
+            <h2 class="section-title" id="instalar-title">Cómo instalarla</h2>
+            <p class="section-lead">K-Downloader no está en Google Play, así que Android te pide un par de confirmaciones la primera vez. Se hace una sola vez y toma un minuto.</p>
+          </div>
+        </div>
+        <div class="guide-grid">
+          <article class="guide-card" id="paso-descargar" aria-labelledby="paso-descargar-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg></span>
+            <h3 id="paso-descargar-title">1. Descarga el APK</h3>
+            <p>Toca <strong>Descargar APK</strong>. Si el navegador avisa que el archivo puede ser dañino, elige <strong>Descargar de todos modos</strong>: lo dice con cualquier APK.</p>
+          </article>
+          <article class="guide-card" id="paso-abrir" aria-labelledby="paso-abrir-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-folder"/></svg></span>
+            <h3 id="paso-abrir-title">2. Ábrelo</h3>
+            <p>Toca <strong>Abrir</strong> en el aviso de la descarga, o búscalo en la app <strong>Archivos › Descargas</strong>.</p>
+          </article>
+          <article class="guide-card" id="fuentes-desconocidas" aria-labelledby="fuentes-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-lock"/></svg></span>
+            <h3 id="fuentes-title">3. Permite instalar desde tu navegador</h3>
+            <p>La primera vez, Android dice que por seguridad no puede instalar apps desconocidas de esa fuente:</p>
+            <ol class="guide-list">
+              <li>Toca <strong>Configuración</strong>.</li>
+              <li>Activa <strong>Permitir de esta fuente</strong>.</li>
+              <li>Vuelve atrás y toca <strong>Instalar</strong>.</li>
+            </ol>
+            <p class="guide-tip"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><span>El permiso es para la app con la que abriste el archivo (Chrome o Archivos). Después puedes volver a desactivarlo en <strong>Ajustes › Apps › Acceso especial › Instalar apps desconocidas</strong>.</span></p>
+          </article>
+          <article class="guide-card" id="play-protect" aria-labelledby="play-protect-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
+            <h3 id="play-protect-title">4. Si Play Protect avisa</h3>
+            <p>Google Play Protect revisa las apps que no vienen de Google Play. Según tu celular, puede decir:</p>
+            <ul class="guide-list">
+              <li><strong>«Se recomienda analizar la app»:</strong> toca <strong>Analizar app</strong>; cuando termine, podrás instalarla.</li>
+              <li><strong>«App no reconocida»</strong> o <strong>«Play Protect no reconoce al desarrollador»:</strong> toca <strong>Más detalles › Instalar de todas formas</strong>.</li>
+              <li><strong>«Esta app es desconocida para Play Protect»:</strong> puedes enviarla a revisión (<strong>Enviar esta vez</strong>) o elegir <strong>No enviar</strong>.</li>
+            </ul>
+            <p class="guide-tip"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><span>El aviso no quiere decir que haya encontrado algo malo: aparece con las apps nuevas que no están en Google Play.</span></p>
+          </article>
+          <article class="guide-card" id="listo" aria-labelledby="listo-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+            <h3 id="listo-title">5. ¡Listo!</h3>
+            <p>Abre K-Downloader y permite las notificaciones para ver el progreso. La primera vez prepara su motor de descarga: mejor con wifi.</p>
+          </article>
+          <article class="guide-card" id="no-instalada" aria-labelledby="no-instalada-title">
+            <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg></span>
+            <h3 id="no-instalada-title">«App no instalada»</h3>
+            <ul class="guide-list">
+              <li>Si dice que es <strong>incompatible</strong>, prueba la otra versión en <a href="#otras-versiones">Otras versiones</a>: los celulares antiguos o muy económicos necesitan la de <strong>32 bits</strong>, y los recientes solo aceptan la de <strong>64 bits</strong>.</li>
+              <li>Si ya tenías K-Downloader de otra fuente, desinstálala primero: Android solo actualiza apps firmadas con la misma llave.</li>
+              <li>Revisa que tengas al menos 300 MB libres.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="callout" id="verificacion-2027">
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
+          <div>
+            <p><strong>Desde 2027, Android pedirá que las apps de fuera de Google Play vengan de desarrolladores verificados.</strong> Ya empezó en Brasil, Indonesia, Singapur y Tailandia (30 de septiembre de 2026) y llegará a todo el mundo durante 2027.</p>
+            <p>Si al instalar tu celular dice que el desarrollador no está verificado, puedes activar una sola vez el «flujo avanzado»: activa las <strong>opciones para desarrolladores</strong>, confirma que nadie te está presionando, reinicia, espera un día y vuelve a confirmar con tu huella o tu PIN. Esta página dirá cuando ya no haga falta.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Otras versiones ============ -->
+    <section class="docs-section docs-section-alt" id="otras-versiones" aria-labelledby="otras-title">
+      <div class="container">
+        <div class="docs-head">
+          <div>
+            <h2 class="section-title" id="otras-title">Otras versiones y verificación</h2>
+            <p class="section-lead">Casi todos los celulares usan la primera. Las huellas SHA-256 sirven para comprobar que el archivo no cambió.</p>
+          </div>
+        </div>
+        <div class="apk-table" role="table" aria-label="Archivos APK de la versión actual">
+          <div class="apk-row" role="row" data-apk-row>
+            <span role="cell"><strong>Celulares de 64 bits</strong> (casi todos desde 2017)</span>
+            <span role="cell" data-apk-size="arm64-v8a"></span>
+            <a role="cell" href="/android/descargar/arm64-v8a" data-apk="arm64-v8a">arm64-v8a</a>
+            <code role="cell" data-apk-sha="arm64-v8a"></code>
+          </div>
+          <div class="apk-row" role="row" data-apk-row>
+            <span role="cell"><strong>Celulares antiguos de 32 bits</strong></span>
+            <span role="cell" data-apk-size="armeabi-v7a"></span>
+            <a role="cell" href="/android/descargar/armeabi-v7a" data-apk="armeabi-v7a">armeabi-v7a</a>
+            <code role="cell" data-apk-sha="armeabi-v7a"></code>
+          </div>
+          <div class="apk-row" role="row" data-apk-row>
+            <span role="cell"><strong>Chromebooks y emuladores</strong></span>
+            <span role="cell" data-apk-size="x86_64"></span>
+            <a role="cell" href="/android/descargar/x86_64" data-apk="x86_64">x86_64</a>
+            <code role="cell" data-apk-sha="x86_64"></code>
+          </div>
+        </div>
+        <p class="small muted">Certificado de firma (SHA-256): <code data-android-cert></code>. Todas las versiones y sus notas: <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases?q=android&amp;expanded=true" data-android-notes rel="noopener">GitHub › Releases</a>.</p>
+      </div>
+    </section>
+
+    <!-- ============ Preguntas ============ -->
+    <section class="docs-section" id="preguntas" aria-labelledby="preguntas-title">
+      <div class="container">
+        <h2 class="section-title" id="preguntas-title">Preguntas frecuentes</h2>
+        <div class="guide-grid">
+          <article class="guide-card" id="por-que-no-play" aria-labelledby="por-que-no-play-title">
+            <h3 id="por-que-no-play-title">¿Por qué no está en Google Play?</h3>
+            <p>Google Play no acepta apps que descargan videos de YouTube. Por eso se instala desde aquí, como muchas apps de código abierto. Las versiones salen de GitHub y van firmadas con la llave de K-Downloader.</p>
+          </article>
+          <article class="guide-card" id="actualizar" aria-labelledby="actualizar-title">
+            <h3 id="actualizar-title">¿Cómo se actualiza?</h3>
+            <p>La app te avisa cuando hay una versión nueva, la descarga, comprueba su huella SHA-256 y te pide confirmar. La primera vez, Android te pedirá permitir que K-Downloader instale apps. El motor de descarga se pone al día solo, sin reinstalar.</p>
+          </article>
+          <article class="guide-card" id="espacio" aria-labelledby="espacio-title">
+            <h3 id="espacio-title">¿Cuánto espacio ocupa?</h3>
+            <p>El APK pesa unos 60 MB. Ya instalada y con su motor listo, ocupa unos 230 MB, más tus videos.</p>
+          </article>
+          <article class="guide-card" id="android-licencia" aria-labelledby="android-licencia-title">
+            <h3 id="android-licencia-title">¿Es de código abierto?</h3>
+            <p>Sí. La app de Android tiene licencia <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/blob/master/android/LICENSE" rel="noopener">GPL-3.0</a> y su código está en la carpeta <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/tree/master/android" rel="noopener">android/</a>. La de Windows tiene licencia MIT.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-legal">
+        <p>© 2026 Kasaco223 · App de Windows: licencia MIT · App de Android: licencia GPL-3.0.</p>
+        <p>No afiliado a YouTube ni a Google. Android y Google Play son marcas de Google LLC. <a href="/uso-responsable">Uso responsable</a>.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

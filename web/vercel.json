@@ -12,31 +12,78 @@
       "source": "/instalar",
       "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest/download/Instalar-K-Downloader.cmd",
       "permanent": false
+    },
+    {
+      "source": "/android/descargar",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0/K-Downloader-Android-arm64-v8a.apk",
+      "permanent": false
+    },
+    {
+      "source": "/android/descargar/arm64-v8a",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0/K-Downloader-Android-arm64-v8a.apk",
+      "permanent": false
+    },
+    {
+      "source": "/android/descargar/armeabi-v7a",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0/K-Downloader-Android-armeabi-v7a.apk",
+      "permanent": false
+    },
+    {
+      "source": "/android/descargar/x86_64",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0/K-Downloader-Android-x86_64.apk",
+      "permanent": false
     }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=(), bluetooth=(), browsing-topics=()" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Strict-Transport-Security", "value": "max-age=63072000" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), hid=(), bluetooth=(), browsing-topics=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000"
+        }
       ]
     },
     {
       "source": "/assets/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
       ]
     },
     {
       "source": "/data/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
       ]
     }
   ]
