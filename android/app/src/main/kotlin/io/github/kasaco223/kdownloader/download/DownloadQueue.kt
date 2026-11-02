@@ -31,6 +31,7 @@ import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.UiPrefs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
