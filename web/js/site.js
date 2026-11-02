@@ -72,6 +72,54 @@ function initHeader() {
   );
 }
 
+/**
+ * Después de tocar un enlace de descarga (Windows o Android), un aviso corto abajo: la descarga empezó y, si la
+ * app le sirve, puede apoyarla. No tapa nada, se cierra solo y aparece una vez por página.
+ */
+function initDownloadThanks() {
+  if (window.location.pathname.startsWith('/donar')) return;
+  let shown = false;
+  document.addEventListener('click', (event) => {
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link || shown) return;
+    const path = new URL(link.href, window.location.href).pathname;
+    if (!/^\/(android\/)?descargar(\/|$)/.test(path)) return;
+    shown = true;
+    // Después del clic, para no demorar la descarga.
+    window.setTimeout(() => showDownloadThanks(path.startsWith('/android')), 600);
+  });
+}
+
+function showDownloadThanks(android) {
+  const close = el('button', { type: 'button', class: 'toast-close', 'aria-label': 'Cerrar' }, icon('x', 'icon-sm'));
+  const toast = el(
+    'div',
+    { class: 'download-toast', role: 'status' },
+    el('span', { class: 'toast-icon' }, icon('circle-check')),
+    el(
+      'div',
+      { class: 'toast-text' },
+      el('strong', { text: android ? 'Tu APK se está descargando' : 'Tu descarga empezó' }),
+      el('span', { text: 'Si K-Downloader te sirve, puedes apoyarlo con lo que quieras.' }),
+    ),
+    el('a', { class: 'btn btn-secondary btn-sm', href: '/donar' }, icon('heart', 'icon-sm'), 'Donar'),
+    close,
+  );
+  let timer = 0;
+  const hide = () => {
+    window.clearTimeout(timer);
+    toast.classList.remove('is-visible');
+    window.setTimeout(() => toast.remove(), prefersReducedMotion() ? 0 : 250);
+  };
+  close.addEventListener('click', hide);
+  document.body.append(toast);
+  window.requestAnimationFrame(() => toast.classList.add('is-visible'));
+  timer = window.setTimeout(hide, 15000);
+  toast.addEventListener('mouseenter', () => window.clearTimeout(timer));
+  toast.addEventListener('focusin', () => window.clearTimeout(timer));
+}
+
 export function initSite() {
   initHeader();
+  initDownloadThanks();
 }

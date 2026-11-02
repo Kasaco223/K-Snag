@@ -594,3 +594,4 @@
   font-size: 0.8125rem;
 }
 .donate-warning .icon { flex: none; margin-top: 2px; color: var(--warning); }
+code[data-android-cert] { overflow-wrap: anywhere; }
