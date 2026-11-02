@@ -8,7 +8,7 @@ El README principal muestra estas capturas. Se generan desde el modo simulado de
 | `formato.png` | S3 Formato | `index.html?mock=1&scenario=S3&theme=dark&lang=es` |
 | `descargas.png` | S4 Descargas | `index.html?mock=1&scenario=S4&theme=dark&lang=es` |
 
-> **Pendiente:** estos archivos todavía no están en el repositorio. Mientras falten, el README muestra el texto alternativo de cada imagen.
+> Se rehicieron en noviembre de 2026, después del cambio de nombre a K-Snag y del botón «Apoyar el proyecto». El modo simulado muestra una etiqueta «DEMO» en la barra lateral: para las capturas se oculta con el estilo `.demo-tag { display: none }` (por ejemplo, desde las herramientas del navegador).
 
 ## Cómo generarlas
 

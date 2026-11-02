@@ -93,9 +93,11 @@ primer plano, la publicación en Descargas y las notificaciones), `ui/jobs` y `u
   4. se prueba: Python con sesión propia (`setsid`, para poder cancelar a FFmpeg y QuickJS junto con Python)
      y SSL, `yt-dlp --version` y `ffmpeg -version`.
   Después de eso, abrir la app solo revisa marcas y hashes. «Acerca de» › «Reparar el motor» lo rehace.
-- **Páginas de 16 KB.** Tres bibliotecas de WebP de FFmpeg vienen alineadas a 4 KB
-  (`scripts/elf_alignment_allowlist.txt`, `pending=M5`). Hasta que llegue nuestra libwebp (PR-9), en un
-  celular con páginas de 16 KB el motor queda en `engine_incompatible` y la app lo explica.
+- **Páginas de 16 KB.** Tres bibliotecas de WebP de FFmpeg vienen alineadas a 4 KB. La app compila su
+  propia libwebp 1.6.0 con el NDK (`app/src/main/cpp/`, alineada a 16 KB), como `libkd_webp.so`,
+  `libkd_webpmux.so` y `libkd_sharpyuv.so` con los SONAME originales. Solo en celulares con páginas de más
+  de 4 KB, `KdEngine` las enlaza en `kd/payload/lib16k/` y las pone primero en `LD_LIBRARY_PATH`. En
+  `scripts/elf_alignment_allowlist.txt` figuran como `replaced_by=`.
 - **Actualizar los pins.** Cambia la URL, la versión y el SHA-256 en `engine-pins.properties` (yt-dlp:
   la línea `yt-dlp` de `SHA2-256SUMS` de su Release; cacert: `https://curl.se/ca/cacert.pem.sha256`) y la
   misma entrada en `third_party/components.json`, y corre `python3 scripts/notices.py`.
@@ -228,10 +230,10 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
      con el minSdk de la app) y los APK debug, qa y de pruebas.
    - `scripts/check_elf_alignment.py`: toda biblioteca nativa de 64 bits debe cargar con páginas de 16 KB,
      también las que van dentro de los paquetes del motor, salvo las de `elf_alignment_allowlist.txt` (las
-     tres de WebP, `pending=M5`: aviso en CI). No hay código nativo propio, así que no hace falta el NDK
-     (`keepDebugSymbols` deja los `.so` sin tocar).
+     tres de WebP, `replaced_by=`: las reemplaza nuestra libwebp). La libwebp propia se compila con el NDK
+     y CMake, en las versiones fijadas en `app/build.gradle.kts`.
    - El build falla si un APK trae una biblioteca nativa que no sea la de Compose
-     (`libandroidx.graphics.path.so`) o las del motor.
+     (`libandroidx.graphics.path.so`), las del motor o nuestras `libkd_*`.
    - Artefactos: reportes (14 días) y `android-apk-<sha>` (7 días) con los tres APK debug (el `arm64-v8a`
      es el del celular), el qa x86_64 y el de pruebas. El APK de pruebas es solo para el emulador e incluye
      JUnit 4.13.2 (EPL-1.0) y Hamcrest 1.3 (BSD-3-Clause); su aviso
@@ -240,8 +242,8 @@ errores, `tests/fixtures/` o `engine.json`, que la app usará), y los lunes.
    (`google_apis_ps16k`), los tres obligatorios. No recompila: instala los APK del build y corre
    `scripts/ci_emulator.sh`, que ejecuta las pruebas instrumentadas, abre el build qa (R8) para ver que no
    se cierre, y corre la autoprueba del motor (`kdl.selftest`: una línea `KDL-SELFTEST` con `PASS {…}`).
-   En el emulador de 16 KB, mientras `elf_alignment_allowlist.txt` tenga líneas `pending=M5`, lo esperado
-   es `FAIL engine_incompatible` (y cualquier otro resultado falla); con M5 se exige `PASS` también ahí.
+   En el emulador de 16 KB también se exige `PASS`. Si alguna vez `elf_alignment_allowlist.txt` vuelve a
+   tener líneas `pending=M5` activas, lo esperado ahí pasa a ser `FAIL engine_incompatible`.
 
 - Subir una rama no dispara la CI de Android: corre al abrir el PR (o en `master`).
 - Las acciones de terceros (`gradle/actions/setup-gradle` y `reactivecircus/android-emulator-runner`) van
@@ -279,9 +281,12 @@ traiga, también un artefacto de CI: en un repo público, cualquiera con cuenta 
 
 ## Pendiente
 
-- Analizar el enlace antes de bajar (calidades y tamaños), listas, reintentos automáticos, seguir tras un
-  cierre de la app, el actualizador de yt-dlp, la libwebp propia para páginas de 16 KB, el pipeline de
-  releases y el actualizador de la app llegan en sus propios PR.
+- Registrar el paquete en la Android Developer Console, antes de que Google exija desarrolladores
+  verificados para instalar fuera de Google Play. El paquete ya está publicado, así que la consola pide
+  probar que la llave es nuestra: un APK firmado por la CI con su archivo de verificación.
+- Cambiar el nombre de los APK a `K-Snag-Android-<abi>.apk` cuando casi todos tengan la 1.0.3 o más nueva
+  (las versiones 1.0.0 a 1.0.2 solo aceptan el nombre anterior). Hay que cambiar a la vez
+  `android-release.yml`, `scripts/sign_apks.sh`, `scripts/promote.py` y sus pruebas.
 
 ## Verificación de dependencias
 

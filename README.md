@@ -18,7 +18,8 @@
   <a href="https://ksnagapp.vercel.app/descargar"><b>Descargar para Windows</b></a> ·
   <a href="https://ksnagapp.vercel.app/android"><b>Descargar para Android</b></a> ·
   <a href="https://github.com/Kasaco223/K-Snag/releases">Todas las versiones</a> ·
-  <a href="https://ksnagapp.vercel.app/ayuda">Centro de ayuda</a>
+  <a href="https://ksnagapp.vercel.app/ayuda">Centro de ayuda</a> ·
+  <a href="https://ksnagapp.vercel.app/donar">Apoyar el proyecto</a>
 </p>
 
 <p align="center">
@@ -46,7 +47,7 @@ K-Snag es una app gratuita y de código abierto para Windows y [Android](#androi
 
 Por dentro usa [yt-dlp](https://github.com/yt-dlp/yt-dlp), el motor de descarga más completo que existe. La app lo mantiene al día sola, para que siga funcionando cuando YouTube cambia algo.
 
-Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"), reconstruida desde cero.
+Hasta noviembre de 2026 se llamó **K-Downloader** (Windows 2.0.2 y Android 1.0.2), y antes, "YouTube Ultra HD Video Downloader". La 2.0 es una reconstrucción desde cero. Si ya la tenías instalada, se actualiza sola con el nombre nuevo y conserva tu historial y tus ajustes.
 
 ## Funciones
 
@@ -117,8 +118,8 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
    - Pasa con todo programa nuevo que todavía no tiene firma digital. Lee [por qué no hay un .exe](#por-qué-no-hay-un-exe).
 5. **El instalador:**
    - baja `kd-bundle-<versión>.zip` (unos 25 MB) desde GitHub Releases;
-   - comprueba su SHA-256 y lo instala **solo para tu usuario** en `%LOCALAPPDATA%\Programs\K-Downloader`, sin pedir permisos de administrador;
-   - crea el acceso directo en el menú Inicio y abre la app.
+   - comprueba su SHA-256 y lo instala **solo para tu usuario** en `%LOCALAPPDATA%\Programs\K-Downloader`, sin pedir permisos de administrador (la carpeta conserva el nombre anterior para que las instalaciones existentes sigan actualizándose);
+   - crea el acceso directo **K-Snag** en el menú Inicio y abre la app.
 6. **En el primer uso**, acepta el aviso de uso responsable y espera a que la app prepare sus componentes.
 
 > **¿Es seguro el instalador?** Es un archivo de texto: puedes abrirlo con el Bloc de notas antes de ejecutarlo.
@@ -152,19 +153,40 @@ El resultado funciona incluso con Smart App Control activado. Lo único que Smar
 - **Listas:** se baja la lista entera, hasta 500 videos.
 - **Se mantiene sola:** el motor (yt-dlp) se actualiza cuando YouTube cambia, con reintentos automáticos. La app avisa cuando hay una versión nueva y se actualiza con tu confirmación.
 - **En segundo plano:** las descargas siguen con la pantalla apagada, se retoman si Android cierra la app y pueden esperar el Wi-Fi.
+- **Avance en la notificación:** desde Android 13 la app pide permiso para mostrar notificaciones al empezar la primera descarga. Si lo niegas, la descarga sigue igual y Inicio te ofrece activarlas.
 
 **Instalación:**
 1. Entra a **<https://ksnagapp.vercel.app/android>** desde el celular y toca **Descargar APK**.
 2. Ábrelo. La primera vez, Android pide **permitir instalar desde esa fuente**: toca **Configuración**, activa el permiso, vuelve y toca **Instalar**.
 3. Si Google Play Protect avisa, la página explica cada mensaje.
 
-**Requisitos:** Android 8.0 o superior. El APK pesa unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Hay APK de 64 bits (casi todos los celulares), de 32 bits y x86_64, todos en [Releases](https://github.com/Kasaco223/K-Snag/releases?q=android&expanded=true) con sus SHA-256.
+**Requisitos:** Android 8.0 o superior. El APK de 64 bits (casi todos los celulares) pesa unos 54 MB, el de 32 bits unos 46 MB y el x86_64 unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Están todos en [Releases](https://github.com/Kasaco223/K-Snag/releases?q=android&expanded=true) con sus SHA-256.
+
+> Los archivos se siguen llamando `K-Downloader-Android-<abi>.apk`: las versiones 1.0.0 a 1.0.2 solo se actualizan con ese nombre.
 
 **¿Por qué no está en Google Play?** Google Play no acepta apps que descargan videos de YouTube. Las versiones salen de este repositorio, firmadas siempre con la misma llave (certificado SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
 
 **Código y licencia:** la app de Android está en [`android/`](android/), con licencia [GPL-3.0-or-later](android/LICENSE), porque incluye FFmpeg y otros componentes GPL. El código fuente de esos binarios está publicado en [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-Snag/releases/tag/android-sources-ytdl-0.18.1-r1) y la lista completa, en [android/THIRD_PARTY_NOTICES.md](android/THIRD_PARTY_NOTICES.md). Para compilar y publicar: [android/README.md](android/README.md) y [docs/release-android.md](docs/release-android.md).
 
+## Apoya el proyecto
+
+K-Snag es gratis, sin anuncios ni funciones de pago, y así va a seguir. Si te sirve, puedes apoyarlo en **<https://ksnagapp.vercel.app/donar>**:
+
+- **Desde Colombia:** transferencia con la llave **Bre-B** `@carlose3509` (desde Nequi, Bancolombia, Daviplata o cualquier banco), o PayPal.
+- **Desde otro país:** PayPal (tarjeta o cuenta, una vez, cada mes o cada año) o cripto (APT, solo por la red Aptos).
+
+Donar es voluntario y no desbloquea nada. También ayuda dejar una estrella en GitHub, [reportar errores](https://github.com/Kasaco223/K-Snag/issues/new/choose) o compartir la app. La app tiene un botón **Apoyar el proyecto** en la barra lateral (Windows) y **Donar** en la barra de abajo (Android).
+
 ## Preguntas frecuentes y solución de problemas
+
+<details>
+<summary><b>¿K-Downloader y K-Snag son la misma app?</b></summary>
+
+Sí. La app cambió de nombre en noviembre de 2026 porque ya existía otra app llamada K-Downloader. Se actualiza encima, sin perder el historial ni los ajustes, y la web anterior (kdownloader.vercel.app) lleva a la nueva.
+
+Por compatibilidad, algunas cosas internas conservan el nombre anterior: en Windows, las carpetas `%LOCALAPPDATA%\K-Downloader` y `Programs\K-Downloader`; en Android, el paquete `io.github.kasaco223.kdownloader` y los archivos APK.
+
+</details>
 
 <details>
 <summary><b>Me sale "Error 403" o "YouTube cambió algo"</b></summary>
@@ -237,9 +259,11 @@ Si tu antivirus lo vuelve a borrar, es un falso positivo: repórtalo a su fabric
 
 | Qué | Dónde |
 | --- | --- |
-| Videos | `Descargas\K-Snag` (se cambia en Ajustes) |
-| Ajustes, historial y componentes | `%LOCALAPPDATA%\K-Downloader` |
-| Registro de la app (para reportar errores) | `%LOCALAPPDATA%\K-Downloader\logs\app.log` |
+| Videos (Windows) | `Descargas\K-Snag` (se cambia en Ajustes). Si ya tenías `Descargas\K-Downloader`, la app sigue usando esa. |
+| Videos (Android) | **Descargas › K-Snag**. Las descargas de antes del cambio de nombre siguen en Descargas › K-Downloader. |
+| Ajustes, historial y componentes (Windows) | `%LOCALAPPDATA%\K-Downloader` |
+| Registro de la app (Windows, para reportar errores) | `%LOCALAPPDATA%\K-Downloader\logs\app.log` |
+| Diagnóstico (Android) | **Ajustes › Acerca de K-Snag › Diagnóstico › Copiar detalles** |
 
 </details>
 
@@ -254,6 +278,7 @@ K-Snag **no tiene telemetría**: no envía estadísticas, no tiene cuentas ni an
 | GitHub | Revisar si hay una versión nueva de la app y leer las pistas del motor (`engine.json`), una vez al día. Bajar yt-dlp y Deno. |
 | gyan.dev | Bajar FFmpeg. |
 | Los sitios de los enlaces que pegas | Analizar y descargar el video, como haría tu navegador. |
+| ksnagapp.vercel.app (solo Android) | Respaldo para revisar si hay una versión nueva cuando GitHub no responde. Las páginas de ayuda y de donaciones solo se abren si tú las tocas. |
 
 - Puedes apagar la búsqueda de actualizaciones de la app y del motor en **Ajustes**.
 - Los registros y el historial se quedan en tu PC.
@@ -299,9 +324,19 @@ Abre <http://localhost:8000/index.html?mock=1&scenario=S4>.
 | `src/kdownloader/engine/` | Motor: componentes, procesos, presets, progreso, errores, pistas |
 | `src/kdownloader/ui/` | Interfaz HTML/CSS/JS, sin build ni frameworks |
 | `packaging/` | Build del bundle e instalador `.cmd` |
-| `web/` | Sitio estático (ksnagapp.vercel.app) |
+| `android/` | App de Android (Kotlin y Jetpack Compose, GPL-3.0-or-later): guía en [android/README.md](android/README.md) |
+| `web/` | Sitio estático (ksnagapp.vercel.app), sin build |
 | `tests/` | Pruebas con pytest |
 | `docs/` | Arquitectura, publicación y pistas del motor |
+| `.github/` | Workflows de CI y de publicación, y plantillas de issues |
+
+**App de Android:** se compila con Docker, sin instalar el SDK en tu PC (detalles en [android/README.md](android/README.md)):
+
+```powershell
+docker compose -f android/tools/docker/compose.yaml build
+docker compose -f android/tools/docker/compose.yaml run --rm kdl :app:assembleGithubDebug -Pkdl.devAbi=arm64-v8a
+docker compose -f android/tools/docker/compose.yaml run --rm kdl :core:test :app:testGithubDebugUnitTest :app:lintGithubDebug
+```
 
 Cómo colaborar: [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -321,7 +356,7 @@ powershell -ExecutionPolicy Bypass -File packaging\build.ps1
 
 Deja en `dist/`:
 
-- `Instalar-K-Snag.cmd`
+- `Instalar-K-Snag.cmd` y su copia `Instalar-K-Downloader.cmd` (el nombre anterior, para los enlaces viejos)
 - `kd-bundle-<versión>.zip`
 - `kd-app-<versión>.zip`
 - `latest.json`
@@ -332,7 +367,7 @@ Opciones: `-Version`, `-BaseUrl`, `-OutDir` y `-SkipTests`. No compila ningún `
 Para probar la instalación sin publicar:
 
 ```powershell
-.\dist\Instalar-K-Snag.cmd --local "$PWD\dist\kd-bundle-2.0.0.zip" --root "$env:TEMP\kd-prueba" --no-registry
+.\dist\Instalar-K-Snag.cmd --local "$PWD\dist\kd-bundle-<versión>.zip" --root "$env:TEMP\kd-prueba" --no-registry
 ```
 
 ### Publicar una versión
@@ -341,7 +376,7 @@ Para probar la instalación sin publicar:
 2. Haz merge a `master` y sube el tag `vX.Y.Z`.
 3. GitHub Actions construye, prueba la instalación en limpio y deja el Release en borrador para revisarlo y publicarlo.
 
-Checklist completa: [docs/release.md](docs/release.md).
+Checklist completa: [docs/release.md](docs/release.md). La app de Android se publica con su propio tag `android-vX.Y.Z`, con aprobación manual de la firma: [docs/release-android.md](docs/release-android.md).
 
 ## Política de firma de código
 
@@ -403,9 +438,9 @@ K-Snag es un proyecto independiente. **No está afiliado a YouTube ni a Google**
 2. Pick a quality.
 3. The file lands in your Downloads folder.
 
-It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to date by itself, so it keeps working when YouTube changes things. This is version 2.0, a full rebuild of the former "YouTube Ultra HD Video Downloader".
+It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to date by itself, so it keeps working when YouTube changes things. Until November 2026 it was called **K-Downloader** (Windows 2.0.2, Android 1.0.2), and before that "YouTube Ultra HD Video Downloader"; 2.0 is a full rebuild. Existing installs update in place under the new name and keep their history and settings.
 
-**[Download for Windows](https://ksnagapp.vercel.app/descargar)** · **[Download for Android](https://ksnagapp.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-Snag/releases) · [Help center](https://ksnagapp.vercel.app/ayuda)
+**[Download for Windows](https://ksnagapp.vercel.app/descargar)** · **[Download for Android](https://ksnagapp.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-Snag/releases) · [Help center](https://ksnagapp.vercel.app/ayuda) · [Support the project](https://ksnagapp.vercel.app/donar)
 
 ### Features
 
@@ -444,8 +479,8 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 5. **What the installer does:**
    - downloads `kd-bundle-<version>.zip` (about 25 MB) from GitHub Releases;
    - verifies its SHA-256;
-   - installs **for your user only** in `%LOCALAPPDATA%\Programs\K-Downloader` (no admin rights needed);
-   - creates a Start menu shortcut.
+   - installs **for your user only** in `%LOCALAPPDATA%\Programs\K-Downloader` (no admin rights needed; the folder keeps the former name so existing installs keep updating);
+   - creates a **K-Snag** Start menu shortcut.
 
 **Requirements:** Windows 10 (1803+) or 11, 64-bit, with the WebView2 Runtime.
 
@@ -468,14 +503,21 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 - **Formats:** MP4 up to 1080p, best quality in MKV, MP3 or M4A audio, plus other heights under "More qualities", with the real size of each option before downloading. Playlists of up to 500 videos.
 - **Keeps itself working:** the engine (yt-dlp) updates when YouTube changes, with automatic retries; the app tells you about new versions and updates with your confirmation.
 - **Background:** downloads keep going with the screen off, resume if Android closes the app and can wait for Wi-Fi.
+- **Progress notification:** on Android 13+ the app asks for the notification permission when your first download starts. If you deny it, downloads work the same and Home offers to turn notifications on.
 
-**Install:** open **<https://ksnagapp.vercel.app/android>** on your phone, tap **Download APK**, open it and allow installing from that source the first time. Requires Android 8.0+.
+**Install:** open **<https://ksnagapp.vercel.app/android>** on your phone, tap **Download APK**, open it and allow installing from that source the first time. Requires Android 8.0+. The 64-bit APK is about 54 MB. The files are still named `K-Downloader-Android-<abi>.apk`, because versions 1.0.0–1.0.2 only update from that name.
 
 **Why not Google Play?** Google Play doesn't accept apps that download YouTube videos. Every release comes from this repository, always signed with the same key (certificate SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
 
 **Code and license:** the Android app lives in [`android/`](android/) under [GPL-3.0-or-later](android/LICENSE); the source of its GPL binaries is published at [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-Snag/releases/tag/android-sources-ytdl-0.18.1-r1).
 
+### Support the project
+
+K-Snag is free, with no ads or paid features. If it helps you, you can support it at **<https://ksnagapp.vercel.app/donar>**: PayPal (card or account; one-time, monthly or yearly) or crypto (APT, Aptos network only). From Colombia you can also use **Bre-B** (`@carlose3509`). Donating is optional and unlocks nothing.
+
 ### FAQ
+
+- **Are K-Downloader and K-Snag the same app?** Yes. It was renamed in November 2026 because another app already used the name. It updates in place; some internals keep the old name for compatibility (the Windows folders `%LOCALAPPDATA%\K-Downloader` and `Programs\K-Downloader`, the Android package and the APK file names).
 
 - **"403" or "YouTube changed something":** the app updates the engine and retries. If it persists, wait for a yt-dlp fix: the app installs it automatically.
 - **"Made for kids" videos are slower:** YouTube serves them with more restrictions.
@@ -484,7 +526,8 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
   - Using your account with a downloader may get it flagged. Use a secondary account.
   - Never share a `cookies.txt`: it is your session.
   - Chrome and Edge cookies cannot be read by external tools on Windows. Export a Netscape `cookies.txt` instead and pick it in **Settings → Advanced**.
-- **Logs:** `%LOCALAPPDATA%\K-Downloader\logs\app.log`.
+- **Where files go:** Windows saves to `Downloads\K-Snag` (or `Downloads\K-Downloader` if you already had it); Android saves to **Downloads › K-Snag**.
+- **Logs:** Windows `%LOCALAPPDATA%\K-Downloader\logs\app.log`; Android **Settings › About K-Snag › Diagnostics › Copy details**.
 
 ### Privacy
 
@@ -492,7 +535,8 @@ No telemetry, no accounts, no ads. The app only connects to:
 
 - GitHub, once a day, for app updates, engine hints, yt-dlp and Deno;
 - gyan.dev for FFmpeg;
-- the sites whose links you paste.
+- the sites whose links you paste;
+- ksnagapp.vercel.app (Android only), as a fallback for update checks.
 
 Update checks can be turned off in Settings.
 
@@ -514,7 +558,8 @@ python -m venv .venv
   - `pytest` runs the unit tests (offline);
   - `pytest -m network` uses the real engine.
 - **Build:** `packaging\build.ps1` writes everything to `dist/`.
-- **Releases:** push a `vX.Y.Z` tag. GitHub Actions builds the bundle, smoke-tests a clean install and drafts the release. See [docs/release.md](docs/release.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+- **Android:** builds with Docker, no local SDK needed. See [android/README.md](android/README.md).
+- **Releases:** push a `vX.Y.Z` tag (Windows) or `android-vX.Y.Z` (Android). GitHub Actions builds, tests and drafts the release. See [docs/release.md](docs/release.md), [docs/release-android.md](docs/release-android.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### Code signing policy
 
