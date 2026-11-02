@@ -61,6 +61,7 @@ fun AppRoot(viewModel: MainViewModel) {
     val onboarded by viewModel.prefs.onboarded.collectAsStateWithLifecycle()
     val engineUpdate by viewModel.engineUpdate.collectAsStateWithLifecycle()
     val waitingForWifi by viewModel.waitingForWifi.collectAsStateWithLifecycle()
+    val appUpdate by viewModel.updater.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -102,6 +103,7 @@ fun AppRoot(viewModel: MainViewModel) {
                         onCheckEngineUpdate = viewModel::checkEngineUpdate,
                         onRollbackEngine = viewModel::rollbackEngine,
                         onWifiOnly = viewModel::setWifiOnly,
+                        updater = viewModel.updater,
                         onRetryEngine = viewModel::retryEngine,
                         onOpenAbout = { viewModel.open(Screen.ABOUT) },
                     )
@@ -127,6 +129,8 @@ fun AppRoot(viewModel: MainViewModel) {
                         onOpenItem = openItem,
                         onOpenDownloads = { viewModel.open(Screen.DOWNLOADS) },
                         waitingForWifi = waitingForWifi,
+                        updateVersion = (appUpdate as? io.github.kasaco223.kdownloader.update.AppUpdater.State.Available)?.update?.version,
+                        onOpenUpdate = { viewModel.open(Screen.SETTINGS) },
                     )
                 }
             }

@@ -31,6 +31,9 @@ class KdlApp : Application() {
     /** El análisis previo de los enlaces (uno a la vez). */
     val analyzer: MediaAnalyzer by lazy { MediaAnalyzer(engine, queue, uiPrefs) }
 
+    /** Las actualizaciones de la app (Releases de GitHub). */
+    val updater: io.github.kasaco223.kdownloader.update.AppUpdater by lazy { io.github.kasaco223.kdownloader.update.AppUpdater(this) }
+
     /** Las pistas remotas del motor (engine.json). */
     val hints: HintsStore by lazy { HintsStore(java.io.File(engine.dirs.root, "hints.json"), engine) }
 
@@ -58,6 +61,7 @@ class KdlApp : Application() {
      * descargas, buscar una versión nueva de yt-dlp. Con «Solo con Wi-Fi», la búsqueda espera una red sin límite.
      */
     fun onForeground() {
+        if (uiPrefs.autoUpdateApp.value) updater.checkIfDue()
         appScope.launch(Dispatchers.IO) {
             hints.refreshIfDue()
             val channel = uiPrefs.engineChannel.value

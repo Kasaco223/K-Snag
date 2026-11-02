@@ -262,4 +262,23 @@
     <string name="home_waiting_wifi">Esperando el Wi-Fi: activaste «Solo con Wi-Fi» en Ajustes.</string>
     <string name="settings_battery">Que las descargas sigan en segundo plano</string>
     <string name="settings_battery_detail">Algunos celulares (Xiaomi, Samsung, Huawei…) detienen las apps en segundo plano para ahorrar batería. En esa lista, busca K-Downloader y elige «No optimizar».</string>
+    <!-- Actualizaciones de la app -->
+    <string name="app_update_title">Actualizaciones de la app</string>
+    <string name="app_update_current">Tienes la versión %1$s.</string>
+    <string name="app_update_test_build">Esta es una versión de prueba: no se actualiza sola. La app publicada, sí.</string>
+    <string name="app_update_auto">Buscar actualizaciones automáticamente</string>
+    <string name="app_update_check">Buscar actualizaciones</string>
+    <string name="app_update_checking">Buscando…</string>
+    <string name="app_update_uptodate">Tienes la última versión.</string>
+    <string name="app_update_available">Está disponible la versión %1$s.</string>
+    <string name="app_update_required">Está disponible la versión %1$s y esta ya no funciona bien: actualízala.</string>
+    <string name="app_update_downloading">Descargando %1$s… %2$s%%</string>
+    <string name="app_update_permission">Android necesita tu permiso para instalar actualizaciones desde K-Downloader. Activa «Permitir de esta fuente», vuelve y toca Instalar.</string>
+    <string name="app_update_installing">Instalando… Confirma en la ventana de Android.</string>
+    <string name="app_update_failed">No pudimos actualizar. Revisa tu conexión y vuelve a intentarlo.</string>
+    <string name="app_update_install">Descargar e instalar</string>
+    <string name="app_update_grant">Dar permiso</string>
+    <string name="app_update_notes">Qué hay de nuevo</string>
+    <string name="app_update_banner">Está disponible K-Downloader %1$s.</string>
+    <string name="app_update_see">Ver</string>
 </resources>

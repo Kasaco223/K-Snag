@@ -55,6 +55,7 @@ class MainViewModel(
     private val queue: DownloadQueue,
     private val uiPrefs: UiPrefs,
     analyzer: MediaAnalyzer,
+    appUpdater: io.github.kasaco223.kdownloader.update.AppUpdater,
 ) : ViewModel() {
     private val _screen = MutableStateFlow(
         savedState.get<String>(KEY_SCREEN)?.let { name -> Screen.entries.firstOrNull { it.name == name } } ?: Screen.HOME,
@@ -81,6 +82,9 @@ class MainViewModel(
 
     /** Todos los ajustes (Ajustes los lee y cambia directamente). */
     val prefs: UiPrefs = uiPrefs
+
+    /** Las actualizaciones de la app (Ajustes y el aviso de Inicio). */
+    val updater: io.github.kasaco223.kdownloader.update.AppUpdater = appUpdater
 
     /** Hay descargas esperando el Wi-Fi («Solo con Wi-Fi»). */
     val waitingForWifi: StateFlow<Boolean> = queue.waitingForWifi
@@ -181,7 +185,7 @@ class MainViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as KdlApp
-                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs, app.analyzer)
+                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs, app.analyzer, app.updater)
             }
         }
     }

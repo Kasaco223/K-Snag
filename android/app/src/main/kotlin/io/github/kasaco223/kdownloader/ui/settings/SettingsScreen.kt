@@ -54,6 +54,7 @@ fun SettingsScreen(
     onCheckEngineUpdate: () -> Unit,
     onRollbackEngine: () -> Unit,
     onWifiOnly: (Boolean) -> Unit,
+    updater: io.github.kasaco223.kdownloader.update.AppUpdater,
     onRetryEngine: () -> Unit,
     onOpenAbout: () -> Unit,
 ) {
@@ -122,6 +123,7 @@ fun SettingsScreen(
         }
         if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
         EngineSettingsCard(prefs, engineStatus, engineUpdate, onCheckEngineUpdate, onRollbackEngine)
+        AppUpdateCard(prefs, updater)
         if (BuildConfig.DONATE_URL.isNotEmpty()) {
             LinkCard(R.drawable.ic_heart, R.string.donate_title, R.string.donate_detail) { SystemActions.openWebPage(context, BuildConfig.DONATE_URL) }
         }

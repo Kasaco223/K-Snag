@@ -115,7 +115,7 @@ jobs:
       - name: Paquetes del SDK fijados
         run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install $SDK_PACKAGES > /dev/null
 
-      - name: Preparar Gradle (sin caché: el build de release sale de cero)
+      - name: "Preparar Gradle (sin caché: el build de release sale de cero)"
         uses: gradle/actions/setup-gradle@v6
         with:
           cache-disabled: true
@@ -126,7 +126,7 @@ jobs:
           KDL_SOURCE_COMMIT: ${{ github.sha }}
         run: ./gradlew --stacktrace :core:test :app:testGithubReleaseUnitTest :app:assembleGithubRelease :app:assembleGithubQa
 
-      - name: Páginas de 16 KB en las bibliotecas nativas (estables: sin pendientes)
+      - name: "Páginas de 16 KB en las bibliotecas nativas (estables: sin pendientes)"
         env:
           STRICT: ${{ steps.meta.outputs.channel == 'stable' && '--fail-on-pending' || '' }}
         run: python3 android/scripts/check_elf_alignment.py $STRICT android/app/build/outputs/apk/github/release/*.apk
