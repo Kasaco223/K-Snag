@@ -4,6 +4,16 @@
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
 
+## 1.0.1 - 2026-11-02
+
+**Español**
+- Arreglo: al compartir un enlace desde YouTube (u otra app) a K-Downloader, la app no llegaba a pedir el permiso de notificaciones, así que no aparecía la notificación con el porcentaje. Ahora lo pide al empezar la descarga, también desde la hoja de compartir.
+- Si las notificaciones están apagadas, Inicio lo avisa con un botón para activarlas, y Ajustes › Descargas tiene un acceso directo a los ajustes de notificaciones.
+
+**English**
+- Fix: when sharing a link from YouTube (or another app) to K-Downloader, the app never got to ask for the notification permission, so the notification with the percentage didn't show up. It now asks when the download starts, from the share sheet too.
+- If notifications are off, Home says so with a button to turn them on, and Settings › Downloads has a shortcut to the notification settings.
+
 ## 1.0.0 - 2026-11-02
 
 **Español**

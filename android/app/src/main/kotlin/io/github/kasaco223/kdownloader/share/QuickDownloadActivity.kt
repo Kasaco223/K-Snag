@@ -16,6 +16,7 @@ import io.github.kasaco223.kdownloader.KdlApp
 import io.github.kasaco223.kdownloader.MainActivity
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
+import io.github.kasaco223.kdownloader.platform.NotificationAccess
 import io.github.kasaco223.kdownloader.ui.components.LocalThumbnails
 import io.github.kasaco223.kdownloader.ui.home.queuedManyText
 import io.github.kasaco223.kdownloader.ui.home.requestFor
@@ -33,8 +34,14 @@ import io.github.kasaco223.kdownloader.ui.theme.darkFor
 class QuickDownloadActivity : AppCompatActivity() {
     private val viewModel: QuickDownloadViewModel by viewModels { QuickDownloadViewModel.Factory }
 
+    // La pregunta del permiso de notificaciones está abierta: la hoja espera a que se cierre para cerrarse.
+    private var promptOpen = false
+    private var finishAfterPrompt = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        promptOpen = savedInstanceState?.getBoolean(STATE_PROMPT_OPEN) ?: false
+        finishAfterPrompt = savedInstanceState?.getBoolean(STATE_FINISH_AFTER) ?: false
         enableEdgeToEdge()
         if (savedInstanceState == null) viewModel.reset(IncomingLinks.from(intent))
         (application as KdlApp).engine.prepare() // para que el motor esté listo cuando lleguen las descargas
@@ -48,6 +55,7 @@ class QuickDownloadActivity : AppCompatActivity() {
                 val start = rememberDownloadStarter(
                     enqueue = { r -> r.urls?.let { queue.enqueueAll(it, r.option, r.allowDuplicate) } ?: queue.enqueue(r.url, r.option, r.allowDuplicate, r.prefill) },
                     onResult = { _, result -> onEnqueued(result) },
+                    onNotificationPrompt = ::onNotificationPrompt,
                 )
                 CompositionLocalProvider(LocalThumbnails provides queue.thumbnails) {
                     QuickDownloadSheet(
@@ -71,26 +79,55 @@ class QuickDownloadActivity : AppCompatActivity() {
         viewModel.reset(IncomingLinks.from(intent))
     }
 
-    override fun onStop() {
-        super.onStop()
-        // Nunca queda escondida detrás de otra app: si la persona sale, la hoja se cierra.
-        if (!isChangingConfigurations) finish()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_PROMPT_OPEN, promptOpen)
+        outState.putBoolean(STATE_FINISH_AFTER, finishAfterPrompt)
     }
 
-    /** La descarga sigue en segundo plano: un aviso corto y la hoja se cierra. */
+    override fun onStop() {
+        super.onStop()
+        // Nunca queda escondida detrás de otra app: si la persona sale, la hoja se cierra. Con la pregunta de
+        // permisos encima no, porque el resultado tiene que volver a esta hoja.
+        if (!isChangingConfigurations && !promptOpen) finish()
+    }
+
+    private fun onNotificationPrompt(open: Boolean) {
+        promptOpen = open
+        if (!open) {
+            if (!NotificationAccess.progressVisible(this)) {
+                Toast.makeText(this, R.string.notif_off_toast, Toast.LENGTH_LONG).show()
+            }
+            if (finishAfterPrompt) finish()
+        }
+    }
+
+    /**
+     * La descarga sigue en segundo plano: un aviso corto y la hoja se cierra (si la pregunta de notificaciones
+     * está abierta, al responderla). Si el avance no se va a ver, el aviso lo dice.
+     */
     private fun onEnqueued(result: EnqueueResult) {
+        val queued = result is EnqueueResult.Queued || (result is EnqueueResult.QueuedMany && result.queued > 0)
+        val hidden = queued && !promptOpen && !NotificationAccess.progressVisible(this)
         val text = when (result) {
-            is EnqueueResult.Queued -> getString(R.string.download_queued)
-            is EnqueueResult.QueuedMany -> queuedManyText(resources, result)
+            is EnqueueResult.Queued -> getString(if (hidden) R.string.download_queued_no_notif else R.string.download_queued)
+            is EnqueueResult.QueuedMany -> queuedManyText(resources, result) + if (hidden) " " + getString(R.string.notif_off_toast) else ""
             is EnqueueResult.AlreadyInDownloads -> getString(R.string.download_already)
             is EnqueueResult.Rejected -> getString(if (result.code == "storage_permission") R.string.download_storage_denied else R.string.download_invalid)
         }
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
-        if (result !is EnqueueResult.Rejected || result.code != "storage_permission") finish()
+        Toast.makeText(this, text, if (hidden) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
+        if (result !is EnqueueResult.Rejected || result.code != "storage_permission") {
+            if (promptOpen) finishAfterPrompt = true else finish()
+        }
     }
 
     private fun openApp() {
         startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         finish()
+    }
+
+    private companion object {
+        const val STATE_PROMPT_OPEN = "kd_prompt_open"
+        const val STATE_FINISH_AFTER = "kd_finish_after_prompt"
     }
 }
