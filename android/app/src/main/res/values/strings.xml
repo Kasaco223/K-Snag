@@ -230,7 +230,7 @@
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="donate_title">Support K-Downloader</string>
-    <string name="donate_detail">It\'s free and has no ads. If it helps you, a donation keeps it going.</string>
+    <string name="donate_detail">It\'s free and has no ads. If it helps you, you can donate with PayPal from any country (or Bre-B in Colombia).</string>
     <!-- Settings: downloads and engine -->
     <string name="settings_downloads_title">Downloads</string>
     <string name="settings_wifi_only">Only on Wi-Fi</string>
