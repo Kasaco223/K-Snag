@@ -369,7 +369,7 @@ jobs:
           mb = lambda abi: f"{apks[abi]['size'] / 1e6:.0f} MB"
           cert = ":".join(re.findall("..", cert_hex.upper()))
           kind = "versión de prueba" if os.environ["CHANNEL"] == "rc" else "versión estable"
-          notes = f"""**K-Downloader para Android {version}** · {kind}
+          notes = f"""**K-Snag para Android {version}** · {kind}
 
           > GitHub la muestra como *Pre-release* a propósito: así «Latest» sigue siendo la app de Windows, de la que dependen su botón de descarga y su actualización automática. *Shown as Pre-release on purpose, so that "Latest" stays on the Windows app.*
 
@@ -379,7 +379,7 @@ jobs:
 
           ## Descargar · Download
 
-          Instrucciones paso a paso: https://kdownloader.vercel.app/android
+          Instrucciones paso a paso: https://ksnagapp.vercel.app/android
 
           | Archivo | Para | Tamaño |
           | --- | --- | --- |
@@ -395,7 +395,7 @@ jobs:
 
           ## Código fuente y licencias · Source code and licenses
 
-          K-Downloader para Android es software libre con licencia GPL-3.0-or-later. Su código es la carpeta `android/` del *Source code* de este Release. Componentes de terceros y sus licencias: [android/THIRD_PARTY_NOTICES.md](https://github.com/{repo}/blob/{tag}/android/THIRD_PARTY_NOTICES.md). Código fuente de los binarios GPL/LGPL que trae el APK (FFmpeg, Python y sus bibliotecas): [{os.environ['SOURCES_TAG']}](https://github.com/{repo}/releases/tag/{os.environ['SOURCES_TAG']}).
+          K-Snag para Android es software libre con licencia GPL-3.0-or-later. Su código es la carpeta `android/` del *Source code* de este Release. Componentes de terceros y sus licencias: [android/THIRD_PARTY_NOTICES.md](https://github.com/{repo}/blob/{tag}/android/THIRD_PARTY_NOTICES.md). Código fuente de los binarios GPL/LGPL que trae el APK (FFmpeg, Python y sus bibliotecas): [{os.environ['SOURCES_TAG']}](https://github.com/{repo}/releases/tag/{os.environ['SOURCES_TAG']}).
 
           <details><summary>Cambios en android/ {"desde " + prev if prev else ""}</summary>
 
@@ -428,10 +428,10 @@ jobs:
             gh release edit "$TAG" --prerelease --latest=false --notes-file "$notes"
           else
             gh release create "$TAG" "${files[@]}" --draft --prerelease --latest=false --verify-tag \
-              --title "K-Downloader para Android ${VERSION}" --notes-file "$notes"
+              --title "K-Snag para Android ${VERSION}" --notes-file "$notes"
           fi
           {
-            echo "### Borrador listo: K-Downloader para Android ${VERSION}"
+            echo "### Borrador listo: K-Snag para Android ${VERSION}"
             echo ""
             echo "Certificado: \`${EXPECTED_CERT_SHA256}\`"
             echo ""
@@ -463,7 +463,7 @@ jobs:
           export KEY_PASS="$KS_PASS"
           keytool="${JAVA_HOME_17_X64:-$JAVA_HOME}/bin/keytool"
           "$keytool" -genkeypair -keystore "$KS_FILE" -storetype PKCS12 -storepass "$KS_PASS" -alias "$KEY_ALIAS" \
-            -keyalg RSA -keysize 2048 -validity 1 -dname "CN=Ensayo K-Downloader" -noprompt
+            -keyalg RSA -keysize 2048 -validity 1 -dname "CN=Ensayo K-Snag" -noprompt
           EXPECTED_CERT_SHA256=$("$keytool" -exportcert -keystore "$KS_FILE" -storepass "$KS_PASS" -alias "$KEY_ALIAS" \
             | sha256sum | cut -d' ' -f1)
           export EXPECTED_CERT_SHA256

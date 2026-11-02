@@ -1,6 +1,6 @@
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
-# Publicar K-Downloader para Android
+# Publicar K-Snag para Android
 
 Una versión de Android es siempre un **pre-release** y nunca **Latest**: «Latest» es el instalador de Windows, del que dependen su botón de descarga y su actualización automática.
 
@@ -23,7 +23,7 @@ La llave firma todas las versiones. **Si se pierde, nadie puede actualizar la ap
    New-Item -ItemType Directory -Force "$env:USERPROFILE\kd-llaves" | Out-Null
    docker run --rm -it -v "$env:USERPROFILE\kd-llaves:/llaves" eclipse-temurin:21.0.12.1_1-jdk-noble `
      keytool -genkeypair -keystore /llaves/k-downloader-android.p12 -storetype PKCS12 -alias kdownloader `
-     -keyalg RSA -keysize 4096 -validity 10950 -dname "CN=K-Downloader"
+     -keyalg RSA -keysize 4096 -validity 10950 -dname "CN=K-Snag"
    ```
 
 2. Mira la huella del certificado (es pública):
@@ -68,7 +68,7 @@ La llave firma todas las versiones. **Si se pierde, nadie puede actualizar la ap
 
    ```powershell
    git checkout master; git pull
-   git tag -a android-vX.Y.Z -m "K-Downloader para Android X.Y.Z"
+   git tag -a android-vX.Y.Z -m "K-Snag para Android X.Y.Z"
    git push origin android-vX.Y.Z
    ```
 

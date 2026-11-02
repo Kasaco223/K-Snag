@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "_comment": "Inventario único de terceros de K-Downloader para Android. De aquí salen THIRD_PARTY_NOTICES.md (notices.py), el espejo de fuentes (sources_mirror.py) y la revisión de pins (check_pins.py). mirror=true: su fuente va al espejo (obligatorio para todo lo copyleft; hoy va todo salvo el NDK). files: rutas dentro de los payloads (jni:<lib> o <payload>.zip.so:<ruta>, con * y **) o del APK (apk:res/… o apk:assets/…).",
+  "_comment": "Inventario único de terceros de K-Snag para Android. De aquí salen THIRD_PARTY_NOTICES.md (notices.py), el espejo de fuentes (sources_mirror.py) y la revisión de pins (check_pins.py). mirror=true: su fuente va al espejo (obligatorio para todo lo copyleft; hoy va todo salvo el NDK). files: rutas dentro de los payloads (jni:<lib> o <payload>.zip.so:<ruta>, con * y **) o del APK (apk:res/… o apk:assets/…).",
   "mirror_release": {
     "tag": "android-sources-ytdl-0.18.1-r1",
     "note": "Pre-release publicada y nunca modificada; una corrección sube la revisión (-r2, -r3…)."
@@ -1030,7 +1030,7 @@
         "freetype/docs/FTL.TXT",
         "freetype/docs/GPLv2.TXT"
       ],
-      "note": "Licencia doble: K-Downloader la usa bajo la FreeType License (FTL). Portions of this software are copyright © 2025 The FreeType Project (www.freetype.org). All rights reserved."
+      "note": "Licencia doble: K-Snag la usa bajo la FreeType License (FTL). Portions of this software are copyright © 2025 The FreeType Project (www.freetype.org). All rights reserved."
     },
     {
       "id": "fontconfig",

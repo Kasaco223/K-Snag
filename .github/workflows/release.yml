@@ -118,7 +118,7 @@ jobs:
           version, base = os.environ["KD_VERSION"], os.environ["KD_BASE_URL"]
           dist = Path("dist")
           names = {
-              "installer": "Instalar-K-Downloader.cmd",
+              "installer": "Instalar-K-Snag.cmd",
               "bundle": f"kd-bundle-{version}.zip",
               "app": f"kd-app-{version}.zip",
           }
@@ -175,7 +175,7 @@ jobs:
         run: |
           $root = Join-Path $env:RUNNER_TEMP 'kd'
           $bundle = (Resolve-Path "dist\kd-bundle-$env:KD_VERSION.zip").Path
-          & ".\dist\Instalar-K-Downloader.cmd" --local $bundle --root $root --no-registry --quiet
+          & ".\dist\Instalar-K-Snag.cmd" --local $bundle --root $root --no-registry --quiet
           if ($LASTEXITCODE -ne 0) { throw "El instalador terminó con código $LASTEXITCODE" }
           foreach ($item in 'runtime\python.exe', 'launch.pyw', 'current') {
             if (-not (Test-Path (Join-Path $root $item))) { throw "La instalación no dejó $item" }
@@ -203,6 +203,7 @@ jobs:
         run: |
           set -euo pipefail
           files=(
+            "dist/Instalar-K-Snag.cmd"
             "dist/Instalar-K-Downloader.cmd"
             "dist/kd-bundle-${VERSION}.zip"
             "dist/kd-app-${VERSION}.zip"
@@ -217,7 +218,7 @@ jobs:
             echo "Ya existe un borrador de $TAG: se reemplazan sus archivos."
             gh release upload "$TAG" "${files[@]}" --clobber
           else
-            args=(--draft --verify-tag --title "K-Downloader ${VERSION}" --generate-notes)
+            args=(--draft --verify-tag --title "K-Snag ${VERSION}" --generate-notes)
             # Las notas automáticas parten del Release de Windows anterior (vX.Y.Z estable), no de un
             # android-* más reciente: GitHub no documenta qué tag elige si no se le indica.
             prev=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --exclude '*-rc.*' "${TAG}^" 2>/dev/null || true)
@@ -230,7 +231,7 @@ jobs:
             gh release create "$TAG" "${files[@]}" "${args[@]}"
           fi
           {
-            echo "### Borrador listo: K-Downloader ${VERSION}"
+            echo "### Borrador listo: K-Snag ${VERSION}"
             echo ""
             echo "Revísalo y publícalo en https://github.com/${GH_REPO}/releases (checklist en docs/release.md)."
           } >> "$GITHUB_STEP_SUMMARY"

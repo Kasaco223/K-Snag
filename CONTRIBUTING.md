@@ -1,4 +1,4 @@
-# Cómo colaborar con K-Downloader
+# Cómo colaborar con K-Snag
 
 ¡Gracias por querer ayudar! Puedes escribir en español o en inglés (*English is welcome too*). Esta guía explica:
 
@@ -40,7 +40,7 @@ $env:KD_DATA_DIR = "$env:TEMP\kd-dev"
 | Variable | Para qué |
 | --- | --- |
 | `KD_DATA_DIR` | Carpeta de datos (ajustes, historial, motor, registros) |
-| `KD_WEB_BASE` | URL base de la web (por defecto `https://kdownloader.vercel.app`) |
+| `KD_WEB_BASE` | URL base de la web (por defecto `https://ksnagapp.vercel.app`) |
 | `KD_UPDATE_URL` | `latest.json` alternativo, para probar la autoactualización |
 | `KD_HINTS_URL` | `engine.json` alternativo, para probar las pistas del motor |
 
@@ -126,7 +126,7 @@ Abre <http://localhost:8000/index.html?mock=1&scenario=S4>.
 
 Usa la [plantilla de errores](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues/new/choose) e incluye:
 
-- **Versión de K-Downloader:** está en Ajustes → Acerca de. Incluye también tu versión de Windows.
+- **Versión de K-Snag:** está en Ajustes → Acerca de. Incluye también tu versión de Windows.
 - **Qué hiciste y qué pasó.** Si es un video público, incluye el enlace.
 - **Detalles técnicos:** en la tarjeta del error, pulsa **Ver detalles → Copiar detalles** y pégalo en el issue.
 - **Registro de la app, si te lo pedimos:**
@@ -140,11 +140,11 @@ Usa la [plantilla de errores](https://github.com/Kasaco223/K-YoutubeVideoDownloa
 
 Muchos errores vienen de yt-dlp o de un cambio de YouTube. **Repórtalos primero aquí, no en el repositorio de yt-dlp:**
 
-- yt-dlp no da soporte a programas de terceros como K-Downloader.
+- yt-dlp no da soporte a programas de terceros como K-Snag.
 - Muchas veces el arreglo ya existe y solo falta que la app lo reciba.
-- El mantenedor de K-Downloader lo reproduce con yt-dlp puro (`yt-dlp -vU <enlace>`). Solo si el error también está ahí, lo reporta en yt-dlp siguiendo sus reglas.
+- El mantenedor de K-Snag lo reproduce con yt-dlp puro (`yt-dlp -vU <enlace>`). Solo si el error también está ahí, lo reporta en yt-dlp siguiendo sus reglas.
 
-> **No abras issues en yt-dlp con texto generado por IA.** Sus reglas prohíben los issues escritos con herramientas de IA. Tampoco pegues ahí reportes copiados de K-Downloader.
+> **No abras issues en yt-dlp con texto generado por IA.** Sus reglas prohíben los issues escritos con herramientas de IA. Tampoco pegues ahí reportes copiados de K-Snag.
 
 ### Vulnerabilidades
 

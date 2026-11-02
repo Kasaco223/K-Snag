@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 import com.android.build.api.variant.FilterConfiguration
 import java.io.StringReader
@@ -66,10 +66,10 @@ android {
         testInstrumentationRunner = "io.github.kasaco223.kdownloader.testing.KdlTestRunner"
         buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
         buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD\"")
-        buildConfigField("String", "WEB_BASE", "\"https://kdownloader.vercel.app\"")
+        buildConfigField("String", "WEB_BASE", "\"https://ksnagapp.vercel.app\"")
         // Página de donaciones de la web (Bre-B desde Colombia, PayPal desde cualquier país): los datos se
-        // cambian en la web, sin sacar otra versión. Vacío: la app no muestra «Apoya K-Downloader».
-        buildConfigField("String", "DONATE_URL", "\"https://kdownloader.vercel.app/donar\"")
+        // cambian en la web, sin sacar otra versión. Vacío: la app no muestra «Apoya K-Snag».
+        buildConfigField("String", "DONATE_URL", "\"https://ksnagapp.vercel.app/donar\"")
         buildConfigField("String", "YOUTUBEDL_ANDROID_VERSION", "\"${libs.versions.youtubedl.get()}\"")
         buildConfigField("String", "YTDLP_BUNDLED_VERSION", "\"${pin("ytdlp.version")}\"")
         buildConfigField("String", "YTDLP_BUNDLED_CHANNEL", "\"${pin("ytdlp.channel")}\"")

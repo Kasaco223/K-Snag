@@ -1,12 +1,12 @@
 name: Reportar un problema
-description: Algo no funciona como debería en K-Downloader.
+description: Algo no funciona como debería en K-Snag.
 title: "[Error] "
 labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Gracias por avisar. Antes de escribir, revisa el [centro de ayuda](https://kdownloader.vercel.app/ayuda):
+        Gracias por avisar. Antes de escribir, revisa el [centro de ayuda](https://ksnagapp.vercel.app/ayuda):
         cada error de la app tiene ahí su código y su solución.
 
         **Nunca pegues cookies, archivos `cookies.txt`, contraseñas ni datos personales.** Este reporte es público.
@@ -16,7 +16,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Versión de K-Downloader
+      label: Versión de K-Snag
       description: La encuentras en Ajustes → Acerca de.
       placeholder: "2.0.0"
     validations:
@@ -94,7 +94,7 @@ body:
     attributes:
       label: Antes de enviar
       options:
-        - label: Revisé el [centro de ayuda](https://kdownloader.vercel.app/ayuda) y las preguntas frecuentes del README.
+        - label: Revisé el [centro de ayuda](https://ksnagapp.vercel.app/ayuda) y las preguntas frecuentes del README.
           required: true
         - label: No incluí cookies, contraseñas ni datos personales.
           required: true

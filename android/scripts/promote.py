@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Promueve una versión de Android ya publicada al puntero que leen la app (y la web) para actualizarse.
 
@@ -35,11 +35,12 @@ CHANNELS = {  # canal -> (archivo del puntero, tags aceptados)
 LOCAL_FIELDS = {"published_at", "min_version_code"}  # lo único que el puntero agrega al android-release.json
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 REDIRECTS = {"/android/descargar": "arm64-v8a", **{f"/android/descargar/{abi}": abi for abi in ABIS}}
+# Nombre anterior (K-Downloader): existe en todos los Releases de Windows, también con copia desde la 2.0.3.
 WINDOWS = f"https://github.com/{REPO}/releases/latest/download/Instalar-K-Downloader.cmd"
 
 
 def http_json(url: str, api: bool = False) -> dict:
-    headers = {"User-Agent": f"K-Downloader-promote (+https://github.com/{REPO})"}
+    headers = {"User-Agent": f"K-Snag-promote (+https://github.com/{REPO})"}
     if api:
         headers["Accept"] = "application/vnd.github+json"
         if os.environ.get("GH_TOKEN"):

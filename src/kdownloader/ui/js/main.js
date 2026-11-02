@@ -1,4 +1,4 @@
-// K-Downloader UI entry point: boot, shell (nav rail + banners), routing, theme/language,
+// K-Snag UI entry point: boot, shell (nav rail + banners), routing, theme/language,
 // global keyboard, paste, drag & drop, clipboard suggestions and Python events.
 import { connect, api, mockScenario } from './api.js';
 import { store, setState, isActive } from './store.js';
@@ -115,7 +115,7 @@ const railRefs = { badge: null, engine: null, engineDot: null, engineTip: null }
 function buildRail() {
   const rail = clear($('rail'));
   rail.setAttribute('aria-label', t('nav.label'));
-  rail.append(h('div', { class: 'rail-logo' }, h('img', { src: 'assets/logo.svg', alt: 'K-Downloader', width: 36, height: 36, attrs: { draggable: 'false' } })));
+  rail.append(h('div', { class: 'rail-logo' }, h('img', { src: 'assets/logo.svg', alt: 'K-Snag', width: 36, height: 36, attrs: { draggable: 'false' } })));
   const items = h('div', { class: 'rail-items' });
   for (const n of NAV) {
     const b = h('button', {

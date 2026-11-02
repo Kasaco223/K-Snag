@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="packaging/assets/logo.svg" width="104" height="104" alt="Logo de K-Downloader">
+  <img src="packaging/assets/logo.svg" width="104" height="104" alt="Logo de K-Snag">
 </p>
 
-<h1 align="center">K-Downloader</h1>
+<h1 align="center">K-Snag</h1>
 
 <p align="center">
   Descarga tus videos favoritos en la mejor calidad, con una app moderna para Windows y Android.<br>
@@ -10,15 +10,15 @@
 </p>
 
 <p align="center">
-  <a href="https://kdownloader.vercel.app/descargar"><img alt="Descargar para Windows" src="https://img.shields.io/badge/Descargar_para_Windows-6366F1?style=for-the-badge"></a>
-  <a href="https://kdownloader.vercel.app/android"><img alt="Descargar para Android" src="https://img.shields.io/badge/Descargar_para_Android-8B5CF6?style=for-the-badge"></a>
+  <a href="https://ksnagapp.vercel.app/descargar"><img alt="Descargar para Windows" src="https://img.shields.io/badge/Descargar_para_Windows-6366F1?style=for-the-badge"></a>
+  <a href="https://ksnagapp.vercel.app/android"><img alt="Descargar para Android" src="https://img.shields.io/badge/Descargar_para_Android-8B5CF6?style=for-the-badge"></a>
 </p>
 
 <p align="center">
-  <a href="https://kdownloader.vercel.app/descargar"><b>Descargar para Windows</b></a> ·
-  <a href="https://kdownloader.vercel.app/android"><b>Descargar para Android</b></a> ·
+  <a href="https://ksnagapp.vercel.app/descargar"><b>Descargar para Windows</b></a> ·
+  <a href="https://ksnagapp.vercel.app/android"><b>Descargar para Android</b></a> ·
   <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases">Todas las versiones</a> ·
-  <a href="https://kdownloader.vercel.app/ayuda">Centro de ayuda</a>
+  <a href="https://ksnagapp.vercel.app/ayuda">Centro de ayuda</a>
 </p>
 
 <p align="center">
@@ -36,9 +36,9 @@
 
 ---
 
-## Qué es K-Downloader
+## Qué es K-Snag
 
-K-Downloader es una app gratuita y de código abierto para Windows y [Android](#android):
+K-Snag es una app gratuita y de código abierto para Windows y [Android](#android):
 
 1. Pegas el enlace de un video.
 2. Eliges la calidad.
@@ -71,7 +71,7 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
   - ante un error típico de YouTube (403), actualiza y reintenta por su cuenta.
 - **Historial** con búsqueda: abrir, mostrar en la carpeta, descargar de nuevo y copiar el enlace.
 - **Descarga rápida** con tu formato favorito.
-- **Desde el navegador:** botón "Abrir en K-Downloader" en la web y un marcador para tu barra de favoritos.
+- **Desde el navegador:** botón "Abrir en K-Snag" en la web y un marcador para tu barra de favoritos.
 - **Español e inglés**, tema claro u oscuro y opción para reducir las animaciones.
 - **Otros sitios:** está pensada para YouTube, pero también abre enlaces de muchos sitios compatibles con yt-dlp.
 
@@ -107,7 +107,7 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
 
 **Pasos:**
 
-1. Descarga **`Instalar-K-Downloader.cmd`** desde <https://kdownloader.vercel.app/descargar> (o desde [Releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest)).
+1. Descarga **`Instalar-K-Snag.cmd`** desde <https://ksnagapp.vercel.app/descargar> (o desde [Releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest)).
 2. **Si el navegador avisa** que el archivo "no se descarga habitualmente" o "puede dañar tu equipo", elige **Conservar** (*Keep*).
    - En Edge: menú **…** de la descarga → **Conservar** → **Mostrar más** → **Conservar de todos modos**.
 3. **Desbloquéalo.** Windows no deja abrir los `.cmd` descargados de internet, y por eso no se abre desde el navegador.
@@ -126,7 +126,7 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
 > - Solo usa `curl.exe` y `tar.exe`, que vienen con Windows.
 > - Se detiene si el SHA-256 del paquete no coincide con el que trae escrito.
 
-**Desinstalar:** Configuración → Aplicaciones → Aplicaciones instaladas → **K-Downloader** → **…** → **Desinstalar**.
+**Desinstalar:** Configuración → Aplicaciones → Aplicaciones instaladas → **K-Snag** → **…** → **Desinstalar**.
 
 - Tus videos descargados no se tocan.
 - Para borrar también los ajustes, el historial y los componentes del motor, elimina la carpeta `%LOCALAPPDATA%\K-Downloader`.
@@ -135,7 +135,7 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
 
 Windows 11 trae **Smart App Control**, que bloquea cualquier `.exe` nuevo que no esté firmado o que Microsoft todavía no conozca. Un `.exe` hecho con PyInstaller o un instalador de Inno Setup quedarían bloqueados en esas PC sin dar opción a abrirlos. La firma de código cuesta dinero y la reputación tarda meses.
 
-Por eso K-Downloader **no genera ningún ejecutable propio**:
+Por eso K-Snag **no genera ningún ejecutable propio**:
 
 - La app es código Python que corre sobre el `pythonw.exe` **oficial firmado** por la Python Software Foundation.
 - yt-dlp corre como *zipapp* de Python puro.
@@ -146,7 +146,7 @@ El resultado funciona incluso con Smart App Control activado. Lo único que Smar
 
 ## Android
 
-**K-Downloader para Android** hace lo mismo desde el celular: en YouTube o en cualquier app, toca **Compartir › K-Downloader**, elige el formato y el archivo queda en **Descargas › K-Downloader**. También puedes pegar el enlace.
+**K-Snag para Android** hace lo mismo desde el celular: en YouTube o en cualquier app, toca **Compartir › K-Snag**, elige el formato y el archivo queda en **Descargas › K-Snag**. También puedes pegar el enlace.
 
 - **Formatos:** video MP4 hasta 1080p, máxima calidad en MKV (4K si existe), audio MP3 o M4A, y otras alturas en «Más calidades». Antes de bajar muestra la miniatura, el título y el tamaño real de cada opción.
 - **Listas:** se baja la lista entera, hasta 500 videos.
@@ -154,7 +154,7 @@ El resultado funciona incluso con Smart App Control activado. Lo único que Smar
 - **En segundo plano:** las descargas siguen con la pantalla apagada, se retoman si Android cierra la app y pueden esperar el Wi-Fi.
 
 **Instalación:**
-1. Entra a **<https://kdownloader.vercel.app/android>** desde el celular y toca **Descargar APK**.
+1. Entra a **<https://ksnagapp.vercel.app/android>** desde el celular y toca **Descargar APK**.
 2. Ábrelo. La primera vez, Android pide **permitir instalar desde esa fuente**: toca **Configuración**, activa el permiso, vuelve y toca **Instalar**.
 3. Si Google Play Protect avisa, la página explica cada mensaje.
 
@@ -200,7 +200,7 @@ Casi nunca. Solo hacen falta para contenido que exige una cuenta (privado, de mi
 
 - **Riesgo:** usar tu cuenta con un descargador puede hacer que YouTube la marque o la suspenda. Si lo haces, usa una cuenta secundaria.
 - **Un `cookies.txt` equivale a tu sesión:** quien lo tenga entra a tu cuenta. Nunca lo compartas ni lo subas a un issue.
-- K-Downloader no usa cookies con YouTube salvo que tú lo pidas: con cookies, YouTube ofrece menos calidades.
+- K-Snag no usa cookies con YouTube salvo que tú lo pidas: con cookies, YouTube ofrece menos calidades.
 
 </details>
 
@@ -237,17 +237,17 @@ Si tu antivirus lo vuelve a borrar, es un falso positivo: repórtalo a su fabric
 
 | Qué | Dónde |
 | --- | --- |
-| Videos | `Descargas\K-Downloader` (se cambia en Ajustes) |
+| Videos | `Descargas\K-Snag` (se cambia en Ajustes) |
 | Ajustes, historial y componentes | `%LOCALAPPDATA%\K-Downloader` |
 | Registro de la app (para reportar errores) | `%LOCALAPPDATA%\K-Downloader\logs\app.log` |
 
 </details>
 
-¿No está tu problema? Revisa el [centro de ayuda](https://kdownloader.vercel.app/ayuda) o [abre un issue](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues/new/choose).
+¿No está tu problema? Revisa el [centro de ayuda](https://ksnagapp.vercel.app/ayuda) o [abre un issue](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues/new/choose).
 
 ## Privacidad
 
-K-Downloader **no tiene telemetría**: no envía estadísticas, no tiene cuentas ni anuncios y no rastrea qué descargas. Solo se conecta a:
+K-Snag **no tiene telemetría**: no envía estadísticas, no tiene cuentas ni anuncios y no rastrea qué descargas. Solo se conecta a:
 
 | Destino | Para qué |
 | --- | --- |
@@ -263,7 +263,7 @@ K-Downloader **no tiene telemetría**: no envía estadísticas, no tiene cuentas
 
 Descarga solo contenido que tengas derecho a guardar: el tuyo, el que tiene una licencia que lo permite o el que la ley de tu país te deja copiar para uso personal. Respeta a los creadores y los términos de cada sitio.
 
-K-Downloader **no evade protecciones** (DRM), no baja contenido de pago y no ayuda a saltarse bloqueos regionales. Más en <https://kdownloader.vercel.app/uso-responsable>.
+K-Snag **no evade protecciones** (DRM), no baja contenido de pago y no ayuda a saltarse bloqueos regionales. Más en <https://ksnagapp.vercel.app/uso-responsable>.
 
 ## Desarrollo
 
@@ -299,7 +299,7 @@ Abre <http://localhost:8000/index.html?mock=1&scenario=S4>.
 | `src/kdownloader/engine/` | Motor: componentes, procesos, presets, progreso, errores, pistas |
 | `src/kdownloader/ui/` | Interfaz HTML/CSS/JS, sin build ni frameworks |
 | `packaging/` | Build del bundle e instalador `.cmd` |
-| `web/` | Sitio estático (kdownloader.vercel.app) |
+| `web/` | Sitio estático (ksnagapp.vercel.app) |
 | `tests/` | Pruebas con pytest |
 | `docs/` | Arquitectura, publicación y pistas del motor |
 
@@ -321,7 +321,7 @@ powershell -ExecutionPolicy Bypass -File packaging\build.ps1
 
 Deja en `dist/`:
 
-- `Instalar-K-Downloader.cmd`
+- `Instalar-K-Snag.cmd`
 - `kd-bundle-<versión>.zip`
 - `kd-app-<versión>.zip`
 - `latest.json`
@@ -332,7 +332,7 @@ Opciones: `-Version`, `-BaseUrl`, `-OutDir` y `-SkipTests`. No compila ningún `
 Para probar la instalación sin publicar:
 
 ```powershell
-.\dist\Instalar-K-Downloader.cmd --local "$PWD\dist\kd-bundle-2.0.0.zip" --root "$env:TEMP\kd-prueba" --no-registry
+.\dist\Instalar-K-Snag.cmd --local "$PWD\dist\kd-bundle-2.0.0.zip" --root "$env:TEMP\kd-prueba" --no-registry
 ```
 
 ### Publicar una versión
@@ -345,7 +345,7 @@ Checklist completa: [docs/release.md](docs/release.md).
 
 ## Política de firma de código
 
-> **Estado: K-Downloader todavía no está firmado.** Esta política se prepara para postular al programa de firma gratuita para código abierto de [SignPath Foundation](https://signpath.org/). Cuando sea aceptado, esta sección dirá: *"Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)"*.
+> **Estado: K-Snag todavía no está firmado.** Esta política se prepara para postular al programa de firma gratuita para código abierto de [SignPath Foundation](https://signpath.org/). Cuando sea aceptado, esta sección dirá: *"Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)"*.
 
 **Qué se firmaría:**
 
@@ -371,7 +371,7 @@ Checklist completa: [docs/release.md](docs/release.md).
 
 ## Créditos
 
-K-Downloader existe gracias a:
+K-Snag existe gracias a:
 
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp), el motor de descarga.
 - [FFmpeg](https://ffmpeg.org/), con los builds de [gyan.dev](https://www.gyan.dev/ffmpeg/builds/).
@@ -391,13 +391,13 @@ Los componentes de terceros conservan sus propias licencias ([THIRD_PARTY_NOTICE
 
 ## Aviso
 
-K-Downloader es un proyecto independiente. **No está afiliado a YouTube ni a Google**, ni cuenta con su respaldo. YouTube, Android y Google Play son marcas de Google LLC; Windows es una marca de Microsoft Corporation. Cada persona es responsable de cómo usa la app.
+K-Snag es un proyecto independiente. **No está afiliado a YouTube ni a Google**, ni cuenta con su respaldo. YouTube, Android y Google Play son marcas de Google LLC; Windows es una marca de Microsoft Corporation. Cada persona es responsable de cómo usa la app.
 
 ---
 
 ## English
 
-**K-Downloader** is a free, open-source app for Windows and [Android](#android-1) to download your favorite videos in the best quality:
+**K-Snag** is a free, open-source app for Windows and [Android](#android-1) to download your favorite videos in the best quality:
 
 1. Paste a link.
 2. Pick a quality.
@@ -405,7 +405,7 @@ K-Downloader es un proyecto independiente. **No está afiliado a YouTube ni a Go
 
 It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to date by itself, so it keeps working when YouTube changes things. This is version 2.0, a full rebuild of the former "YouTube Ultra HD Video Downloader".
 
-**[Download for Windows](https://kdownloader.vercel.app/descargar)** · **[Download for Android](https://kdownloader.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases) · [Help center](https://kdownloader.vercel.app/ayuda)
+**[Download for Windows](https://ksnagapp.vercel.app/descargar)** · **[Download for Android](https://ksnagapp.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases) · [Help center](https://ksnagapp.vercel.app/ayuda)
 
 ### Features
 
@@ -420,7 +420,7 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 - **Also included:**
   - history with search;
   - quick download with your favorite format;
-  - "Open in K-Downloader" from the browser;
+  - "Open in K-Snag" from the browser;
   - Spanish and English, light and dark themes.
 
 ### How it works
@@ -436,7 +436,7 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 
 ### Installation
 
-1. Download **`Instalar-K-Downloader.cmd`** from <https://kdownloader.vercel.app/descargar>.
+1. Download **`Instalar-K-Snag.cmd`** from <https://ksnagapp.vercel.app/descargar>.
 2. If your browser warns that the file is uncommon or may be harmful, choose **Keep**.
 3. **Unblock it.** Windows won't open `.cmd` files downloaded from the internet, so it won't start from the browser. In your **Downloads** folder, right-click it → **Properties** → check **Unblock** → **OK**.
    - **Alternative:** right-click → **Run as administrator**. It still installs for your user and opens the app without admin rights. If your account is not an administrator, use **Unblock** instead: Windows would ask for another account and the app would be installed for that account (the installer detects this and tells you).
@@ -449,12 +449,12 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 
 **Requirements:** Windows 10 (1803+) or 11, 64-bit, with the WebView2 Runtime.
 
-**Uninstall:** Settings → Apps → Installed apps → **K-Downloader** → **Uninstall**.
+**Uninstall:** Settings → Apps → Installed apps → **K-Snag** → **Uninstall**.
 
 - Your downloaded videos are kept.
 - To remove settings, history and engine components as well, delete `%LOCALAPPDATA%\K-Downloader`.
 
-**Why there is no .exe.** Windows 11 **Smart App Control** blocks new executables that are unsigned or not yet known to Microsoft. So K-Downloader ships no executable of its own:
+**Why there is no .exe.** Windows 11 **Smart App Control** blocks new executables that are unsigned or not yet known to Microsoft. So K-Snag ships no executable of its own:
 
 - the app runs on Python's official signed `pythonw.exe`;
 - yt-dlp is a Python zipapp;
@@ -463,13 +463,13 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 
 ### Android
 
-**K-Downloader for Android** does the same on your phone: in YouTube or any other app, tap **Share › K-Downloader**, pick the format and the file lands in **Downloads › K-Downloader**. You can also paste the link.
+**K-Snag for Android** does the same on your phone: in YouTube or any other app, tap **Share › K-Snag**, pick the format and the file lands in **Downloads › K-Snag**. You can also paste the link.
 
 - **Formats:** MP4 up to 1080p, best quality in MKV, MP3 or M4A audio, plus other heights under "More qualities", with the real size of each option before downloading. Playlists of up to 500 videos.
 - **Keeps itself working:** the engine (yt-dlp) updates when YouTube changes, with automatic retries; the app tells you about new versions and updates with your confirmation.
 - **Background:** downloads keep going with the screen off, resume if Android closes the app and can wait for Wi-Fi.
 
-**Install:** open **<https://kdownloader.vercel.app/android>** on your phone, tap **Download APK**, open it and allow installing from that source the first time. Requires Android 8.0+.
+**Install:** open **<https://ksnagapp.vercel.app/android>** on your phone, tap **Download APK**, open it and allow installing from that source the first time. Requires Android 8.0+.
 
 **Why not Google Play?** Google Play doesn't accept apps that download YouTube videos. Every release comes from this repository, always signed with the same key (certificate SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
 
@@ -498,7 +498,7 @@ Update checks can be turned off in Settings.
 
 ### Responsible use
 
-Only download content you have the right to keep. K-Downloader does not bypass DRM, does not download paid content and does not help get around regional blocks.
+Only download content you have the right to keep. K-Snag does not bypass DRM, does not download paid content and does not help get around regional blocks.
 
 ### Development
 
@@ -518,7 +518,7 @@ python -m venv .venv
 
 ### Code signing policy
 
-> **Status: K-Downloader is not code-signed yet.** This policy is prepared for the [SignPath Foundation](https://signpath.org/) open-source program. Once accepted, this section will read: *"Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)"*.
+> **Status: K-Snag is not code-signed yet.** This policy is prepared for the [SignPath Foundation](https://signpath.org/) open-source program. Once accepted, this section will read: *"Free code signing provided by [SignPath.io](https://about.signpath.io/), certificate by [SignPath Foundation](https://signpath.org/)"*.
 
 **What gets signed:** only artifacts built by GitHub Actions from this public repository by [`release.yml`](.github/workflows/release.yml), from a `vX.Y.Z` tag.
 
@@ -543,4 +543,4 @@ python -m venv .venv
 
 - **Credits:** [yt-dlp](https://github.com/yt-dlp/yt-dlp), [FFmpeg](https://ffmpeg.org/) (builds by [gyan.dev](https://www.gyan.dev/ffmpeg/builds/)), [Deno](https://deno.com/), [pywebview](https://pywebview.flowrl.com/), [pythonnet](https://pythonnet.github.io/), [Python](https://www.python.org/) and [Lucide](https://lucide.dev/) icons. The full list is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 - **License:** Windows app [MIT](LICENSE); Android app (`android/`) [GPL-3.0-or-later](android/LICENSE).
-- **Disclaimer:** K-Downloader is an independent project and is **not affiliated with YouTube or Google**. YouTube, Android and Google Play are trademarks of Google LLC; Windows is a trademark of Microsoft Corporation.
+- **Disclaimer:** K-Snag is an independent project and is **not affiliated with YouTube or Google**. YouTube, Android and Google Play are trademarks of Google LLC; Windows is a trademark of Microsoft Corporation.

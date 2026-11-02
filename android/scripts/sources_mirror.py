@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Espejo del código fuente de los componentes copyleft que trae el APK (GPL-3.0 §6, LGPL, MPL-2.0 §3.2).
 
@@ -35,7 +35,7 @@ ROOT = Path(os.environ.get("KD_ROOT") or Path(__file__).resolve().parents[2])
 REPO = os.environ.get("GH_REPO") or "Kasaco223/K-YoutubeVideoDownloaderHD"
 COMPONENTS = ROOT / "android" / "third_party" / "components.json"
 CATALOG = ROOT / "android" / "gradle" / "libs.versions.toml"
-UA = {"User-Agent": f"K-Downloader-sources (+https://github.com/{REPO})"}
+UA = {"User-Agent": f"K-Snag-sources (+https://github.com/{REPO})"}
 MAX_BYTES = 1 << 30  # ninguna fuente pesa 1 GiB; youtubedl-android, la mayor, ~220 MB
 
 
@@ -216,20 +216,20 @@ def fuentes_md(components: dict, rows: list[tuple[dict, dict]], version: str) ->
     snap = components["recipes_snapshot"]
     commit = snap["commit"]
     lines = [
-        f"# Código fuente de terceros · K-Downloader para Android (youtubedl-android {version})",
+        f"# Código fuente de terceros · K-Snag para Android (youtubedl-android {version})",
         "",
         "Este Release publica, sin cambios, el código fuente de los componentes de terceros que trae el APK de",
-        "K-Downloader para Android (todos menos las bibliotecas del Android NDK, Apache-2.0), más el árbol de",
+        "K-Snag para Android (todos menos las bibliotecas del Android NDK, Apache-2.0), más el árbol de",
         "Termux con el que se compilan. Se publica para cumplir la GPL-3.0 (sección 6), la GPL-2.0 (sección 3),",
         "la LGPL-2.1 (sección 6), la LGPL-3.0 (sección 4) y la MPL-2.0 (sección 3.2). No se modifica nunca: una",
         f"corrección se publica como otra revisión (`{mirror_tag(components)}` → `-r2`).",
         "",
-        "*English: unmodified source code of the third-party components shipped in the K-Downloader for Android",
+        "*English: unmodified source code of the third-party components shipped in the K-Snag for Android",
         "APK (all but the Apache-2.0 Android NDK libraries), plus the Termux build tree used to compile them.*",
         "",
         "## De dónde salen los binarios",
         "",
-        f"- K-Downloader usa los binarios de [youtubedl-android](https://github.com/yausername/youtubedl-android) "
+        f"- K-Snag usa los binarios de [youtubedl-android](https://github.com/yausername/youtubedl-android) "
         f"{version} (Maven Central), sin recompilarlos.",
         "- youtubedl-android los arma con paquetes de [Termux](https://github.com/termux/termux-packages), pero no",
         "  publicó qué commit exacto usó (issues [#358](https://github.com/yausername/youtubedl-android/issues/358) y",

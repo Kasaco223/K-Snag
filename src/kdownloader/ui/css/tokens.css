@@ -1,4 +1,4 @@
-/* K-Downloader design tokens.
+/* K-Snag design tokens.
  * Two themes driven by data-theme on <html> ("dark" | "light"); settings.theme "system" resolves in JS.
  * 8pt grid, radius 12 (cards) / 8 (inputs), layered surfaces, Fluent 2 motion.
  * Every text/background pair below was checked for WCAG AA (>= 4.5:1). */

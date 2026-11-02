@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.update
 
@@ -35,7 +35,7 @@ import java.security.MessageDigest
  * Actualizaciones de la app (sabor github, solo la versión publicada): busca en los punteros de la web, baja el
  * APK de su ABI verificando tamaño, SHA-256 y que esté firmado con la misma llave, y lo instala con
  * PackageInstaller. Android siempre pide confirmación (no hay actualizaciones silenciosas en v1); la primera vez,
- * además, el permiso «Instalar apps desconocidas» para K-Downloader.
+ * además, el permiso «Instalar apps desconocidas» para K-Snag.
  */
 class AppUpdater(private val app: KdlApp) {
     sealed interface State {
@@ -97,7 +97,7 @@ class AppUpdater(private val app: KdlApp) {
         app.appScope.launch(Dispatchers.IO) { install(s.update, s.file) }
     }
 
-    /** La pantalla del sistema para dar el permiso a K-Downloader. */
+    /** La pantalla del sistema para dar el permiso a K-Snag. */
     fun permissionIntent(): Intent =
         Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${app.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
@@ -136,7 +136,7 @@ class AppUpdater(private val app: KdlApp) {
 
     private fun download(update: AppUpdate.Available): File {
         val dir = File(app.cacheDir, "updates").apply { deleteRecursively(); mkdirs() }
-        val target = File(dir, "K-Downloader-${update.version}.apk")
+        val target = File(dir, "K-Snag-${update.version}.apk")
         val conn = URL(update.url).openConnection() as HttpURLConnection
         try {
             conn.connectTimeout = 20_000
@@ -231,7 +231,8 @@ class AppUpdater(private val app: KdlApp) {
         private const val KEY_CHECKED = "checked_at"
         private val POINTER_BASES = listOf(
             "https://raw.githubusercontent.com/${AppUpdate.REPO}/master/web/data/",
-            "https://kdownloader.vercel.app/data/",
+            "https://ksnagapp.vercel.app/data/",
+            "https://kdownloader.vercel.app/data/", // el dominio de antes del cambio de nombre: sigue sirviendo /data/
         )
     }
 }

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.platform
 
@@ -42,7 +42,7 @@ data class Diagnostics(
      * descargas (así se lee igual en cualquier reporte).
      */
     fun report(): String = listOf(
-        "K-Downloader para Android $versionName ($versionCode)",
+        "K-Snag para Android $versionName ($versionCode)",
         "Compilación: $flavor · $buildType · commit ${knownCommit ?: "desconocido"}",
         "Android $androidRelease (API $apiLevel) · $device · APK ${apkAbi ?: "sin dividir"} · página $pageSizeBytes B",
         "ABI del celular: ${deviceAbis.joinToString(", ").ifEmpty { "desconocida" }}",

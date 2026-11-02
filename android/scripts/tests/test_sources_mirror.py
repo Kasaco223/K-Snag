@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Prueba sources_mirror.py sin red. Uso: python3 -I -X utf8 test_sources_mirror.py <sources_mirror.py>"""
 import hashlib

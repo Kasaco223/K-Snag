@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.ui.downloads
 
@@ -45,7 +45,7 @@ private enum class Filter(val label: Int) {
 
 /**
  * Pestaña Descargas: lo que está bajando, lo que falló y todo lo terminado (el historial, máximo 500), con
- * filtro de video o audio. Quitar algo de la lista nunca borra el archivo de Descargas/K-Downloader.
+ * filtro de video o audio. Quitar algo de la lista nunca borra el archivo de Descargas/K-Snag.
  */
 @Composable
 fun DownloadsScreen(

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 // Tareas que generan archivos que van dentro del APK. Viven en buildSrc (y no en app/build.gradle.kts)
@@ -42,7 +42,7 @@ fun fetchVerified(url: String, sha256: String, maxBytes: Int = 16 shl 20): ByteA
                 connectTimeout = 30_000
                 readTimeout = 60_000
                 instanceFollowRedirects = true
-                setRequestProperty("User-Agent", "K-Downloader-build (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)")
+                setRequestProperty("User-Agent", "K-Snag-build (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)")
             }
             val bytes = conn.inputStream.use { it.readNBytes(maxBytes + 1) }
             if (bytes.size > maxBytes) throw GradleException("$url pesa más de $maxBytes bytes")

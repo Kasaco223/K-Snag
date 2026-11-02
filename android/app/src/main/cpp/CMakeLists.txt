@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Reemplazos de 16 KB para el FFmpeg del motor (M5): libwebp, libwebpmux y libsharpyuv 1.6.0 (BSD-3-Clause),

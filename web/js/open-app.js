@@ -1,4 +1,4 @@
-// "Ya tengo la app": abre un enlace en K-Downloader con el protocolo kdownloader://
+// "Ya tengo la app": abre un enlace en K-Snag con el protocolo kdownloader://
 // y el marcador para arrastrar a la barra de favoritos.
 
 import { el, icon } from './site.js';
@@ -31,7 +31,7 @@ export function buildDeepLink(url) {
 
 /**
  * Navega al protocolo y, pasado ~1,5 s, revisa si la página sigue visible y con foco.
- * Si el navegador mostró su diálogo "¿Abrir K-Downloader?" o la app se abrió, la ventana
+ * Si el navegador mostró su diálogo "¿Abrir K-Snag?" o la app se abrió, la ventana
  * pierde el foco; si nada pasó, lo más probable es que la app no esté instalada.
  */
 function launch(deepLink, onDone) {
@@ -69,8 +69,8 @@ function notOpenedCallout() {
     el(
       'div',
       {},
-      el('strong', { text: '¿No se abrió? Instala K-Downloader primero.' }),
-      el('p', { text: 'Si ya la instalaste y tu navegador te preguntó, elige «Abrir K-Downloader».' }),
+      el('strong', { text: '¿No se abrió? Instala K-Snag primero.' }),
+      el('p', { text: 'Si ya la instalaste y tu navegador te preguntó, elige «Abrir K-Snag».' }),
       el(
         'p',
         { class: 'callout-actions' },
@@ -119,14 +119,14 @@ export function initOpenForm(form) {
     button?.setAttribute('aria-busy', 'true');
     input.value = result.url;
     const spinner = el('span', { class: 'spinner', 'aria-hidden': 'true' });
-    status?.replaceChildren(statusLine(spinner, 'Abriendo K-Downloader… Si tu navegador pregunta, elige «Abrir».'));
+    status?.replaceChildren(statusLine(spinner, 'Abriendo K-Snag… Si tu navegador pregunta, elige «Abrir».'));
 
     launch(buildDeepLink(result.url), (opened) => {
       busy = false;
       button?.removeAttribute('aria-busy');
       if (!status) return;
       if (opened) {
-        status.replaceChildren(statusLine(icon('circle-check'), 'Listo. Sigue en K-Downloader para elegir la calidad.'));
+        status.replaceChildren(statusLine(icon('circle-check'), 'Listo. Sigue en K-Snag para elegir la calidad.'));
       } else {
         status.replaceChildren(notOpenedCallout());
       }

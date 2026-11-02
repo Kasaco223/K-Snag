@@ -208,6 +208,6 @@ def test_template_output_roundtrip():
     info = {"format_id": "299", "vcodec": "avc1.64002A", "acodec": "none", "height": 1080, "ext": "mp4"}
     ev = parse_line(f"KDL|dl|{json.dumps(prog)}|{json.dumps(info)}")
     assert ev == KdlEvent("dl", prog, info)
-    path = "C:\\Users\\Ana\\Descargas\\K-Downloader\\Ñandú ｜ 日本語 [abc].mp4"
+    path = "C:\\Users\\Ana\\Descargas\\K-Snag\\Ñandú ｜ 日本語 [abc].mp4"
     ev = parse_line("KDL|file|" + json.dumps(path))
     assert ev == KdlEvent("file", path=path)

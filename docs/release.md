@@ -1,6 +1,6 @@
 # Cómo publicar una versión
 
-Lista de pasos para sacar una versión de K-Downloader. Se hace de arriba abajo, sin saltarse pasos.
+Lista de pasos para sacar una versión de K-Snag. Se hace de arriba abajo, sin saltarse pasos.
 
 ## Resumen
 
@@ -36,7 +36,7 @@ Prueba el build y la instalación en local (PowerShell, desde la raíz del repo)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File packaging\build.ps1 -Version 2.0.1
-.\dist\Instalar-K-Downloader.cmd --local "$PWD\dist\kd-bundle-2.0.1.zip" --root "$env:TEMP\kd-prueba" --no-registry
+.\dist\Instalar-K-Snag.cmd --local "$PWD\dist\kd-bundle-2.0.1.zip" --root "$env:TEMP\kd-prueba" --no-registry
 & "$env:TEMP\kd-prueba\runtime\python.exe" "$env:TEMP\kd-prueba\launch.pyw" --selftest
 ```
 
@@ -67,7 +67,7 @@ Desde `master` actualizado:
 ```powershell
 git switch master
 git pull
-git tag -a v2.0.1 -m "K-Downloader 2.0.1"
+git tag -a v2.0.1 -m "K-Snag 2.0.1"
 git push origin v2.0.1
 ```
 
@@ -81,10 +81,10 @@ El workflow **Release** arranca solo con el tag y hace esto:
 2. Ejecuta `packaging/build.ps1 -Version 2.0.1 -BaseUrl https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/v2.0.1`, con ruff y pytest incluidos.
 3. Comprueba que `latest.json` y `SHA256SUMS.txt` coinciden con los archivos de `dist/`.
 4. Instala en limpio en el runner:
-   - `Instalar-K-Downloader.cmd --local … --root $RUNNER_TEMP\kd --no-registry --quiet`;
+   - `Instalar-K-Snag.cmd --local … --root $RUNNER_TEMP\kd --no-registry --quiet`;
    - luego `runtime\python.exe launch.pyw --selftest`.
 5. Crea el Release **como borrador**, con notas generadas automáticamente y estos 5 archivos:
-   - `Instalar-K-Downloader.cmd`
+   - `Instalar-K-Snag.cmd`
    - `kd-bundle-2.0.1.zip`
    - `kd-app-2.0.1.zip`
    - `latest.json`
@@ -109,10 +109,10 @@ Desde una rama siempre es un ensayo. Los archivos quedan como artefacto del work
 
 ## 5. Revisar el borrador
 
-En **GitHub → Releases**, abre el borrador `K-Downloader 2.0.1` y revisa:
+En **GitHub → Releases**, abre el borrador `K-Snag 2.0.1` y revisa:
 
 - [ ] Están los **5 archivos** de la lista anterior.
-- [ ] El título es `K-Downloader 2.0.1`, el tag `v2.0.1` y apunta al commit correcto de `master`.
+- [ ] El título es `K-Snag 2.0.1`, el tag `v2.0.1` y apunta al commit correcto de `master`.
 - [ ] *Set as a pre-release* está marcado **solo** si la versión lleva `-rc`.
 - [ ] Descarga `latest.json` y ábrelo:
   - `version` es `2.0.1`;
@@ -138,7 +138,7 @@ Pulsa **Publish release**.
 
 En una PC con Windows 11, idealmente con Smart App Control activo:
 
-- [ ] <https://kdownloader.vercel.app/descargar> baja `Instalar-K-Downloader.cmd` de la versión nueva.
+- [ ] <https://ksnagapp.vercel.app/descargar> baja `Instalar-K-Snag.cmd` de la versión nueva.
 - [ ] Con Smart App Control activo, el `.cmd` recién descargado **no** abre (ni desde el navegador ni con doble clic). Tras **Propiedades → Desbloquear**, el doble clic instala y abre la app.
 - [ ] Con **Ejecutar como administrador** también instala, y la app se abre **sin** permisos elevados (en el Administrador de tareas, columna *Elevado* = No).
 - [ ] El instalador termina y abre la app.
@@ -169,14 +169,14 @@ Despliegue manual con la CLI, siempre **desde la raíz del repo**: `.vercelignor
 ```powershell
 vercel whoami                       # Debe mostrar la cuenta del proyecto. Si es otra: vercel logout / vercel login
 vercel deploy --scope k23           # preview: revisa la URL que imprime
-vercel deploy --prod --scope k23    # producción: https://kdownloader.vercel.app
+vercel deploy --prod --scope k23    # producción: https://ksnagapp.vercel.app
 ```
 
 Después del deploy, comprueba:
 
 - [ ] La página de inicio, `/ayuda` y `/uso-responsable` cargan.
   - Revísalas en el celular (375 px) y en escritorio.
-- [ ] `/descargar` responde con una redirección al `Instalar-K-Downloader.cmd` del último Release.
+- [ ] `/descargar` responde con una redirección al `Instalar-K-Snag.cmd` del último Release.
 - [ ] `/ayuda` muestra los códigos de error actuales.
   - Si cambiaste `errors_catalog.json`, primero ejecuta `python scripts/export_web_data.py` y haz commit de `web/data/errors.json`.
 

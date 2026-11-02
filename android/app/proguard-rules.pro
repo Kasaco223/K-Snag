@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Reglas de R8 para release y qa. Las bibliotecas (AndroidX, Compose, Kotlin) traen las suyas; aquí solo va

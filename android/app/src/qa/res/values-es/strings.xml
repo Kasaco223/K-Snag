@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Build qa (R8, llave de debug): su propio nombre en el launcher y en «Compartir». -->
 <resources>
-    <string name="launcher_label">K-Downloader QA</string>
+    <string name="launcher_label">K-Snag QA</string>
 </resources>

@@ -1,5 +1,5 @@
 name: Reportar un problema (Android)
-description: Algo no funciona como debería en K-Downloader para Android.
+description: Algo no funciona como debería en K-Snag para Android.
 title: "[Android] "
 labels: ["bug", "android"]
 body:
@@ -14,7 +14,7 @@ body:
     id: diagnostics
     attributes:
       label: Diagnóstico
-      description: En la app, Ajustes › Acerca de K-Downloader › «Copiar detalles», y pégalo aquí. No incluye enlaces ni datos personales.
+      description: En la app, Ajustes › Acerca de K-Snag › «Copiar detalles», y pégalo aquí. No incluye enlaces ni datos personales.
       render: text
     validations:
       required: true

@@ -192,7 +192,7 @@ jobs:
         run: |
           $root = Join-Path $env:RUNNER_TEMP 'kd'
           $bundle = (Get-ChildItem dist -Filter 'kd-bundle-*.zip' | Select-Object -First 1).FullName
-          & ".\dist\Instalar-K-Downloader.cmd" --local $bundle --root $root --no-registry --quiet
+          & ".\dist\Instalar-K-Snag.cmd" --local $bundle --root $root --no-registry --quiet
           if ($LASTEXITCODE -ne 0) { throw "El instalador terminó con código $LASTEXITCODE" }
           & (Join-Path $root 'runtime\python.exe') (Join-Path $root 'launch.pyw') --selftest
           if ($LASTEXITCODE -ne 0) { throw "--selftest terminó con código $LASTEXITCODE" }

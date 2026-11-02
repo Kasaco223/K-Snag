@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.platform
 
@@ -26,7 +26,7 @@ class DiagnosticsTest {
     fun reportHasTheFieldsNeededToDebugAPhone() {
         assertEquals(
             """
-            K-Downloader para Android 1.0.0-rc.1-debug (10000013)
+            K-Snag para Android 1.0.0-rc.1-debug (10000013)
             Compilación: github · debug · commit 3d0e907c1b2a3d4e5f60718293a4b5c6d7e8f901
             Android 16 (API 36) · Google Pixel 8 · APK arm64-v8a · página 16384 B
             ABI del celular: arm64-v8a, armeabi-v7a, armeabi

@@ -6,7 +6,7 @@ import os
 import sys
 from pathlib import Path
 
-from .constants import APP_NAME
+from .constants import DIR_NAME
 
 IS_WINDOWS = sys.platform == "win32"
 
@@ -17,9 +17,9 @@ def data_dir() -> Path:
     if override:
         base = Path(override)
     elif IS_WINDOWS:
-        base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local") / APP_NAME
+        base = Path(os.environ.get("LOCALAPPDATA") or Path.home() / "AppData" / "Local") / DIR_NAME
     elif sys.platform == "darwin":
-        base = Path.home() / "Library" / "Application Support" / APP_NAME
+        base = Path.home() / "Library" / "Application Support" / DIR_NAME
     else:
         base = Path(os.environ.get("XDG_DATA_HOME") or Path.home() / ".local" / "share") / "k-downloader"
     base.mkdir(parents=True, exist_ok=True)

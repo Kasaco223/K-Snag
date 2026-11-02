@@ -100,7 +100,7 @@ function showDownloadThanks(android) {
       'div',
       { class: 'toast-text' },
       el('strong', { text: android ? 'Tu APK se está descargando' : 'Tu descarga empezó' }),
-      el('span', { text: 'Si K-Downloader te sirve, puedes apoyarlo con lo que quieras.' }),
+      el('span', { text: 'Si K-Snag te sirve, puedes apoyarlo con lo que quieras.' }),
     ),
     el('a', { class: 'btn btn-secondary btn-sm', href: '/donar' }, icon('heart', 'icon-sm'), 'Donar'),
     close,

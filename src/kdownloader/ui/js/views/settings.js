@@ -224,7 +224,7 @@ export function createSettings() {
     h('div', { class: 'about-head' },
       h('img', { src: 'assets/logo.svg', alt: '', width: 56, height: 56, attrs: { draggable: 'false' } }),
       h('div', {},
-        h('strong', { class: 'about-name', text: 'K-Downloader' }),
+        h('strong', { class: 'about-name', text: 'K-Snag' }),
         h('div', { class: 'muted' }, versionText, ' · ', h('span', { text: t('about.license') })))),
     h('div', { class: 'about-links' },
       link('home', 'globe', 'about.link_home'),

@@ -141,7 +141,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.png_dir:
         args.png_dir.mkdir(parents=True, exist_ok=True)
         for im in images:
-            im.save(args.png_dir / f"K-Downloader-{im.width}.png")
+            im.save(args.png_dir / f"K-Snag-{im.width}.png")
     print(f"{args.out} ({args.out.stat().st_size} bytes): {', '.join(str(s) for s in SIZES)} px")
     return 0
 

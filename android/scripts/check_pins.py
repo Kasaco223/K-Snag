@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Cruza las dos fuentes de verdad de los AAR de youtubedl-android que firmamos y distribuimos:
 android/gradle/verification-metadata.xml (Gradle rechaza cualquier artefacto con otro SHA-256) y

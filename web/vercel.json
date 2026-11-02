@@ -4,6 +4,17 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/:path((?!data/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "kdownloader.vercel.app"
+        }
+      ],
+      "destination": "https://ksnagapp.vercel.app/:path",
+      "permanent": false
+    },
+    {
       "source": "/descargar",
       "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest/download/Instalar-K-Downloader.cmd",
       "permanent": false

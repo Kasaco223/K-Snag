@@ -4,12 +4,12 @@
     "es": {
       "title": "Contenido protegido (DRM)",
       "message": "Este video tiene protección anticopia y no se puede descargar.",
-      "help": "Algunos videos (películas, series o música de tiendas) usan DRM. K-Downloader no evade protecciones."
+      "help": "Algunos videos (películas, series o música de tiendas) usan DRM. K-Snag no evade protecciones."
     },
     "en": {
       "title": "Protected content (DRM)",
       "message": "This video is copy-protected and can't be downloaded.",
-      "help": "Some videos (movies, shows, store music) use DRM. K-Downloader does not bypass protections."
+      "help": "Some videos (movies, shows, store music) use DRM. K-Snag does not bypass protections."
     }
   },
   {
@@ -251,12 +251,12 @@
     "es": {
       "title": "El antivirus bloqueó un componente",
       "message": "Tu antivirus puso en cuarentena un archivo del motor.",
-      "help": "Suele ser un falso positivo. Ve a Ajustes › Componentes y pulsa Reparar; si vuelve a pasar, agrega una excepción para la carpeta de K-Downloader."
+      "help": "Suele ser un falso positivo. Ve a Ajustes › Componentes y pulsa Reparar; si vuelve a pasar, agrega una excepción para la carpeta de K-Snag."
     },
     "en": {
       "title": "Your antivirus blocked a component",
       "message": "Your antivirus quarantined an engine file.",
-      "help": "This is usually a false positive. Go to Settings › Components and press Repair; if it happens again, add an exception for the K-Downloader folder."
+      "help": "This is usually a false positive. Go to Settings › Components and press Repair; if it happens again, add an exception for the K-Snag folder."
     }
   },
   {
@@ -329,12 +329,12 @@
     "es": {
       "title": "Ese enlace no es compatible",
       "message": "Cópialo desde la barra de direcciones o el botón Compartir.",
-      "help": "K-Downloader funciona con YouTube, TikTok, Instagram, X, Facebook, Vimeo y más de mil sitios."
+      "help": "K-Snag funciona con YouTube, TikTok, Instagram, X, Facebook, Vimeo y más de mil sitios."
     },
     "en": {
       "title": "That link isn't supported",
       "message": "Copy it from the address bar or the Share button.",
-      "help": "K-Downloader works with YouTube, TikTok, Instagram, X, Facebook, Vimeo and more than a thousand sites."
+      "help": "K-Snag works with YouTube, TikTok, Instagram, X, Facebook, Vimeo and more than a thousand sites."
     }
   },
   {

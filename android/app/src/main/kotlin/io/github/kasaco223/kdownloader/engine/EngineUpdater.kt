@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.engine
 
@@ -167,6 +167,6 @@ class EngineUpdater(private val dirs: EngineDirs, private val runner: PyRunner) 
 
     companion object {
         private const val MAX_YTDLP = 16L * 1024 * 1024
-        val USER_AGENT = "K-Downloader-Android/${BuildConfig.VERSION_NAME} (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)"
+        val USER_AGENT = "K-Snag-Android/${BuildConfig.VERSION_NAME} (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)"
     }
 }

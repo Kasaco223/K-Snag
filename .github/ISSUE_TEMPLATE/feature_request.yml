@@ -1,12 +1,12 @@
 name: Proponer una idea
-description: Algo que te gustaría que K-Downloader hiciera.
+description: Algo que te gustaría que K-Snag hiciera.
 title: "[Idea] "
 labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Gracias por la idea. Ten en cuenta que K-Downloader no evade protecciones (DRM, contenido de pago)
+        Gracias por la idea. Ten en cuenta que K-Snag no evade protecciones (DRM, contenido de pago)
         ni ayuda a saltarse bloqueos regionales: ese tipo de propuestas se cierran.
 
         *English is welcome too.*

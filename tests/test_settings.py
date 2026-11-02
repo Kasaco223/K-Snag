@@ -41,10 +41,20 @@ def test_defaults(store_path: Path):
     assert not store_path.exists()  # leer no escribe
 
 
-def test_default_download_dir(store_path: Path):
-    expected = paths.downloads_dir() / "K-Downloader"
+def test_default_download_dir(store_path: Path, tmp_path: Path, monkeypatch):
+    monkeypatch.setattr(paths, "downloads_dir", lambda: tmp_path)
+    expected = tmp_path / "K-Snag"
     assert settings.default_download_dir() == str(expected)
     assert SettingsStore(store_path).get().download_dir == str(expected)
+
+
+def test_default_download_dir_keeps_the_old_folder(tmp_path: Path, monkeypatch):
+    # Quien ya tenía Descargas/K-Downloader (antes del cambio de nombre) sigue descargando ahí.
+    monkeypatch.setattr(paths, "downloads_dir", lambda: tmp_path)
+    (tmp_path / "K-Downloader").mkdir()
+    assert settings.default_download_dir() == str(tmp_path / "K-Downloader")
+    (tmp_path / "K-Snag").mkdir()
+    assert settings.default_download_dir() == str(tmp_path / "K-Snag")
 
 
 def test_default_values_are_valid_choices():

@@ -1,6 +1,6 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Avisos de terceros de K-Downloader para Android, generados desde android/third_party/components.json.
+"""Avisos de terceros de K-Snag para Android, generados desde android/third_party/components.json.
 
     python3 android/scripts/notices.py                     # escribe android/THIRD_PARTY_NOTICES.md
     python3 android/scripts/notices.py --check             # CI: inventario válido y avisos al día
@@ -144,18 +144,18 @@ def render(data: dict) -> str:
     snap = data["recipes_snapshot"]
     out = [
         "<!--",
-        "SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader",
+        "SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag",
         "SPDX-License-Identifier: GPL-3.0-or-later",
         "Generado por android/scripts/notices.py desde third_party/components.json: no lo edites a mano.",
         "-->",
-        "# Avisos de terceros de K-Downloader para Android · Third-party notices",
+        "# Avisos de terceros de K-Snag para Android · Third-party notices",
         "",
-        "K-Downloader para Android se distribuye bajo la [GPL-3.0-or-later](LICENSE). Incluye software libre de otras",
+        "K-Snag para Android se distribuye bajo la [GPL-3.0-or-later](LICENSE). Incluye software libre de otras",
         "personas, que conserva su propia licencia. Esta lista dice qué componentes trae el APK con el motor de",
         "descargas, con qué licencia y dónde está su código fuente. Los textos completos de las licencias están en",
         "[`third_party/licenses/`](third_party/licenses/).",
         "",
-        "*English summary: K-Downloader for Android is GPL-3.0-or-later. The tables list every third-party component",
+        "*English summary: K-Snag for Android is GPL-3.0-or-later. The tables list every third-party component",
         "in the APK with its SPDX license. The unmodified source code of every component marked “espejo” (all of",
         f"them except the Android NDK libraries) is published in the pre-release [`{tag}`]({mirror_url}) of this",
         "repository, together with the full Termux build tree (recipes and patches).*",

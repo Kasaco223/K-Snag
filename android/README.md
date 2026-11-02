@@ -1,10 +1,10 @@
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 
-# K-Downloader para Android: guía para desarrollar
+# K-Snag para Android: guía para desarrollar
 
 Esta carpeta tiene la app de Android. Hoy es una **versión de prueba que ya descarga**: pegas o compartes un
-enlace, eliges el formato (Video MP4, Máxima MKV, MP3 o M4A) y el archivo queda en Descargas/K-Downloader. Lo
+enlace, eliges el formato (Video MP4, Máxima MKV, MP3 o M4A) y el archivo queda en Descargas/K-Snag. Lo
 que falta (analizar el enlace antes, listas, reintentos automáticos, seguir tras un cierre) llega en los
 próximos PR.
 
@@ -22,7 +22,7 @@ próximos PR.
 - Cada archivo propio de `android/` lleva este encabezado (en el formato de comentario de su lenguaje):
 
   ```text
-  SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+  SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
   SPDX-License-Identifier: GPL-3.0-or-later
   ```
 
@@ -69,7 +69,7 @@ primer plano, la publicación en Descargas y las notificaciones), `ui/jobs` y `u
   `core/src/test/resources/desktop_error_vectors.json` (los ejemplos de `tests/test_errors.py`).
 - **`DownloadQueue`**: una descarga a la vez, en `DownloadService` (primer plano, `dataSync`). Guarda
   `kd/jobs.json` y `kd/history.json`; cada trabajo baja en `kd/jobs/<id>/` y `Publisher` lo pasa a
-  Descargas/K-Downloader (MediaStore desde Android 10; copia directa y FileProvider en Android 8 y 9, con el
+  Descargas/K-Snag (MediaStore desde Android 10; copia directa y FileProvider en Android 8 y 9, con el
   permiso de almacenamiento).
 - **Permisos**: el de notificaciones se pide una vez, después de la primera descarga (Android 13+); sin él la
   descarga sigue, solo sin avisos. En Android 8 y 9, el de almacenamiento se pide antes de encolar.
@@ -184,8 +184,8 @@ docker compose -f android/tools/docker/compose.yaml run --rm kdl :core:test :app
 - **Como la llave es pública, cualquiera puede firmar un APK que actualice una instalación `.debug`** (también
   los PR de forks, cuyos artefactos aparecen en la misma lista de Actions). Instala solo APK de corridas de
   `master` o de tus propias ramas.
-- En el celular, el build debug se llama **«K-Downloader (prueba)»** («K-Downloader (test)» en inglés) y el
-  qa **«K-Downloader QA»**, en el launcher y en «Compartir», para no confundirlos con la app publicada
+- En el celular, el build debug se llama **«K-Snag (prueba)»** («K-Snag (test)» en inglés) y el
+  qa **«K-Snag QA»**, en el launcher y en «Compartir», para no confundirlos con la app publicada
   (`src/debug/res`, `src/qa/res`).
 - **«Acerca de» → «Código fuente»** enlaza al árbol del commit con el que se compiló (`KDL_SOURCE_COMMIT`);
   una versión publicada enlaza a su tag `android-v<versión>`.

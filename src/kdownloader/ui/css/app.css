@@ -1,4 +1,4 @@
-/* K-Downloader app styles. Tokens live in tokens.css. Layout targets 1000x680 (min 760x540). */
+/* K-Snag app styles. Tokens live in tokens.css. Layout targets 1000x680 (min 760x540). */
 
 /* ------------------------------------------------------------------ base */
 *, *::before, *::after { box-sizing: border-box; }
