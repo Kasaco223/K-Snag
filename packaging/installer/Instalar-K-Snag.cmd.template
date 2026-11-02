@@ -1,7 +1,7 @@
 @echo off
 rem ==========================================================================================
-rem  Instalar-K-Downloader.cmd - instalador de K-Downloader {{VERSION}}
-rem  https://kdownloader.vercel.app  -  https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD
+rem  Instalar-K-Snag.cmd - instalador de K-Snag {{VERSION}}
+rem  https://ksnagapp.vercel.app  -  https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD
 rem
 rem  Que hace (puedes leerlo entero; es texto):
 rem   1. Descarga {{BUNDLE_NAME}} desde GitHub Releases con curl.exe (incluido en Windows).
@@ -33,11 +33,11 @@ if "%KD_RC%"=="3" if "%KD_MODE%"=="ui" goto kd_console
 if "%KD_MODE%"=="console" pause
 exit /b %KD_RC%
 :kd_console
-start "Instalar K-Downloader" "%ComSpec%" /c ""%~f0" --console %*"
+start "Instalar K-Snag" "%ComSpec%" /c ""%~f0" --console %*"
 exit /b 0
 #__KD_INSTALLER_PS__
 # ===========================================================================================
-# Instalador de K-Downloader (Windows PowerShell 5.1). Se ejecuta desde el .cmd de arriba.
+# Instalador de K-Snag (Windows PowerShell 5.1). Se ejecuta desde el .cmd de arriba.
 # Este archivo debe ser ASCII puro: los acentos del texto en pantalla salen de la funcion S
 # (~a ~e ~i ~o ~u = vocales con tilde, ~n = enie, ~? y ~! = signos de apertura, ~. = puntos
 # suspensivos, ~* = punto medio).
@@ -53,8 +53,8 @@ $KD = @{
     Sha256  = '{{BUNDLE_SHA256}}'
     Name    = '{{BUNDLE_NAME}}'
     Size    = '{{BUNDLE_SIZE}}'
-    App     = 'K-Downloader'
-    Web     = 'https://kdownloader.vercel.app'
+    App     = 'K-Snag'
+    Web     = 'https://ksnagapp.vercel.app'
 }
 
 # --- Texto ----------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ function S([string]$Text) {
     return $sb.ToString()
 }
 
-$LogFile = Join-Path ([IO.Path]::GetTempPath()) 'K-Downloader-instalacion.log'
+$LogFile = Join-Path ([IO.Path]::GetTempPath()) 'K-Snag-instalacion.log'
 
 function Write-Log([string]$Message) {
     try {
@@ -173,9 +173,9 @@ function Read-KdOptions {
 
 function Show-KdHelp {
     Write-Host ''
-    Write-Host ((S 'Instalador de K-Downloader ') + $KD.Version)
+    Write-Host ((S 'Instalador de K-Snag ') + $KD.Version)
     Write-Host ''
-    Write-Host '  Instalar-K-Downloader.cmd [opciones]'
+    Write-Host '  Instalar-K-Snag.cmd [opciones]'
     Write-Host ''
     Write-Host ((S '  --local <zip>          usa un paquete local en vez de descargarlo'))
     Write-Host ((S '  --sha256 <hash>        SHA-256 esperado del paquete (por defecto, el de esta versi~on)'))
@@ -185,7 +185,7 @@ function Show-KdHelp {
     Write-Host ((S '  --desktop/--no-desktop crea (o no) el acceso directo en el escritorio'))
     Write-Host ((S '  --quiet                sin ventanas ni preguntas (CI); no abre la app salvo --launch'))
     Write-Host ((S '  --console              muestra el progreso en la consola en vez de la ventana'))
-    Write-Host ((S '  --launch/--no-launch   abre (o no) K-Downloader al terminar'))
+    Write-Host ((S '  --launch/--no-launch   abre (o no) K-Snag al terminar'))
     Write-Host ''
 }
 
@@ -273,7 +273,7 @@ function Get-KdRunning {
         })
 }
 
-function Get-DesktopLink { return Join-Path ([Environment]::GetFolderPath('Desktop')) 'K-Downloader.lnk' }
+function Get-DesktopLink { return Join-Path ([Environment]::GetFolderPath('Desktop')) 'K-Snag.lnk' }
 
 function Confirm-Kd([string]$Message) {
     if ($Opt.Mode -eq 'quiet') { return $true }
@@ -281,7 +281,7 @@ function Confirm-Kd([string]$Message) {
         $answer = Read-Host ($Message + ' (S/N)')
         return $answer -match '^\s*[sSyY]'
     }
-    $r = [System.Windows.Forms.MessageBox]::Show($Ui.Form, $Message, (S 'Instalar K-Downloader'),
+    $r = [System.Windows.Forms.MessageBox]::Show($Ui.Form, $Message, (S 'Instalar K-Snag'),
         [System.Windows.Forms.MessageBoxButtons]::YesNo, [System.Windows.Forms.MessageBoxIcon]::Question)
     return $r -eq [System.Windows.Forms.DialogResult]::Yes
 }
@@ -319,7 +319,7 @@ function Start-KdApp {
         # normales de la sesion.
         $dir = $Opt.ShortcutDir
         if (-not $dir) { $dir = [Environment]::GetFolderPath('Programs') }
-        $lnk = Join-Path $dir 'K-Downloader.lnk'
+        $lnk = Join-Path $dir 'K-Snag.lnk'
         if (Test-Path -LiteralPath $lnk -PathType Leaf) {
             Write-Log ('Instalador como administrador: abriendo ' + $lnk + ' con explorer.exe')
             Start-Process -FilePath (Join-Path $env:SystemRoot 'explorer.exe') -ArgumentList (Quote $lnk)
@@ -338,8 +338,8 @@ function Start-KdApp {
 
 function Invoke-StepCheck {
     $v = [Environment]::OSVersion.Version
-    if ($v.Major -lt 10) { throw (New-KdError (S 'K-Downloader necesita Windows 10 u 11.') ('Windows ' + $v)) }
-    if (-not [Environment]::Is64BitOperatingSystem) { throw (New-KdError (S 'K-Downloader necesita Windows de 64 bits.') '') }
+    if ($v.Major -lt 10) { throw (New-KdError (S 'K-Snag necesita Windows 10 u 11.') ('Windows ' + $v)) }
+    if (-not [Environment]::Is64BitOperatingSystem) { throw (New-KdError (S 'K-Snag necesita Windows de 64 bits.') '') }
     if ($KD.Version.Contains('{' + '{')) { throw (New-KdError (S 'Este instalador es una plantilla sin procesar; usa el que se publica en cada versi~on.') '') }
     if ((Test-KdElevated) -and -not $Opt.ExplicitRoot) {
         # "Ejecutar como administrador" desde una cuenta sin permisos pide otra cuenta, y entonces se
@@ -348,7 +348,7 @@ function Invoke-StepCheck {
         $shell = @(Get-KdShellUsers)
         Write-Log ('Instalador como administrador: ' + $me + ' | sesion: ' + ($shell -join ', '))
         if ($shell.Count -gt 0 -and -not ($shell | Where-Object { $_ -ieq $me })) {
-            throw (New-KdError ((S 'Lo abriste como administrador con otra cuenta (') + $me + (S '), as~i que K-Downloader se instalar~ia para esa cuenta y no para la tuya.')) (S 'Ci~erralo y haz esto: clic derecho en el archivo > Propiedades > marca Desbloquear > Aceptar. Luego ~abrelo con doble clic, sin "Ejecutar como administrador".'))
+            throw (New-KdError ((S 'Lo abriste como administrador con otra cuenta (') + $me + (S '), as~i que K-Snag se instalar~ia para esa cuenta y no para la tuya.')) (S 'Ci~erralo y haz esto: clic derecho en el archivo > Propiedades > marca Desbloquear > Aceptar. Luego ~abrelo con doble clic, sin "Ejecutar como administrador".'))
         }
     }
     $sys32 = Join-Path $env:SystemRoot 'System32'
@@ -377,7 +377,7 @@ function Invoke-StepCheck {
     $root = $St.Root
     $driveRoot = [IO.Path]::GetPathRoot($root)
     if (-not $driveRoot -or $driveRoot.TrimEnd('\') -ieq $root) { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
-    if (-not $Opt.ExplicitRoot -and (Split-Path -Leaf $root) -ine 'K-Downloader') { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
+    if (-not $Opt.ExplicitRoot -and (Split-Path -Leaf $root) -ine 'K-Snag') { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
     if (Test-Path -LiteralPath $root) {
         if (-not (Test-Path -LiteralPath $root -PathType Container)) {
             throw (New-KdError (S 'Ya existe un archivo con el nombre de la carpeta de instalaci~on.') $root)
@@ -385,7 +385,7 @@ function Invoke-StepCheck {
         if (Test-Reparse $root) { throw (New-KdError (S 'La carpeta de instalaci~on es un enlace; por seguridad no se usa.') $root) }
         $hasItems = @(Get-ChildItem -LiteralPath $root -Force | Select-Object -First 1).Count -gt 0
         if ($hasItems -and -not (Test-Path -LiteralPath (Join-Path $root 'launch.pyw'))) {
-            throw (New-KdError (S 'La carpeta de instalaci~on ya existe y no parece de K-Downloader; por seguridad no se toca.') $root)
+            throw (New-KdError (S 'La carpeta de instalaci~on ya existe y no parece de K-Snag; por seguridad no se toca.') $root)
         }
     }
 
@@ -422,7 +422,7 @@ function Invoke-StepDownload {
         $St.Downloaded = $false
         return $null
     }
-    $St.TempDir = Join-Path ([IO.Path]::GetTempPath()) ('K-Downloader-' + (New-KdId))
+    $St.TempDir = Join-Path ([IO.Path]::GetTempPath()) ('K-Snag-' + (New-KdId))
     [void](New-Item -ItemType Directory -Path $St.TempDir -Force)
     $St.Zip = Join-Path $St.TempDir $KD.Name
     $St.Downloaded = $true
@@ -447,7 +447,7 @@ function Invoke-StepDownload {
     $w.Done = {
         param($w)
         if ($w.Proc.ExitCode -ne 0) {
-            throw (New-KdError (S 'No se pudo descargar K-Downloader. Revisa tu conexi~on a internet y vuelve a intentarlo.') ('curl ' + $w.Proc.ExitCode + ': ' + $w.Err.Result.Trim()))
+            throw (New-KdError (S 'No se pudo descargar K-Snag. Revisa tu conexi~on a internet y vuelve a intentarlo.') ('curl ' + $w.Proc.ExitCode + ': ' + $w.Err.Result.Trim()))
         }
     }
     return $w
@@ -467,14 +467,14 @@ function Invoke-StepVerify {
 function Invoke-StepClose {
     $procs = Get-KdRunning
     if ($procs.Count -eq 0) { return $null }
-    if (-not (Confirm-Kd (S 'K-Downloader est~a abierto. Para continuar hay que cerrarlo y las descargas en curso se detendr~an. ~?Cerrarlo ahora?'))) {
-        throw (New-KdError (S 'Instalaci~on cancelada: K-Downloader sigue abierto.') '')
+    if (-not (Confirm-Kd (S 'K-Snag est~a abierto. Para continuar hay que cerrarlo y las descargas en curso se detendr~an. ~?Cerrarlo ahora?'))) {
+        throw (New-KdError (S 'Instalaci~on cancelada: K-Snag sigue abierto.') '')
     }
-    Write-Log ('Cerrando ' + $procs.Count + ' proceso(s) de K-Downloader')
+    Write-Log ('Cerrando ' + $procs.Count + ' proceso(s) de K-Snag')
     $procs | Stop-Process -Force -ErrorAction SilentlyContinue
     $procs | Wait-Process -Timeout 15 -ErrorAction SilentlyContinue
     if ((Get-KdRunning).Count -gt 0) {
-        throw (New-KdError (S 'No se pudo cerrar K-Downloader. Ci~erralo y vuelve a intentarlo.') '')
+        throw (New-KdError (S 'No se pudo cerrar K-Snag. Ci~erralo y vuelve a intentarlo.') '')
     }
     return $null
 }
@@ -534,7 +534,7 @@ function Invoke-StepPlace {
     $rtOld = Join-Path $root ('runtime.old-' + $id)
     if (Test-Path -LiteralPath $rt) {
         try { Move-KdDir $rt $rtOld } catch {
-            throw (New-KdError (S 'La carpeta de K-Downloader est~a en uso. Cierra K-Downloader y cualquier ventana abierta en esa carpeta, y vuelve a intentarlo.') $_.Exception.Message)
+            throw (New-KdError (S 'La carpeta de K-Snag est~a en uso. Cierra K-Snag y cualquier ventana abierta en esa carpeta, y vuelve a intentarlo.') $_.Exception.Message)
         }
     }
     try {
@@ -542,7 +542,7 @@ function Invoke-StepPlace {
     } catch {
         $msg = $_.Exception.Message
         if (Test-Path -LiteralPath $rtOld) { try { Move-KdDir $rtOld $rt } catch { } }
-        throw (New-KdError (S 'No se pudieron copiar los archivos de K-Downloader.') $msg)
+        throw (New-KdError (S 'No se pudieron copiar los archivos de K-Snag.') $msg)
     }
 
     # 2. Codigo de la app: app\<version> (las versiones anteriores se quedan hasta el final).
@@ -589,7 +589,7 @@ function Invoke-StepFinish {
         $out = ($w.Out.Result + [Environment]::NewLine + $w.Err.Result).Trim()
         Write-Log ('install-finish (' + $w.Proc.ExitCode + '): ' + $out)
         if ($w.Proc.ExitCode -ne 0) {
-            throw (New-KdError (S 'No se pudieron crear los accesos directos ni registrar K-Downloader en Windows.') $out)
+            throw (New-KdError (S 'No se pudieron crear los accesos directos ni registrar K-Snag en Windows.') $out)
         }
     }
     return $w
@@ -598,16 +598,16 @@ function Invoke-StepFinish {
 function Invoke-StepCleanup {
     if ($St.TempDir) { Remove-KdDir $St.TempDir; $St.TempDir = $null }
     if ($St.Staging) { Remove-KdDir $St.Staging; $St.Staging = $null }
-    Write-Log ('Instalado K-Downloader ' + $KD.Version + ' en ' + $St.Root)
+    Write-Log ('Instalado K-Snag ' + $KD.Version + ' en ' + $St.Root)
     return $null
 }
 
 # Peso de cada paso en la barra de progreso (la descarga pesa 0 con --local).
 $Steps = @(
     @{ Text = 'Comprobando tu sistema~.'; Run = { Invoke-StepCheck }; Weight = 2 },
-    @{ Text = 'Descargando K-Downloader~.'; Run = { Invoke-StepDownload }; Weight = 60 },
+    @{ Text = 'Descargando K-Snag~.'; Run = { Invoke-StepDownload }; Weight = 60 },
     @{ Text = 'Verificando el archivo~.'; Run = { Invoke-StepVerify }; Weight = 3 },
-    @{ Text = 'Revisando si K-Downloader est~a abierto~.'; Run = { Invoke-StepClose }; Weight = 1 },
+    @{ Text = 'Revisando si K-Snag est~a abierto~.'; Run = { Invoke-StepClose }; Weight = 1 },
     @{ Text = 'Extrayendo archivos~.'; Run = { Invoke-StepExtract }; Weight = 18 },
     @{ Text = 'Copiando archivos~.'; Run = { Invoke-StepPlace }; Weight = 8; Critical = $true },
     @{ Text = 'Creando accesos directos~.'; Run = { Invoke-StepFinish }; Weight = 6; Critical = $true },
@@ -651,7 +651,7 @@ function Invoke-KdConsole {
     elseif ($quiet) { $St.Desktop = $false }
     else { $St.Desktop = (-not $St.Existing) -or (Test-Path -LiteralPath (Get-DesktopLink)) }
     Write-Host ''
-    Write-Host ((S 'Instalador de K-Downloader ') + $KD.Version)
+    Write-Host ((S 'Instalador de K-Snag ') + $KD.Version)
     Write-Host ((S 'Carpeta: ') + $St.Root)
     Write-Log ('--- Instalador ' + $KD.Version + ' (' + $Opt.Mode + ') en ' + $St.Root + ' args: ' + $env:KD_ARGS)
     try {
@@ -686,7 +686,7 @@ function Invoke-KdConsole {
         return 1
     }
     Write-Host ''
-    Write-Host ((S '~!Listo! K-Downloader ') + $KD.Version + (S ' est~a instalado en ') + $St.Root)
+    Write-Host ((S '~!Listo! K-Snag ') + $KD.Version + (S ' est~a instalado en ') + $St.Root)
     $launch = $Opt.Launch
     if ($null -eq $launch) { $launch = -not $quiet }
     if ($launch) { Start-KdApp }
@@ -800,7 +800,7 @@ function Set-KdUiState([string]$State) {
             $f.Desktop.Enabled = $false; $f.Bar.Visible = $true; $f.LogLink.Visible = $false
         }
         'done' {
-            $f.Primary.Text = 'Abrir K-Downloader'; $f.Primary.Enabled = $true
+            $f.Primary.Text = 'Abrir K-Snag'; $f.Primary.Enabled = $true
             $f.Secondary.Text = 'Cerrar'; $f.Secondary.Enabled = $true
             $f.Desktop.Enabled = $false; $f.LogLink.Visible = $false
             [void]$f.Primary.Focus()
@@ -832,7 +832,7 @@ function Show-KdDone {
     $St.ExitCode = 0
     $where = S 'Lo encontrar~as en el men~u Inicio'
     if ($St.Desktop -and -not $Opt.NoRegistry) { $where += (S ' y en el escritorio') }
-    Set-KdStatus (S '~!Listo! K-Downloader est~a instalado.') ($where + '.') $false
+    Set-KdStatus (S '~!Listo! K-Snag est~a instalado.') ($where + '.') $false
     Set-KdUiState 'done'
     $Ui.Bar.Invalidate()
 }
@@ -900,7 +900,7 @@ function Show-KdWindow {
 
     $form = New-Object System.Windows.Forms.Form
     $Ui.Form = $form
-    $form.Text = S 'Instalar K-Downloader'
+    $form.Text = S 'Instalar K-Snag'
     $form.ClientSize = New-Object System.Drawing.Size 540, 400
     $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedSingle
     $form.MaximizeBox = $false
@@ -924,7 +924,7 @@ function Show-KdWindow {
             $gr = $e.Graphics
             $gr.TextRenderingHint = [System.Drawing.Text.TextRenderingHint]::ClearTypeGridFit
             Draw-KdLogo $gr 26 22 64
-            $gr.DrawString('K-Downloader', $Ui.FontTitle, [System.Drawing.Brushes]::White, 104, 24)
+            $gr.DrawString('K-Snag', $Ui.FontTitle, [System.Drawing.Brushes]::White, 104, 24)
             $sb = New-Object System.Drawing.SolidBrush (New-KdColor 0xA9 0xAC 0xC4)
             $gr.DrawString($Ui.Subtitle, $Ui.FontSub, $sb, 107, 60)
             $sb.Dispose()
@@ -939,13 +939,13 @@ function Show-KdWindow {
     $intro.SetBounds(26, 126, 488, 46)
     $intro.ForeColor = $Ui.Text
     if (-not $St.Existing) {
-        $intro.Text = S 'Descarga tus videos favoritos en la mejor calidad. K-Downloader se instala solo para tu usuario y no necesita permisos de administrador.'
+        $intro.Text = S 'Descarga tus videos favoritos en la mejor calidad. K-Snag se instala solo para tu usuario y no necesita permisos de administrador.'
         $Ui.StartText = 'Instalar'
     } elseif ($St.Existing -eq $KD.Version) {
-        $intro.Text = (S 'K-Downloader ') + $KD.Version + (S ' ya est~a instalado. Puedes reinstalarlo para reparar la instalaci~on; tus ajustes y tu historial se conservan.')
+        $intro.Text = (S 'K-Snag ') + $KD.Version + (S ' ya est~a instalado. Puedes reinstalarlo para reparar la instalaci~on; tus ajustes y tu historial se conservan.')
         $Ui.StartText = 'Reinstalar'
     } else {
-        $intro.Text = (S 'Se actualizar~a K-Downloader ') + $St.Existing + (S ' a la versi~on ') + $KD.Version + (S '. Tus ajustes y tu historial se conservan.')
+        $intro.Text = (S 'Se actualizar~a K-Snag ') + $St.Existing + (S ' a la versi~on ') + $KD.Version + (S '. Tus ajustes y tu historial se conservan.')
         $Ui.StartText = 'Actualizar'
     }
     $form.Controls.Add($intro)
@@ -1059,11 +1059,11 @@ function Show-KdWindow {
             param($sender, $e)
             if ($St.Ui -ne 'running') { return }
             if ($St.Critical) {
-                [void][System.Windows.Forms.MessageBox]::Show($Ui.Form, (S 'Espera un momento: se est~an copiando los archivos de K-Downloader.'), (S 'Instalar K-Downloader'))
+                [void][System.Windows.Forms.MessageBox]::Show($Ui.Form, (S 'Espera un momento: se est~an copiando los archivos de K-Snag.'), (S 'Instalar K-Snag'))
                 $e.Cancel = $true
                 return
             }
-            $answer = [System.Windows.Forms.MessageBox]::Show($Ui.Form, (S '~?Cancelar la instalaci~on?'), (S 'Instalar K-Downloader'),
+            $answer = [System.Windows.Forms.MessageBox]::Show($Ui.Form, (S '~?Cancelar la instalaci~on?'), (S 'Instalar K-Snag'),
                 [System.Windows.Forms.MessageBoxButtons]::YesNo, [System.Windows.Forms.MessageBoxIcon]::Question)
             if ($answer -ne [System.Windows.Forms.DialogResult]::Yes -or $St.Critical) {
                 $e.Cancel = $true
@@ -1102,7 +1102,7 @@ try {
     if ($Opt.Mode -eq 'ui') {
         try {
             Add-Type -AssemblyName System.Windows.Forms
-            [void][System.Windows.Forms.MessageBox]::Show(($fail.Message + ' ' + $fail.Detail), (S 'Instalar K-Downloader'))
+            [void][System.Windows.Forms.MessageBox]::Show(($fail.Message + ' ' + $fail.Detail), (S 'Instalar K-Snag'))
         } catch { }
     }
     exit 1

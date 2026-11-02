@@ -1,4 +1,4 @@
-# Dependencias del runtime de K-Downloader (Python embeddable 3.13, cp313 win_amd64).
+# Dependencias del runtime de K-Snag (Python embeddable 3.13, cp313 win_amd64).
 #
 # build.ps1 las instala con:
 #   pip install --target runtime\Lib\site-packages --platform win_amd64 --python-version 3.13

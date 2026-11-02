@@ -50,7 +50,10 @@ class Settings:
 
 
 def default_download_dir() -> str:
-    return str(paths.downloads_dir() / "K-Downloader")
+    """Descargas/K-Snag; si ya existe Descargas/K-Downloader (de antes del cambio de nombre) y no la nueva, esa."""
+    base = paths.downloads_dir()
+    new, old = base / "K-Snag", base / "K-Downloader"
+    return str(old if old.is_dir() and not new.exists() else new)
 
 
 def _coerce(name: str, value: Any, current: Any) -> Any:

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- FileProvider ${applicationId}.files: solo para Android 8 y 9, donde las descargas se copian directamente a
-     Descargas/K-Downloader (desde Android 10 se publican con MediaStore y no hace falta). -->
+     Descargas/K-Snag (desde Android 10 se publican con MediaStore y no hace falta). -->
 <paths>
-    <external-path name="dl" path="Download/K-Downloader/" />
+    <external-path name="dl" path="Download/K-Snag/" />
+    <!-- Las descargas de antes del cambio de nombre (K-Downloader) siguen abriéndose desde el historial. -->
+    <external-path name="dl_legacy" path="Download/K-Downloader/" />
 </paths>

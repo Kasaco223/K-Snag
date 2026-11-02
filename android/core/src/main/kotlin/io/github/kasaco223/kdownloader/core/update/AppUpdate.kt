@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.core.update
 
@@ -8,6 +8,8 @@ package io.github.kasaco223.kdownloader.core.update
  * acepta APK de los Releases de este repo, del mismo paquete y con SHA-256; Android exige además la misma firma.
  */
 object AppUpdate {
+    /** Prefijos aceptados en el nombre de los APK publicados. */
+    val APK_NAMES = listOf("K-Downloader", "K-Snag")
     const val REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
     const val PACKAGE = "io.github.kasaco223.kdownloader"
     private val SHA256 = Regex("^[0-9a-f]{64}$")
@@ -39,7 +41,9 @@ object AppUpdate {
         val abi = ABI_BY_DIGIT[(installedCode % 10).toInt()] ?: return null
         val apk = (m["apks"] as? Map<*, *>)?.get(abi) as? Map<*, *> ?: return null
         val url = apk["url"] as? String ?: return null
-        if (url != "https://github.com/$REPO/releases/download/$tag/K-Downloader-Android-$abi.apk") return null
+        // K-Downloader-Android-<abi>.apk es el nombre de siempre (lo exigen las versiones 1.0.0 a 1.0.2 ya instaladas);
+        // desde la 1.0.3 también vale K-Snag-Android-<abi>.apk, para poder cambiarlo cuando todas se actualicen.
+        if (url !in APK_NAMES.map { "https://github.com/$REPO/releases/download/$tag/$it-Android-$abi.apk" }) return null
         val sha = (apk["sha256"] as? String)?.takeIf { SHA256.matches(it) } ?: return null
         val size = (apk["size"] as? Number)?.toLong()?.takeIf { it in 1..MAX_APK } ?: return null
         val code = (apk["version_code"] as? Number)?.toLong() ?: return null

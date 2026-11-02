@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Construye la distribución de K-Downloader: kd-bundle, kd-app, el instalador .cmd, latest.json y SHA256SUMS.txt.
+    Construye la distribución de K-Snag: kd-bundle, kd-app, el instalador .cmd, latest.json y SHA256SUMS.txt.
 
 .DESCRIPTION
     No genera ningún .exe propio: Smart App Control bloquea los .exe nuevos sin firma. El bundle lleva el
@@ -14,7 +14,8 @@
          packaging/requirements-runtime.txt (con hashes), app\<versión>\kdownloader, current, launch.pyw,
          uninstall.cmd, K-Downloader.ico y licenses\.
       4. Verifica el runtime: importa las dependencias, revisa que no falte ninguna y corre --selftest.
-      5. Genera en -OutDir: kd-bundle-<v>.zip, kd-app-<v>.zip, Instalar-K-Downloader.cmd, latest.json y SHA256SUMS.txt.
+      5. Genera en -OutDir: kd-bundle-<v>.zip, kd-app-<v>.zip, Instalar-K-Snag.cmd (y su copia
+         Instalar-K-Downloader.cmd, el nombre anterior), latest.json y SHA256SUMS.txt.
 
 .PARAMETER Version
     Versión a construir. Por defecto, __version__ de src/kdownloader/__init__.py (si se pasa, debe coincidir).
@@ -195,7 +196,7 @@ try {
         $venvPython = Join-Path $Repo '.venv\Scripts\python.exe'
         if (Test-Path -LiteralPath $venvPython) { $Python = $venvPython } else { $Python = (Get-Command python).Source }
     }
-    Write-Step ('K-Downloader {0} -> {1}' -f $Version, $Out)
+    Write-Step ('K-Snag {0} -> {1}' -f $Version, $Out)
     Write-Info ('Python del build: ' + $Python)
     Write-Info ('URL base: ' + $BaseUrl)
 
@@ -313,7 +314,7 @@ try {
     $Lic = Join-Path $Stage 'licenses'
     [void](New-Item -ItemType Directory -Force -Path $Lic)
     Copy-Item -LiteralPath (Join-Path $RuntimeDir 'LICENSE.txt') -Destination (Join-Path $Lic 'Python-LICENSE.txt')
-    Copy-Item -LiteralPath (Join-Path $Repo 'LICENSE') -Destination (Join-Path $Lic 'K-Downloader-LICENSE.txt')
+    Copy-Item -LiteralPath (Join-Path $Repo 'LICENSE') -Destination (Join-Path $Lic 'K-Snag-LICENSE.txt')
     $notices = Join-Path $Repo 'THIRD_PARTY_NOTICES.md'
     if (Test-Path -LiteralPath $notices) { Copy-Item -LiteralPath $notices -Destination $Lic }
     $licCount = 0
@@ -340,17 +341,17 @@ try {
         }
     }
     $licReadme = @(
-        'K-Downloader se distribuye bajo la licencia MIT (K-Downloader-LICENSE.txt).',
+        'K-Snag se distribuye bajo la licencia MIT (K-Snag-LICENSE.txt).',
         '',
         'Este paquete incluye Python (PSF License, Python-LICENSE.txt) y las bibliotecas de',
         'runtime\Lib\site-packages; cada carpeta de licenses\ contiene la licencia de una de ellas.',
         'mutagen se distribuye bajo GPL-2.0-or-later y su código fuente completo está en',
         'runtime\Lib\site-packages\mutagen.',
         '',
-        'K-Downloader no incluye yt-dlp, FFmpeg ni Deno: se descargan aparte, desde sus sitios',
+        'K-Snag no incluye yt-dlp, FFmpeg ni Deno: se descargan aparte, desde sus sitios',
         'oficiales y verificados con SHA-256, la primera vez que abres la app.',
         '',
-        'K-Downloader is MIT-licensed. This bundle includes Python (PSF License) and the libraries in',
+        'K-Snag is MIT-licensed. This bundle includes Python (PSF License) and the libraries in',
         'runtime\Lib\site-packages, each with its license under licenses\. mutagen is GPL-2.0-or-later and',
         'its complete source code is included. yt-dlp, FFmpeg and Deno are not redistributed.'
     )
@@ -387,7 +388,10 @@ try {
     [void](New-Item -ItemType Directory -Force -Path $Out)
     $bundleName = 'kd-bundle-{0}.zip' -f $Version
     $appName = 'kd-app-{0}.zip' -f $Version
-    $installerName = 'Instalar-K-Downloader.cmd'
+    $installerName = 'Instalar-K-Snag.cmd'
+    # Copia con el nombre de antes del cambio de nombre (K-Downloader): los enlaces viejos a
+    # releases/latest/download/Instalar-K-Downloader.cmd siguen funcionando.
+    $legacyInstallerName = 'Instalar-K-Downloader.cmd'
     $bundlePath = Join-Path $Out $bundleName
     $appPath = Join-Path $Out $appName
     $installerPath = Join-Path $Out $installerName
@@ -402,7 +406,7 @@ try {
     Write-Info ('{0}: {1} archivos, {2}' -f $bundleName, $bundleEntries.Count, (Format-Size $bundleSize))
     Write-Info ('{0}: {1} archivos, {2}' -f $appName, $appEntries.Count, (Format-Size (Get-Item -LiteralPath $appPath).Length))
 
-    $template = [IO.File]::ReadAllText((Join-Path $PackagingDir 'installer\Instalar-K-Downloader.cmd.template'))
+    $template = [IO.File]::ReadAllText((Join-Path $PackagingDir 'installer\Instalar-K-Snag.cmd.template'))
     $bundleUrl = '{0}/{1}' -f $BaseUrl, $bundleName
     $rendered = $template.Replace('{{VERSION}}', $Version).Replace('{{BUNDLE_URL}}', $bundleUrl).
         Replace('{{BUNDLE_SHA256}}', $bundleSha).Replace('{{BUNDLE_NAME}}', $bundleName).
@@ -415,6 +419,7 @@ try {
         }
     }
     Write-TextFile $installerPath $rendered -Ascii
+    Copy-Item -LiteralPath $installerPath -Destination (Join-Path $Out $legacyInstallerName) -Force
     $installerSha = Get-Sha256 $installerPath
 
     $latest = [ordered]@{
@@ -429,7 +434,7 @@ try {
     Write-TextFile $latestPath ((ConvertTo-KdJson $latest) + "`n")
 
     $sumsPath = Join-Path $Out 'SHA256SUMS.txt'
-    $sums = foreach ($name in @($installerName, $appName, $bundleName, 'latest.json')) {
+    $sums = foreach ($name in @($installerName, $legacyInstallerName, $appName, $bundleName, 'latest.json')) {
         '{0}  {1}' -f (Get-Sha256 (Join-Path $Out $name)), $name
     }
     Write-TextFile $sumsPath (($sums -join "`n") + "`n")

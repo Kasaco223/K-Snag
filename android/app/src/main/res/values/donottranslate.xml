@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <resources>
-    <string name="app_name" translatable="false">K-Downloader</string>
+    <string name="app_name" translatable="false">K-Snag</string>
     <string name="diag_android_value" translatable="false">%1$s (API %2$d)</string>
     <string name="diag_page_size_kb" translatable="false">%1$d KB</string>
     <string name="diag_page_size_bytes" translatable="false">%1$d B</string>

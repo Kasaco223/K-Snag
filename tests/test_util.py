@@ -152,7 +152,7 @@ def test_console_python_prefers_python_exe(tmp_path: Path, monkeypatch: pytest.M
 
 def test_install_root_detection(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.delenv("KD_INSTALL_ROOT", raising=False)
-    root = tmp_path / "Programs" / "K-Downloader"
+    root = tmp_path / "Programs" / "K-Snag"
     (root / "runtime").mkdir(parents=True)
     (root / "runtime" / "pythonw.exe").write_bytes(b"")
     monkeypatch.setattr(paths.sys, "executable", str(root / "runtime" / "pythonw.exe"))

@@ -1,4 +1,4 @@
-"""Lanzador estable de K-Downloader (solo biblioteca estándar).
+"""Lanzador estable de K-Snag (solo biblioteca estándar).
 
 Vive en la raíz de instalación y no cambia entre versiones:
 
@@ -25,8 +25,9 @@ import time
 import traceback
 from pathlib import Path
 
-APP_NAME = "K-Downloader"
-DOWNLOAD_PAGE = "https://kdownloader.vercel.app/descargar"
+APP_NAME = "K-Snag"
+DIR_NAME = "K-Downloader"  # carpeta de datos: no cambia con el nombre (instalaciones existentes)
+DOWNLOAD_PAGE = "https://ksnagapp.vercel.app/descargar"
 VERSION_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z.+_-]{0,63}$")
 INSTALLER_COMMANDS = ("--install-finish", "--uninstall")
 
@@ -37,7 +38,7 @@ def install_root() -> Path:
 
 def log_path() -> Path:
     base = os.environ.get("KD_DATA_DIR") or os.path.join(
-        os.environ.get("LOCALAPPDATA") or os.path.join(os.path.expanduser("~"), "AppData", "Local"), APP_NAME
+        os.environ.get("LOCALAPPDATA") or os.path.join(os.path.expanduser("~"), "AppData", "Local"), DIR_NAME
     )
     return Path(base) / "logs" / "launch.log"
 
@@ -104,15 +105,15 @@ def report_failure(exc: BaseException, interactive: bool, started: bool) -> int:
     _stderr(details.rstrip())
     if interactive:
         headline = (
-            "K-Downloader se cerró por un error inesperado."
+            "K-Snag se cerró por un error inesperado."
             if started
-            else "K-Downloader no pudo iniciar."
+            else "K-Snag no pudo iniciar."
         )
         _message_box(
             f"{headline}\n\n"
             f"{type(exc).__name__}: {exc}\n\n"
             f"Encontrarás los detalles en:\n{where}\n\n"
-            "Si vuelve a pasar, descarga e instala K-Downloader otra vez desde\n"
+            "Si vuelve a pasar, descarga e instala K-Snag otra vez desde\n"
             f"{DOWNLOAD_PAGE}\n(tus ajustes y tu historial se conservan)."
         )
     return 1

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.download
 
@@ -20,7 +20,7 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 /**
- * Pasa el archivo terminado de la carpeta privada del trabajo a Descargas/K-Downloader (diseño del motor §11):
+ * Pasa el archivo terminado de la carpeta privada del trabajo a Descargas/K-Snag (diseño del motor §11):
  * - API 29+: MediaStore, con IS_PENDING mientras copia, para que ninguna galería vea un archivo a medias;
  * - API 26-28: copia directa (necesita WRITE_EXTERNAL_STORAGE), escaneo y un URI de FileProvider.
  * La carpeta privada se borra solo después de publicar.
@@ -127,7 +127,7 @@ class Publisher(private val context: Context) {
     }
 
     companion object {
-        const val FOLDER = "K-Downloader"
+        const val FOLDER = "K-Snag"
         private const val CHUNK = 8L shl 20
 
         /** El MIME del archivo real, con los de respaldo del diseño para lo que MimeTypeMap no conoce. */

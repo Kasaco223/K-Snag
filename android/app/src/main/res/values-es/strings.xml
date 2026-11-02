@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Español neutro latinoamericano, tuteo. Es la fuente del texto: se escribe primero aquí y luego en values/
      (inglés, los recursos por defecto). Reglas: "video" (nunca "vídeo"), nada de "usted", "toca" (no "pulsa"
@@ -7,7 +7,7 @@
 <resources>
     <!-- Nombre en el launcher y en los menús «Compartir» y de selección de texto. Los builds debug y qa lo
          reemplazan (src/debug/res, src/qa/res) para no confundirlos con la app publicada. -->
-    <string name="launcher_label">K-Downloader</string>
+    <string name="launcher_label">K-Snag</string>
 
     <!-- Comunes -->
     <string name="common_close">Cerrar</string>
@@ -15,7 +15,7 @@
     <string name="common_no_browser">No encontramos una app para abrir el enlace.</string>
 
     <!-- Hoja al compartir -->
-    <string name="quick_pane_title">Compartir con K-Downloader</string>
+    <string name="quick_pane_title">Compartir con K-Snag</string>
     <string name="quick_no_link_title">No encontramos un enlace</string>
     <string name="quick_no_link_body">Comparte el video con el botón Compartir de YouTube o de otra app. Si compartiste un texto, revisa que incluya el enlace.</string>
     <plurals name="quick_more_links">
@@ -23,19 +23,19 @@
         <item quantity="many">Encontramos %d enlaces; te mostramos el primero.</item>
         <item quantity="other">Encontramos %d enlaces; te mostramos el primero.</item>
     </plurals>
-    <string name="quick_open_app">Abrir K-Downloader</string>
+    <string name="quick_open_app">Abrir K-Snag</string>
 
     <!-- Acerca de (avisos legales de la GPL-3.0, §0 y §5 d) -->
     <string name="about_title">Acerca de</string>
-    <string name="about_app_name_full">K-Downloader para Android</string>
+    <string name="about_app_name_full">K-Snag para Android</string>
     <string name="about_version_detail">Versión %1$s · %2$s · %3$s</string>
     <string name="about_license_title">Software libre</string>
-    <string name="about_copyright">© 2026 Kasaco223 y colaboradores de K-Downloader</string>
-    <string name="about_gpl_notice">K-Downloader para Android es software libre: puedes redistribuirlo y modificarlo según los términos de la Licencia Pública General de GNU publicada por la Free Software Foundation, ya sea la versión 3 de la licencia o (si prefieres) cualquier versión posterior. Se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA, ni siquiera la garantía implícita de COMERCIABILIDAD o de IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulta la licencia para ver los detalles.</string>
+    <string name="about_copyright">© 2026 Kasaco223 y colaboradores de K-Snag</string>
+    <string name="about_gpl_notice">K-Snag para Android es software libre: puedes redistribuirlo y modificarlo según los términos de la Licencia Pública General de GNU publicada por la Free Software Foundation, ya sea la versión 3 de la licencia o (si prefieres) cualquier versión posterior. Se distribuye con la esperanza de que sea útil, pero SIN NINGUNA GARANTÍA, ni siquiera la garantía implícita de COMERCIABILIDAD o de IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulta la licencia para ver los detalles.</string>
     <string name="about_view_license">Ver la licencia</string>
     <string name="about_source">Código fuente</string>
     <string name="about_website">Sitio web</string>
-    <string name="about_not_affiliated">K-Downloader no está afiliado a YouTube ni a Google, ni a ningún otro sitio compatible.</string>
+    <string name="about_not_affiliated">K-Snag no está afiliado a YouTube ni a Google, ni a ningún otro sitio compatible.</string>
 
     <!-- Licencia -->
     <string name="license_title">Licencia Pública General de GNU</string>
@@ -92,7 +92,7 @@
     <!-- Avisos de terceros -->
     <string name="about_third_party">Avisos de terceros</string>
     <string name="third_party_title">Avisos de terceros</string>
-    <string name="third_party_lead">K-Downloader incluye software libre de otras personas, cada uno con su licencia. El código fuente de todos está publicado en GitHub, en el Release «Código fuente de terceros» del repositorio.</string>
+    <string name="third_party_lead">K-Snag incluye software libre de otras personas, cada uno con su licencia. El código fuente de todos está publicado en GitHub, en el Release «Código fuente de terceros» del repositorio.</string>
     <string name="third_party_load_failed">No pudimos abrir la lista. También está en el código fuente, en android/THIRD_PARTY_NOTICES.md.</string>
     <string name="third_party_view">Ver %1$s</string>
     <!-- Inicio y descargas -->
@@ -130,7 +130,7 @@
     <string name="jobs_pp_publish">Guardando en Descargas</string>
     <string name="jobs_pp_other">Terminando</string>
     <string name="jobs_error_storage_title">No tenemos permiso para guardar</string>
-    <string name="jobs_error_storage_body">Dale a K-Downloader el permiso de almacenamiento y toca «Reintentar».</string>
+    <string name="jobs_error_storage_body">Dale a K-Snag el permiso de almacenamiento y toca «Reintentar».</string>
     <string name="jobs_error_live_title">Las transmisiones en vivo no se pueden descargar</string>
     <string name="jobs_error_live_body">Cuando termine la transmisión, vuelve a intentarlo.</string>
     <string name="notif_downloads_title">Descargando</string>
@@ -145,6 +145,7 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_downloads">Descargas</string>
     <string name="tab_settings">Ajustes</string>
+    <string name="tab_donate">Donar</string>
     <string name="home_lead">Pega un enlace o compártelo desde la app donde estás viendo el video.</string>
     <string name="home_paste_link">Pegar enlace</string>
     <string name="home_paste_empty">No hay un enlace copiado. Copia primero el enlace del video.</string>
@@ -155,7 +156,7 @@
     <string name="home_recent">Recientes</string>
     <string name="home_see_all">Ver todo</string>
     <string name="home_empty_title">Aquí verás tus descargas</string>
-    <string name="home_empty_body">En YouTube o en otra app, toca Compartir y elige K-Downloader.</string>
+    <string name="home_empty_body">En YouTube o en otra app, toca Compartir y elige K-Snag.</string>
     <string name="format_action_recommended">Descargar video</string>
     <string name="format_action_max">Descargar en máxima calidad</string>
     <string name="format_action_mp3">Descargar audio MP3</string>
@@ -168,9 +169,9 @@
     <string name="format_other">Otras opciones</string>
     <string name="jobs_eta">quedan %1$s</string>
     <plurals name="downloads_count">
-        <item quantity="one">1 archivo en Descargas › K-Downloader</item>
-        <item quantity="many">%d archivos en Descargas › K-Downloader</item>
-        <item quantity="other">%d archivos en Descargas › K-Downloader</item>
+        <item quantity="one">1 archivo en Descargas › K-Snag</item>
+        <item quantity="many">%d archivos en Descargas › K-Snag</item>
+        <item quantity="other">%d archivos en Descargas › K-Snag</item>
     </plurals>
     <string name="downloads_filter_all">Todo</string>
     <string name="downloads_filter_video">Videos</string>
@@ -185,10 +186,10 @@
     <string name="settings_favorite_title">Formato principal</string>
     <string name="settings_favorite_lead">Es el botón grande de Inicio y de la hoja que aparece al compartir.</string>
     <string name="settings_folder_title">Dónde se guardan</string>
-    <string name="settings_folder_body">Descargas › K-Downloader. Tu galería y tu app de música los encuentran ahí.</string>
-    <string name="settings_about">Acerca de K-Downloader</string>
+    <string name="settings_folder_body">Descargas › K-Snag. Tu galería y tu app de música los encuentran ahí.</string>
+    <string name="settings_about">Acerca de K-Snag</string>
     <string name="settings_about_detail">Versión, licencias y diagnóstico</string>
-    <string name="quick_header">Descargar con K-Downloader</string>
+    <string name="quick_header">Descargar con K-Snag</string>
     <!-- Análisis del enlace (PR-6) -->
     <string name="analyze_loading">Analizando el enlace…</string>
     <string name="analyze_loading_hint">Ya puedes elegir el formato; no hace falta esperar.</string>
@@ -223,20 +224,20 @@
     </plurals>
     <string name="option_height">Video %1$dp</string>
     <!-- Bienvenida, apariencia y donaciones -->
-    <string name="welcome_title">Te damos la bienvenida a K-Downloader</string>
+    <string name="welcome_title">Te damos la bienvenida a K-Snag</string>
     <string name="welcome_lead">Guarda videos y música de internet en tu celular, gratis y sin anuncios.</string>
     <string name="welcome_step1">Copia el enlace o toca Compartir en YouTube o en otra app.</string>
     <string name="welcome_step2">Elige el formato: video, máxima calidad o audio.</string>
-    <string name="welcome_step3">Queda en Descargas › K-Downloader.</string>
+    <string name="welcome_step3">Queda en Descargas › K-Snag.</string>
     <string name="welcome_responsible_title">Uso responsable</string>
-    <string name="welcome_responsible_body">Descarga solo lo que tienes derecho a guardar: contenido tuyo, con licencia libre o con permiso de su autor. Respeta los derechos de autor y las reglas de cada sitio. K-Downloader no descarga contenido protegido con DRM.</string>
+    <string name="welcome_responsible_body">Descarga solo lo que tienes derecho a guardar: contenido tuyo, con licencia libre o con permiso de su autor. Respeta los derechos de autor y las reglas de cada sitio. K-Snag no descarga contenido protegido con DRM.</string>
     <string name="welcome_accept">Entiendo</string>
     <string name="welcome_start">Empezar</string>
     <string name="settings_theme_title">Apariencia</string>
     <string name="settings_theme_system">Igual que el celular</string>
     <string name="settings_theme_light">Claro</string>
     <string name="settings_theme_dark">Oscuro</string>
-    <string name="donate_title">Apoya K-Downloader</string>
+    <string name="donate_title">Apoya K-Snag</string>
     <string name="donate_detail">Es gratis y sin anuncios. Si te sirve, puedes donar con Bre-B desde Colombia o con PayPal desde cualquier país.</string>
     <!-- Ajustes: descargas y motor -->
     <string name="settings_downloads_title">Descargas</string>
@@ -261,7 +262,7 @@
     <!-- Segundo plano -->
     <string name="home_waiting_wifi">Esperando el Wi-Fi: activaste «Solo con Wi-Fi» en Ajustes.</string>
     <string name="settings_battery">Que las descargas sigan en segundo plano</string>
-    <string name="settings_battery_detail">Algunos celulares (Xiaomi, Samsung, Huawei…) detienen las apps en segundo plano para ahorrar batería. En esa lista, busca K-Downloader y elige «No optimizar».</string>
+    <string name="settings_battery_detail">Algunos celulares (Xiaomi, Samsung, Huawei…) detienen las apps en segundo plano para ahorrar batería. En esa lista, busca K-Snag y elige «No optimizar».</string>
     <!-- Actualizaciones de la app -->
     <string name="app_update_title">Actualizaciones de la app</string>
     <string name="app_update_current">Tienes la versión %1$s.</string>
@@ -273,20 +274,20 @@
     <string name="app_update_available">Está disponible la versión %1$s.</string>
     <string name="app_update_required">Está disponible la versión %1$s y esta ya no funciona bien: actualízala.</string>
     <string name="app_update_downloading">Descargando %1$s… %2$s%%</string>
-    <string name="app_update_permission">Android necesita tu permiso para instalar actualizaciones desde K-Downloader. Activa «Permitir de esta fuente», vuelve y toca Instalar.</string>
+    <string name="app_update_permission">Android necesita tu permiso para instalar actualizaciones desde K-Snag. Activa «Permitir de esta fuente», vuelve y toca Instalar.</string>
     <string name="app_update_installing">Instalando… Confirma en la ventana de Android.</string>
     <string name="app_update_failed">No pudimos actualizar. Revisa tu conexión y vuelve a intentarlo.</string>
     <string name="app_update_install">Descargar e instalar</string>
     <string name="app_update_grant">Dar permiso</string>
     <string name="app_update_notes">Qué hay de nuevo</string>
-    <string name="app_update_banner">Está disponible K-Downloader %1$s.</string>
+    <string name="app_update_banner">Está disponible K-Snag %1$s.</string>
     <string name="app_update_see">Ver</string>
-    <string name="download_queued_no_notif">Descargando… Las notificaciones de K-Downloader están apagadas: abre la app para ver el avance.</string>
+    <string name="download_queued_no_notif">Descargando… Las notificaciones de K-Snag están apagadas: abre la app para ver el avance.</string>
     <string name="download_queued_here">Descargando… El avance se ve aquí abajo.</string>
-    <string name="notif_off_toast">Las notificaciones están apagadas: el avance solo se ve dentro de K-Downloader.</string>
+    <string name="notif_off_toast">Las notificaciones están apagadas: el avance solo se ve dentro de K-Snag.</string>
     <string name="notif_off_title">Activa las notificaciones</string>
     <string name="notif_off_body">Así ves el porcentaje de cada descarga aunque la app esté cerrada, por ejemplo al compartir desde YouTube. Las descargas siguen igual sin ellas.</string>
     <string name="notif_off_enable">Activar notificaciones</string>
     <string name="settings_notifications">Ver el avance en las notificaciones</string>
-    <string name="settings_notifications_detail">Si no aparece la notificación con el porcentaje, activa ahí las notificaciones de K-Downloader y la categoría «Trabajo en curso».</string>
+    <string name="settings_notifications_detail">Si no aparece la notificación con el porcentaje, activa ahí las notificaciones de K-Snag y la categoría «Trabajo en curso».</string>
 </resources>

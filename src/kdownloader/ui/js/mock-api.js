@@ -192,7 +192,7 @@ function playlistMedia(url, token) {
 const DEFAULT_SETTINGS = {
   version: 1,
   language: 'auto', theme: THEME || 'system', reduce_motion: false,
-  download_dir: 'C:\\Users\\Ana\\Downloads\\K-Downloader', favorite_preset: 'recommended', quick_download: false,
+  download_dir: 'C:\\Users\\Ana\\Downloads\\K-Snag', favorite_preset: 'recommended', quick_download: false,
   filename_style: 'title_id', max_concurrent: 2,
   engine_channel: 'nightly', auto_update_engine: true, max_codec: 'vp9',
   clipboard_suggest: true, notify_on_finish: true, open_folder_on_finish: false,
@@ -305,7 +305,7 @@ export function createMockApi(emit) {
     engine: engineView(true), jobs: [], first_run: false,
     update: params.get('update') === '1' ? UPDATE : null,
     notice: params.get('notice') === '1' ? NOTICE : null,
-    web_base: 'https://kdownloader.vercel.app',
+    web_base: 'https://ksnagapp.vercel.app',
   };
   const jobs = new Map(); // id -> JobView
   const sims = new Map(); // id -> simulation
@@ -869,7 +869,7 @@ export function createMockApi(emit) {
     async copy_details(id) {
       const job = jobs.get(id);
       const lines = [
-        `K-Downloader ${state.version} (win32)`,
+        `K-Snag ${state.version} (win32)`,
         `Trabajo: ${id}`,
         job ? `Título: ${job.title}` : '',
         job ? `Opción: ${job.option} · Estado: ${job.state}` : '',
@@ -888,7 +888,7 @@ export function createMockApi(emit) {
     },
     async choose_folder() {
       await sleep(300);
-      const folders = ['C:\\Users\\Ana\\Videos\\K-Downloader', 'D:\\Descargas\\Videos', 'C:\\Users\\Ana\\Downloads\\K-Downloader'];
+      const folders = ['C:\\Users\\Ana\\Videos\\K-Snag', 'D:\\Descargas\\Videos', 'C:\\Users\\Ana\\Downloads\\K-Snag'];
       state.settings.download_dir = folders[folderIdx++ % folders.length];
       send({ type: 'settings', settings: state.settings });
       return ok({ settings: state.settings });

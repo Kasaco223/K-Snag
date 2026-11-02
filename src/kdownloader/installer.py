@@ -1,4 +1,4 @@
-"""Integración con Windows al instalar y desinstalar K-Downloader (biblioteca estándar + comtypes opcional).
+"""Integración con Windows al instalar y desinstalar K-Snag (biblioteca estándar + comtypes opcional).
 
 Lo llama launch.pyw:
 
@@ -17,7 +17,7 @@ Opciones para pruebas: --root (otra carpeta de instalación), --no-registry (no 
 crea o borra accesos directos fuera de --shortcut-dir/--desktop-dir), --shortcut-dir, --desktop-dir,
 --no-schedule (no programa el borrado final). Los datos se pueden redirigir con KD_DATA_DIR.
 
-Seguridad: nunca borra una carpeta que no termine en "K-Downloader" (salvo un --root explícito) o que no
+Seguridad: nunca borra una carpeta que no termine en "K-Snag" (salvo un --root explícito) o que no
 contenga launch.pyw; nunca sigue enlaces ni uniones (junctions) y nunca borra fuera de la raíz indicada.
 """
 
@@ -36,7 +36,7 @@ import traceback
 from dataclasses import dataclass
 from pathlib import Path
 
-from .constants import APP_ID, APP_NAME, PROTOCOL, WEB_BASE
+from .constants import APP_ID, APP_NAME, DIR_NAME, PROTOCOL, WEB_BASE
 
 if sys.platform == "win32":
     import winreg
@@ -47,9 +47,10 @@ else:  # pragma: no cover - el instalador solo existe en Windows
 
 PUBLISHER = "Kasaco223"
 SHORTCUT_FILE = f"{APP_NAME}.lnk"
-ICON_FILE = f"{APP_NAME}.ico"
+LEGACY_SHORTCUT_FILE = f"{DIR_NAME}.lnk"  # el acceso directo de antes del cambio de nombre (2.0.2 y anteriores)
+ICON_FILE = f"{DIR_NAME}.ico"
 DESCRIPTION = "Descarga tus videos favoritos en la mejor calidad"
-UNINSTALL_KEY = rf"Software\Microsoft\Windows\CurrentVersion\Uninstall\{APP_NAME}"
+UNINSTALL_KEY = rf"Software\Microsoft\Windows\CurrentVersion\Uninstall\{DIR_NAME}"
 PROTOCOL_KEY = rf"Software\Classes\{PROTOCOL}"
 KEEP_APP_VERSIONS = 2  # la versión activa y la anterior (para volver atrás)
 VERSION_RE = re.compile(r"^[0-9A-Za-z][0-9A-Za-z.+_-]{0,63}$")
@@ -159,7 +160,7 @@ def data_dir() -> Path:
     if override:
         return Path(override)
     base = os.environ.get("LOCALAPPDATA") or str(Path.home() / "AppData" / "Local")
-    return Path(base) / APP_NAME
+    return Path(base) / DIR_NAME
 
 
 # ---------------------------------------------------------------------------------------------
@@ -202,7 +203,7 @@ def _protected_dirs() -> list[str]:
 
 
 def check_install_root(root: Path, explicit: bool) -> Path:
-    """Valida que root sea una instalación de K-Downloader que se puede borrar. Devuelve la ruta absoluta."""
+    """Valida que root sea una instalación de K-Snag que se puede borrar. Devuelve la ruta absoluta."""
     root = Path(os.path.abspath(root))
     if not root.is_dir():
         raise InstallerError(f"No existe la carpeta de instalación: {root}")
@@ -212,7 +213,7 @@ def check_install_root(root: Path, explicit: bool) -> Path:
         raise InstallerError(f"Por seguridad no se borra esta carpeta: {root}")
     if is_reparse_point(root):
         raise InstallerError(f"La carpeta de instalación es un enlace; por seguridad no se borra: {root}")
-    if not explicit and root.name.lower() != APP_NAME.lower():
+    if not explicit and root.name.lower() != DIR_NAME.lower():
         raise InstallerError(f"La carpeta no parece una instalación de {APP_NAME}: {root}")
     if not (root / "launch.pyw").is_file():
         raise InstallerError(f"La carpeta no contiene launch.pyw; no parece una instalación de {APP_NAME}: {root}")
@@ -228,7 +229,7 @@ def check_data_dir(path: Path, install_root: Path | None) -> Path | None:
         return None
     if is_reparse_point(path):
         return None
-    if path.name.lower() != APP_NAME.lower() and not os.environ.get("KD_DATA_DIR"):
+    if path.name.lower() != DIR_NAME.lower() and not os.environ.get("KD_DATA_DIR"):
         return None
     if install_root is not None and (is_within(install_root, path) or is_within(path, install_root)):
         return None
@@ -519,6 +520,44 @@ def read_shortcut(path: Path) -> dict:
     return info
 
 
+def remove_legacy_shortcut(folder: Path) -> bool:
+    """Quita el «K-Downloader.lnk» de antes del cambio de nombre, si existe. True si lo quitó."""
+    lnk = folder / LEGACY_SHORTCUT_FILE
+    if not lnk.is_file() or is_reparse_point(lnk):
+        return False
+    try:
+        lnk.unlink()
+        say(f"Acceso directo anterior quitado: {lnk}")
+        return True
+    except OSError as exc:
+        say(f"  No se pudo quitar {lnk}: {exc}")
+        return False
+
+
+def migrate_name(root: Path, version: str) -> list[str]:
+    """Cambio de nombre a K-Snag en una instalación que se actualizó sola (el zip de la app no pasa por el
+    instalador): cambia «K-Downloader.lnk» por «K-Snag.lnk» en el menú Inicio y el escritorio, y renueva el
+    nombre de la entrada de «Desinstalar» y del protocolo. Solo toca lo que ya existía. Devuelve lo que cambió."""
+    done: list[str] = []
+    for folder in (start_menu_dir(), desktop_dir()):
+        if folder is None or not (folder / LEGACY_SHORTCUT_FILE).is_file():
+            continue
+        sc = app_shortcut(root, folder)
+        create_shortcut(sc)
+        if remove_legacy_shortcut(folder):
+            done.append(str(sc.path))
+    if _read_value(UNINSTALL_KEY, "DisplayName") not in (None, APP_NAME):
+        register_uninstall_entry(root, version)
+        done.append(f"HKCU\\{UNINSTALL_KEY}")
+    friendly = _read_value(PROTOCOL_KEY + r"\shell\open", "FriendlyAppName")
+    if _key_exists(PROTOCOL_KEY) and friendly not in (None, APP_NAME):
+        register_protocol(root)
+        done.append(f"HKCU\\{PROTOCOL_KEY}")
+    if done:
+        notify_shell()
+    return done
+
+
 def app_shortcut(root: Path, folder: Path) -> Shortcut:
     return Shortcut(
         path=folder / SHORTCUT_FILE,
@@ -592,7 +631,7 @@ def register_protocol(root: Path) -> None:
         "ApplicationCompany": (sz, PUBLISHER),
         "ApplicationIcon": (sz, f"{root / ICON_FILE},0"),
     })
-    # FriendlyAppName: así el navegador pregunta "¿Abrir K-Downloader?" y no "¿Abrir pythonw?".
+    # FriendlyAppName: así el navegador pregunta "¿Abrir K-Snag?" y no "¿Abrir pythonw?".
     _set_values(PROTOCOL_KEY + r"\shell\open", {"FriendlyAppName": (sz, APP_NAME)})
     _set_values(PROTOCOL_KEY + r"\shell\open\command", {"": (sz, protocol_command(root))})
 
@@ -612,7 +651,7 @@ def register_uninstall_entry(root: Path, version: str) -> None:
         "NoRepair": (dword, 1),
         "EstimatedSize": (dword, int(size_kb)),
         "InstallDate": (sz, time.strftime("%Y%m%d")),
-        "URLInfoAbout": (sz, "https://kdownloader.vercel.app"),
+        "URLInfoAbout": (sz, "https://ksnagapp.vercel.app"),
         "HelpLink": (sz, f"{WEB_BASE}/ayuda"),
     })
 
@@ -760,10 +799,13 @@ def install_finish(
         sc = app_shortcut(root, start_dir)
         summary["shortcuts"][str(sc.path)] = create_shortcut(sc)
         say(f"Acceso directo: {sc.path}")
+        remove_legacy_shortcut(start_dir)
     if desktop and desk_dir is not None:
         sc = app_shortcut(root, desk_dir)
         summary["shortcuts"][str(sc.path)] = create_shortcut(sc)
         say(f"Acceso directo en el escritorio: {sc.path}")
+    if desk_dir is not None:
+        remove_legacy_shortcut(desk_dir)
 
     if register:
         register_protocol(root)
@@ -818,24 +860,24 @@ def uninstall(
             "Las descargas en curso se detendrán.\n\n¿Cerrarlo ahora?",
             default_no=False,
         ):
-            raise InstallerError("No se desinstaló nada: K-Downloader sigue abierto.")
+            raise InstallerError("No se desinstaló nada: K-Snag sigue abierto.")
         say(f"Cerrando {APP_NAME} ({len(procs)} proceso(s))…")
         if not stop_processes([pid for pid, _ in procs]):
-            raise InstallerError("No se pudo cerrar K-Downloader. Ciérralo y vuelve a intentarlo.")
+            raise InstallerError("No se pudo cerrar K-Snag. Ciérralo y vuelve a intentarlo.")
 
     start_dir = shortcut_dir if shortcut_dir is not None else (start_menu_dir() if register else None)
     desk_dir = desktop_dir_override if desktop_dir_override is not None else (desktop_dir() if register else None)
     for folder in (start_dir, desk_dir):
         if folder is None:
             continue
-        lnk = folder / SHORTCUT_FILE
-        if lnk.is_file() and not is_reparse_point(lnk):
-            try:
-                lnk.unlink()
-                summary["shortcuts"].append(str(lnk))
-                say(f"Acceso directo quitado: {lnk}")
-            except OSError as exc:
-                say(f"  No se pudo quitar {lnk}: {exc}")
+        for lnk in (folder / SHORTCUT_FILE, folder / LEGACY_SHORTCUT_FILE):
+            if lnk.is_file() and not is_reparse_point(lnk):
+                try:
+                    lnk.unlink()
+                    summary["shortcuts"].append(str(lnk))
+                    say(f"Acceso directo quitado: {lnk}")
+                except OSError as exc:
+                    say(f"  No se pudo quitar {lnk}: {exc}")
 
     if register:
         summary["registry"] = unregister(root)

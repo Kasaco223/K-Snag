@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Firma los APK sin firmar de <entrada> y deja en <salida> K-Downloader-Android-<abi>.apk.

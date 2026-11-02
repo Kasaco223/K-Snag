@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.ui.home
 
@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import io.github.kasaco223.kdownloader.BuildConfig
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.core.Urls
@@ -200,15 +202,30 @@ fun HomeScreen(
                 Icon(painterResource(R.drawable.ic_paste), contentDescription = null)
                 Text(stringResource(R.string.home_paste_link), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 17.sp))
             }
-            OutlinedTextField(
-                value = text,
-                onValueChange = { text = it },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(R.string.home_link_hint)) },
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Done),
-            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    modifier = Modifier.weight(1f),
+                    placeholder = { Text(stringResource(R.string.home_link_hint)) },
+                    singleLine = true,
+                    shape = RoundedCornerShape(16.dp),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri, imeAction = ImeAction.Done),
+                )
+                if (BuildConfig.DONATE_URL.isNotEmpty()) {
+                    OutlinedIconButton(
+                        onClick = { SystemActions.openWebPage(context, BuildConfig.DONATE_URL) },
+                        modifier = Modifier.size(56.dp),
+                        shape = RoundedCornerShape(16.dp),
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_heart),
+                            contentDescription = stringResource(R.string.donate_title),
+                            tint = MaterialTheme.colorScheme.tertiary,
+                        )
+                    }
+                }
+            }
         }
 
         if (updateVersion != null) {

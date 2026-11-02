@@ -34,7 +34,7 @@ DOWNLOAD_TIMEOUT = 300
 
 @pytest.fixture(scope="module")
 def engine_python() -> Path:
-    # Un Python con los extras de yt-dlp, p. ej. <instalación>\runtime\python.exe de K-Downloader.
+    # Un Python con los extras de yt-dlp, p. ej. <instalación>\runtime\python.exe de K-Snag.
     value = os.environ.get("KD_TEST_PYTHON")
     if not value:
         pytest.skip("Define KD_TEST_PYTHON con el intérprete del motor (p. ej. runtime\\python.exe)")

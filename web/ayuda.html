@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Centro de ayuda · K-Downloader</title>
-  <meta name="description" content="Qué significa cada mensaje de K-Downloader y cómo resolverlo, qué hacer si Windows muestra un aviso al instalar y cómo reportar un problema.">
+  <title>Centro de ayuda · K-Snag</title>
+  <meta name="description" content="Qué significa cada mensaje de K-Snag y cómo resolverlo, qué hacer si Windows muestra un aviso al instalar y cómo reportar un problema.">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#101218" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
-  <link rel="canonical" href="https://kdownloader.vercel.app/ayuda">
+  <link rel="canonical" href="https://ksnagapp.vercel.app/ayuda">
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_419">
-  <meta property="og:site_name" content="K-Downloader">
-  <meta property="og:title" content="Centro de ayuda · K-Downloader">
-  <meta property="og:description" content="Qué significa cada mensaje de K-Downloader y cómo resolverlo.">
-  <meta property="og:url" content="https://kdownloader.vercel.app/ayuda">
-  <meta property="og:image" content="https://kdownloader.vercel.app/assets/og.png">
+  <meta property="og:site_name" content="K-Snag">
+  <meta property="og:title" content="Centro de ayuda · K-Snag">
+  <meta property="og:description" content="Qué significa cada mensaje de K-Snag y cómo resolverlo.">
+  <meta property="og:url" content="https://ksnagapp.vercel.app/ayuda">
+  <meta property="og:image" content="https://ksnagapp.vercel.app/assets/og.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/docs.css">
@@ -30,14 +30,18 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="/" aria-label="K-Downloader, inicio">
+      <a class="brand" href="/" aria-label="K-Snag, inicio">
         <img src="/assets/logo.svg" alt="" width="32" height="32">
-        <span>K-Downloader</span>
+        <span>K-Snag</span>
       </a>
       <nav class="site-nav" aria-label="Principal">
         <a class="nav-optional" href="/">Inicio</a>
         <a class="nav-optional" href="/ayuda" aria-current="page">Ayuda</a>
         <a class="nav-optional" href="/uso-responsable">Uso responsable</a>
+        <a class="nav-donate" href="/donar">
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+          <span class="nav-donate-label">Donar</span>
+        </a>
         <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD" rel="noopener">
           <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-github"/></svg>
           <span class="nav-github-label">GitHub</span>
@@ -53,7 +57,7 @@
       <div class="container">
         <p class="eyebrow"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-help"/></svg>Centro de ayuda</p>
         <h1 class="page-title" id="ayuda-title">¿En qué te ayudamos?</h1>
-        <p class="page-lead">Qué significa cada mensaje de K-Downloader, cómo resolverlo y qué hacer si Windows muestra un aviso al instalar.</p>
+        <p class="page-lead">Qué significa cada mensaje de K-Snag, cómo resolverlo y qué hacer si Windows muestra un aviso al instalar.</p>
 
         <form class="help-search" role="search" id="help-search-form">
           <label class="sr-only" for="help-search">Buscar un error</label>
@@ -110,7 +114,7 @@
         <div class="docs-head">
           <div>
             <h2 class="section-title" id="windows-title">Instalación y avisos de Windows</h2>
-            <p class="section-lead">K-Downloader no tiene una firma digital de pago, así que Windows y tu navegador pueden pedirte una confirmación extra la primera vez. Así es como se ve y qué hacer.</p>
+            <p class="section-lead">K-Snag no tiene una firma digital de pago, así que Windows y tu navegador pueden pedirte una confirmación extra la primera vez. Así es como se ve y qué hacer.</p>
           </div>
         </div>
 
@@ -118,7 +122,7 @@
           <article class="guide-card" id="navegador" aria-labelledby="navegador-title">
             <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg></span>
             <h3 id="navegador-title">El navegador dice que el archivo puede ser peligroso</h3>
-            <p>Los navegadores advierten sobre cualquier archivo <code>.cmd</code>, porque puede ejecutar comandos. El de K-Downloader solo baja la app desde GitHub, comprueba su huella SHA-256 y la instala en tu carpeta de usuario.</p>
+            <p>Los navegadores advierten sobre cualquier archivo <code>.cmd</code>, porque puede ejecutar comandos. El de K-Snag solo baja la app desde GitHub, comprueba su huella SHA-256 y la instala en tu carpeta de usuario.</p>
             <ul class="guide-list">
               <li><strong>Chrome:</strong> abre el panel de descargas y elige <strong>Conservar</strong>.</li>
               <li><strong>Edge:</strong> abre el menú <strong>⋯</strong> de la descarga y elige <strong>Conservar</strong>. Si vuelve a preguntar, pulsa <strong>Mostrar más › Conservar de todos modos</strong>.</li>
@@ -133,11 +137,11 @@
             <p>Si al abrirlo no pasa nada, o Windows dice que una directiva o el <strong>Control inteligente de aplicaciones</strong> bloqueó el archivo, es porque Windows marca los <code>.cmd</code> descargados de internet. Por eso tampoco se abre desde el panel de descargas del navegador. Quítale la marca:</p>
             <ol class="guide-list">
               <li>Abre tu carpeta <strong>Descargas</strong>.</li>
-              <li>Clic derecho en <code>Instalar-K-Downloader.cmd</code> › <strong>Propiedades</strong>.</li>
+              <li>Clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Propiedades</strong>.</li>
               <li>Abajo, en <strong>Seguridad</strong>, marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</li>
               <li>Ábrelo con doble clic.</li>
             </ol>
-            <p><strong>Otra opción:</strong> clic derecho › <strong>Ejecutar como administrador</strong> y acepta el aviso de Windows. K-Downloader se instala igual en tu usuario y se abre sin permisos de administrador.</p>
+            <p><strong>Otra opción:</strong> clic derecho › <strong>Ejecutar como administrador</strong> y acepta el aviso de Windows. K-Snag se instala igual en tu usuario y se abre sin permisos de administrador.</p>
             <p class="guide-tip"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><span>Si tu cuenta no es de administrador, Windows te pedirá la contraseña de otra cuenta y la app se instalaría para esa cuenta. En ese caso usa <strong>Desbloquear</strong>: el instalador te avisará si pasa.</span></p>
           </article>
 
@@ -147,7 +151,7 @@
             <p>Es Microsoft Defender SmartScreen. Aparece con los programas nuevos que todavía no tienen muchas descargas o una firma digital de pago. No quiere decir que haya encontrado un virus.</p>
             <ol class="guide-list">
               <li>Pulsa <strong>Más información</strong>.</li>
-              <li>Comprueba que el archivo se llame <code>Instalar-K-Downloader.cmd</code>.</li>
+              <li>Comprueba que el archivo se llame <code>Instalar-K-Snag.cmd</code>.</li>
               <li>Pulsa <strong>Ejecutar de todas formas</strong>.</li>
             </ol>
             <p class="guide-tip"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><span>Si no aparece ese botón, es posible que tu empresa o escuela lo haya bloqueado. Habla con quien administra tu PC.</span></p>
@@ -157,7 +161,7 @@
             <span class="guide-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-lock"/></svg></span>
             <h3 id="control-inteligente-title">Control inteligente de aplicaciones</h3>
             <p>Windows 11 puede tener activado el <strong>Control inteligente de aplicaciones</strong> (<span lang="en">Smart App Control</span>). Cuando está activado, bloquea cualquier programa nuevo sin firma digital o sin buena reputación, y no da la opción de ejecutarlo igual.</p>
-            <p>Por eso K-Downloader no trae un <code>.exe</code> propio: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation, y usa componentes que Windows reconoce, como FFmpeg de gyan.dev y Deno. No necesitas desactivar esa protección.</p>
+            <p>Por eso K-Snag no trae un <code>.exe</code> propio: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation, y usa componentes que Windows reconoce, como FFmpeg de gyan.dev y Deno. No necesitas desactivar esa protección.</p>
             <p>Lo único que frena es abrir el instalador recién descargado: <a href="#desbloquear">desbloquéalo una vez</a> y listo.</p>
             <p>Si aun así Windows bloquea un componente, la app te lo explica y puedes pulsar <strong>Reparar</strong> en Ajustes › Componentes. <a href="#blocked_by_windows">Ver el mensaje «Windows bloqueó un componente»</a>.</p>
           </article>
@@ -189,7 +193,7 @@
             <h3 id="desinstalar-title">Cómo desinstalar</h3>
             <ol class="guide-list">
               <li>Abre <strong>Configuración › Aplicaciones › Aplicaciones instaladas</strong>.</li>
-              <li>Busca <strong>K-Downloader</strong>.</li>
+              <li>Busca <strong>K-Snag</strong>.</li>
               <li>Elige <strong>Desinstalar</strong>.</li>
             </ol>
             <p>Tus videos descargados no se borran.</p>
@@ -234,7 +238,7 @@
         <div class="footer-brand">
           <a class="brand" href="/">
             <img src="/assets/logo.svg" alt="" width="32" height="32">
-            <span>K-Downloader</span>
+            <span>K-Snag</span>
           </a>
           <p>Descarga tus videos favoritos en la mejor calidad. Gratis, sin anuncios y de código abierto.</p>
         </div>

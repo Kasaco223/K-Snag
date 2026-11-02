@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
-<!-- El logo de K-Downloader (packaging/assets/logo.svg): la K y la flecha sobre el degradado de la marca. -->
+<!-- El logo de K-Snag (packaging/assets/logo.svg): la K y la flecha sobre el degradado de la marca. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="40dp"

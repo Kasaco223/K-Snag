@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 // Todos los plugins se declaran aquí (sin aplicar) para que se carguen una sola vez en el classpath común.

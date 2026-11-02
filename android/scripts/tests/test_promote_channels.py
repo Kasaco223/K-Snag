@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Prueba sin red promote.py --check con los dos canales. Uso: python -I test_promote_channels.py <promote.py> <vercel.json>"""
 import json

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Punto de entrada de la imagen: copia el código (de /src, solo lectura) al volumen /work, corre Gradle con

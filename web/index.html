@@ -3,25 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>K-Downloader · Descarga tus videos en la mejor calidad</title>
+  <title>K-Snag · Descarga tus videos en la mejor calidad</title>
   <meta name="description" content="Descarga tus videos favoritos de YouTube y más de mil sitios en la mejor calidad, hasta 4K, o solo el audio en MP3. Gratis, sin anuncios y de código abierto. Para Windows 10 y 11.">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#101218" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
-  <link rel="canonical" href="https://kdownloader.vercel.app/">
+  <link rel="canonical" href="https://ksnagapp.vercel.app/">
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_419">
-  <meta property="og:site_name" content="K-Downloader">
-  <meta property="og:title" content="K-Downloader · Descarga tus videos en la mejor calidad">
+  <meta property="og:site_name" content="K-Snag">
+  <meta property="og:title" content="K-Snag · Descarga tus videos en la mejor calidad">
   <meta property="og:description" content="Gratis, sin anuncios y de código abierto. YouTube hasta 4K, solo audio en MP3, listas completas y errores explicados en español.">
-  <meta property="og:url" content="https://kdownloader.vercel.app/">
-  <meta property="og:image" content="https://kdownloader.vercel.app/assets/og.png">
+  <meta property="og:url" content="https://ksnagapp.vercel.app/">
+  <meta property="og:image" content="https://ksnagapp.vercel.app/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Logo de K-Downloader con el lema: descarga tus videos favoritos en la mejor calidad">
+  <meta property="og:image:alt" content="Logo de K-Snag con el lema: descarga tus videos favoritos en la mejor calidad">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/home.css">
@@ -32,15 +32,19 @@
 
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="/" aria-label="K-Downloader, inicio">
+      <a class="brand" href="/" aria-label="K-Snag, inicio">
         <img src="/assets/logo.svg" alt="" width="32" height="32">
-        <span>K-Downloader</span>
+        <span>K-Snag</span>
       </a>
       <nav class="site-nav" aria-label="Principal">
         <a class="nav-optional" href="#funciones">Funciones</a>
         <a class="nav-optional" href="#instalar">Instalar</a>
         <a class="nav-optional" href="/android">Android</a>
         <a class="nav-optional" href="/ayuda">Ayuda</a>
+        <a class="nav-donate" href="/donar">
+          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+          <span class="nav-donate-label">Donar</span>
+        </a>
         <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD" rel="noopener">
           <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-github"/></svg>
           <span class="nav-github-label">GitHub</span>
@@ -59,7 +63,7 @@
           <p class="hero-badge"><span class="hero-badge-dot" aria-hidden="true"></span>Gratis · Sin anuncios · Código abierto</p>
           <h1 class="hero-title" id="hero-title">
             <img class="hero-logo" src="/assets/logo.svg" alt="" width="72" height="72">
-            <span class="gradient-text">K-Downloader</span>
+            <span class="gradient-text">K-Snag</span>
           </h1>
           <p class="hero-lead"><strong>Descarga tus videos favoritos en la mejor calidad.</strong> Gratis, sin anuncios y de código abierto.</p>
           <div class="hero-actions">
@@ -81,16 +85,16 @@
             <span class="hero-meta-sep" aria-hidden="true"></span>
             <span>Sin permisos de administrador</span>
           </p>
-          <p class="hero-note" id="hero-note">Se descarga <code>Instalar-K-Downloader.cmd</code>, un archivo pequeño. <a href="#instalar">¿Cómo se instala?</a></p>
+          <p class="hero-note" id="hero-note">Se descarga <code>Instalar-K-Snag.cmd</code>, un archivo pequeño. <a href="#instalar">¿Cómo se instala?</a></p>
           <p class="hero-note" id="hero-ios" hidden>En iPhone y iPad no es posible instalarla: Apple solo permite apps de su App Store. Úsala en Android o en Windows.</p>
         </div>
 
         <div class="hero-visual">
           <div class="mock-wrap">
             <div class="mock-glow" aria-hidden="true"></div>
-            <div class="mock" role="img" aria-label="Vista previa de K-Downloader: un video pegado con tres opciones de calidad (recomendado MP4 1080p, máxima calidad 4K y solo audio MP3) y una descarga en curso que termina con éxito.">
+            <div class="mock" role="img" aria-label="Vista previa de K-Snag: un video pegado con tres opciones de calidad (recomendado MP4 1080p, máxima calidad 4K y solo audio MP3) y una descarga en curso que termina con éxito.">
               <div class="mock-titlebar">
-                <span class="mock-app"><img src="/assets/logo.svg" alt="" width="16" height="16">K-Downloader</span>
+                <span class="mock-app"><img src="/assets/logo.svg" alt="" width="16" height="16">K-Snag</span>
                 <span class="mock-winctl">
                   <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-minus"/></svg>
                   <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-square"/></svg>
@@ -141,7 +145,7 @@
                   </div>
 
                   <div class="mock-actions">
-                    <span class="mock-save"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-folder"/></svg>Descargas › K-Downloader</span>
+                    <span class="mock-save"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-folder"/></svg>Descargas › K-Snag</span>
                     <span class="mock-dl"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>Descargar</span>
                   </div>
 
@@ -195,7 +199,7 @@
         <div class="section-head center">
           <p class="eyebrow">Funciones</p>
           <h2 class="section-title" id="funciones-title">Todo lo que necesitas, nada que te estorbe</h2>
-          <p class="section-lead">Pega un enlace, elige la calidad y listo. K-Downloader se encarga de lo difícil.</p>
+          <p class="section-lead">Pega un enlace, elige la calidad y listo. K-Snag se encarga de lo difícil.</p>
         </div>
 
         <ul class="features">
@@ -273,14 +277,14 @@
           <li class="step">
             <span class="step-num" aria-hidden="true">2</span>
             <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-paste"/></svg></span>
-            <h3>Pégalo en K-Downloader</h3>
+            <h3>Pégalo en K-Snag</h3>
             <p>Pulsa <strong>Pegar</strong> o usa <kbd>Ctrl</kbd> + <kbd>V</kbd> en cualquier parte. La app te muestra la calidad real y el tamaño de cada opción.</p>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">3</span>
             <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg></span>
             <h3>Elige y descarga</h3>
-            <p>Recomendado, máxima calidad o solo audio. El archivo queda en tu carpeta <strong>Descargas › K-Downloader</strong>.</p>
+            <p>Recomendado, máxima calidad o solo audio. El archivo queda en tu carpeta <strong>Descargas › K-Snag</strong>.</p>
           </li>
         </ol>
       </div>
@@ -292,7 +296,7 @@
         <div class="section-head">
           <p class="eyebrow">Instalación</p>
           <h2 class="section-title" id="instalar-title">Instalar en 1 minuto</h2>
-          <p class="section-lead">La descarga es un archivo pequeño, <code>Instalar-K-Downloader.cmd</code>, que instala la app solo para tu usuario. No necesitas permisos de administrador.</p>
+          <p class="section-lead">La descarga es un archivo pequeño, <code>Instalar-K-Snag.cmd</code>, que instala la app solo para tu usuario. No necesitas permisos de administrador.</p>
         </div>
 
         <div class="install-grid">
@@ -300,11 +304,11 @@
             <li class="install-step">
               <div class="install-text">
                 <h3>Descarga el instalador</h3>
-                <p>Pulsa <strong>Descargar para Windows</strong>. Se baja <code>Instalar-K-Downloader.cmd</code>, un archivo de texto de pocos KB.</p>
+                <p>Pulsa <strong>Descargar para Windows</strong>. Se baja <code>Instalar-K-Snag.cmd</code>, un archivo de texto de pocos KB.</p>
               </div>
               <div class="illus illus-file" aria-hidden="true">
                 <span class="illus-file-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-file-code"/></svg></span>
-                <span class="illus-file-name">Instalar-K-Downloader.cmd</span>
+                <span class="illus-file-name">Instalar-K-Snag.cmd</span>
                 <span class="illus-file-size">Archivo de comandos · pocos KB</span>
               </div>
             </li>
@@ -316,7 +320,7 @@
               <div class="illus illus-browser" aria-hidden="true">
                 <span class="illus-browser-row">
                   <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
-                  <span><strong>Instalar-K-Downloader.cmd</strong><br>Este tipo de archivo puede dañar tu equipo.</span>
+                  <span><strong>Instalar-K-Snag.cmd</strong><br>Este tipo de archivo puede dañar tu equipo.</span>
                 </span>
                 <span class="illus-buttons">
                   <span class="illus-btn">Eliminar</span>
@@ -327,11 +331,11 @@
             <li class="install-step">
               <div class="install-text">
                 <h3>Desbloquéalo</h3>
-                <p>Windows no deja abrir los archivos <code>.cmd</code> que vienen de internet, y por eso no se abre desde el navegador. Ve a tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Downloader.cmd</code> › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</p>
+                <p>Windows no deja abrir los archivos <code>.cmd</code> que vienen de internet, y por eso no se abre desde el navegador. Ve a tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</p>
                 <p class="install-alt"><strong>Otra opción:</strong> clic derecho › <strong>Ejecutar como administrador</strong> y acepta el aviso de Windows. También funciona, pero si tu cuenta no es de administrador, mejor usa «Desbloquear».</p>
               </div>
               <div class="illus illus-props" aria-hidden="true">
-                <span class="illus-props-title">Propiedades: Instalar-K-Downloader.cmd</span>
+                <span class="illus-props-title">Propiedades: Instalar-K-Snag.cmd</span>
                 <span class="illus-props-text"><strong>Seguridad:</strong> Este archivo proviene de otro equipo y podría bloquearse para ayudar a proteger el equipo.</span>
                 <span class="illus-props-check"><span class="illus-checkbox"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span>Desbloquear</span>
                 <span class="illus-buttons">
@@ -368,7 +372,7 @@
             <span class="why-cmd-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
             <h3 id="why-cmd-title">¿Por qué un <code>.cmd</code> y no un <code>.exe</code>?</h3>
             <p>Windows 11 incluye el <strong>Control inteligente de aplicaciones</strong>, que bloquea cualquier programa nuevo sin firma digital. Esa firma cuesta cientos de dólares al año, algo que un proyecto gratuito no puede pagar.</p>
-            <p>Por eso K-Downloader no trae un <code>.exe</code> propio: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation, y así corre incluso con esa protección activada.</p>
+            <p>Por eso K-Snag no trae un <code>.exe</code> propio: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation, y así corre incluso con esa protección activada.</p>
             <p>Lo único que esa protección frena es abrir el instalador recién descargado. Para eso es el paso de <strong>Desbloquear</strong>, que se hace una sola vez.</p>
             <p>El instalador es un archivo de texto: puedes abrirlo con el Bloc de notas y ver exactamente qué hace.</p>
             <a class="why-cmd-link" href="/ayuda#control-inteligente">Más detalles en la ayuda <svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-right"/></svg></a>
@@ -388,18 +392,18 @@
         <div class="section-head center">
           <p class="eyebrow">Atajos</p>
           <h2 class="section-title" id="abrir-title">Del navegador a la app en un clic</h2>
-          <p class="section-lead">Si ya tienes K-Downloader, puedes mandarle videos sin copiar y pegar.</p>
+          <p class="section-lead">Si ya tienes K-Snag, puedes mandarle videos sin copiar y pegar.</p>
         </div>
 
         <div class="shortcut-grid">
           <article class="shortcut card" aria-labelledby="marcador-title">
             <h3 id="marcador-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-bookmark"/></svg>Botón para tu barra de favoritos</h3>
-            <p class="muted">Arrástralo a tu barra de favoritos. Cuando estés viendo un video, haz clic en él y se abrirá en K-Downloader.</p>
+            <p class="muted">Arrástralo a tu barra de favoritos. Cuando estés viendo un video, haz clic en él y se abrirá en K-Snag.</p>
             <div class="bookmarklet-zone">
               <a class="bookmarklet" id="bookmarklet" href="javascript:location.href='kdownloader://download?url='+encodeURIComponent(location.href)" title="Arrástrame a tu barra de favoritos" aria-describedby="bookmarklet-help">
                 <svg class="icon bookmarklet-grip" aria-hidden="true"><use href="/assets/icons.svg#i-grip"/></svg>
                 <img src="/assets/logo.svg" alt="" width="20" height="20">
-                Descargar con K-Downloader
+                Descargar con K-Snag
               </a>
               <span class="bookmarklet-arrow" aria-hidden="true">Arrástrame</span>
             </div>
@@ -407,14 +411,14 @@
             <ol class="mini-steps" id="bookmarklet-help">
               <li>Muestra la barra de favoritos con <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>.</li>
               <li>Arrastra el botón de arriba hasta la barra.</li>
-              <li>En la página de un video, haz clic en el favorito y elige <strong class="nowrap">Abrir K-Downloader</strong> cuando el navegador pregunte.</li>
+              <li>En la página de un video, haz clic en el favorito y elige <strong class="nowrap">Abrir K-Snag</strong> cuando el navegador pregunte.</li>
             </ol>
             <p class="small muted">Funciona en Chrome, Edge, Firefox y Brave en computadora.</p>
           </article>
 
           <article class="shortcut card" aria-labelledby="ya-tengo-title">
             <h3 id="ya-tengo-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-zap"/></svg>¿Ya tienes la app?</h3>
-            <p class="muted">Pega un enlace y ábrelo directo en K-Downloader. La app siempre te muestra una vista previa antes de descargar.</p>
+            <p class="muted">Pega un enlace y ábrelo directo en K-Snag. La app siempre te muestra una vista previa antes de descargar.</p>
             <form class="open-form" id="open-form" novalidate>
               <label class="sr-only" for="open-url">Enlace del video</label>
               <div class="open-field">
@@ -423,7 +427,7 @@
                        placeholder="https://www.youtube.com/watch?v=…" aria-describedby="open-status">
               </div>
               <button class="btn btn-primary" type="submit">
-                Abrir en K-Downloader
+                Abrir en K-Snag
                 <svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-right"/></svg>
               </button>
             </form>
@@ -506,9 +510,26 @@
           <details class="faq-item">
             <summary>¿Cómo la desinstalo?<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></summary>
             <div class="faq-body">
-              <p>Ve a <strong>Configuración › Aplicaciones › Aplicaciones instaladas</strong>, busca K-Downloader y elige <strong>Desinstalar</strong>. Tus videos descargados no se borran.</p>
+              <p>Ve a <strong>Configuración › Aplicaciones › Aplicaciones instaladas</strong>, busca K-Snag y elige <strong>Desinstalar</strong>. Tus videos descargados no se borran.</p>
             </div>
           </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Apoyo ============ -->
+    <section class="support-band" aria-labelledby="apoyo-title">
+      <div class="container">
+        <div class="support-card">
+          <span class="support-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg></span>
+          <div class="support-text">
+            <h2 id="apoyo-title">¿Te sirve K-Snag?</h2>
+            <p>Lo hace una sola persona y es gratis para todos, sin anuncios ni funciones de pago. Si quieres que siga al día cada vez que YouTube cambia algo, puedes apoyarlo con lo que quieras: Bre-B desde Colombia, PayPal o cripto desde cualquier país.</p>
+          </div>
+          <a class="btn btn-secondary" href="/donar">
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+            Apoyar el proyecto
+          </a>
         </div>
       </div>
     </section>
@@ -535,7 +556,7 @@
         <div class="footer-brand">
           <a class="brand" href="/">
             <img src="/assets/logo.svg" alt="" width="32" height="32">
-            <span>K-Downloader</span>
+            <span>K-Snag</span>
           </a>
           <p>Descarga tus videos favoritos en la mejor calidad. Gratis, sin anuncios y de código abierto.</p>
         </div>

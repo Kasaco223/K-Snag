@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.ui.components
 
@@ -79,7 +79,7 @@ fun BrandHeader(modifier: Modifier = Modifier, logoSize: Dp = 36.dp, label: Stri
     Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Image(painterResource(R.drawable.ic_logo), contentDescription = null, modifier = Modifier.size(logoSize))
         Text(
-            text = label ?: "K-Downloader",
+            text = label ?: "K-Snag",
             style = if (label == null) MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold) else MaterialTheme.typography.labelLarge,
             color = if (label == null) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
         )

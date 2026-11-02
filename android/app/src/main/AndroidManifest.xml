@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Permisos: red, el servicio en primer plano del motor y las descargas, su notificación (se pide después de la
      primera descarga), mantener el celular despierto mientras baja, y escribir en Descargas solo en Android 8 y 9
@@ -54,7 +54,7 @@
         </activity>
 
         <!-- «Compartir» con texto y selección de texto: hoja translúcida en su propia tarea, fuera de Recientes.
-             Usa la etiqueta de la app (launcher_label: «K-Downloader», o «K-Downloader (prueba)» / «K-Downloader QA»
+             Usa la etiqueta de la app (launcher_label: «K-Snag», o «K-Snag (prueba)» / «K-Snag QA»
              en los builds de prueba) en el menú «Compartir» y en el de selección de texto. -->
         <activity
             android:name=".share.QuickDownloadActivity"

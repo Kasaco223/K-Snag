@@ -308,7 +308,7 @@ class DownloadManager:
             return ""
         engine = self.engine.status()
         lines = [
-            f"K-Downloader · trabajo {job.id}",
+            f"K-Snag · trabajo {job.id}",
             f"Enlace: {job.url}",
             f"Opción: {job.option} · estado: {job.state} · intentos: {job.attempts}",
             f"yt-dlp: {engine['ytdlp'].get('version')} · FFmpeg: {engine['ffmpeg'].get('version')} · "

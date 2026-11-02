@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.download
 
@@ -25,7 +25,7 @@ import java.io.File
 /**
  * La descarga de punta a punta sin red (diseño del motor §13, pruebas 5 y 8): el FFmpeg del motor genera un
  * video corto, yt-dlp lo "descarga" como file:// (--enable-file-urls, solo en debug) y la cola lo publica en
- * Descargas/K-Downloader.
+ * Descargas/K-Snag.
  */
 @RunWith(AndroidJUnit4::class)
 class DownloadPipelineTest {

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "kdownloader"
 dynamic = ["version"]
-description = "K-Downloader: descarga tus videos favoritos en la mejor calidad, con una interfaz moderna."
+description = "K-Snag: descarga tus videos favoritos en la mejor calidad, con una interfaz moderna."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Kasaco223" }]
@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://kdownloader.vercel.app"
+Homepage = "https://ksnagapp.vercel.app"
 Source = "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD"
 
 [tool.setuptools.dynamic]

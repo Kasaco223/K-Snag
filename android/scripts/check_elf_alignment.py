@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Revisa que las bibliotecas nativas de 64 bits carguen con páginas de 16 KB (Android 15+).
 

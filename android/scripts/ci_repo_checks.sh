@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # Revisiones del repositorio que no necesitan Gradle ni el SDK. Se corre desde la RAÍZ del repo (CI y local):

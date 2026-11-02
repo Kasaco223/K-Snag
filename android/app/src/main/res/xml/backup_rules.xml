@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!-- Copia de seguridad automática en Android 8 a 11 (en 12+ manda data_extraction_rules.xml). Esta versión no
      guarda datos propios; cuando la app guarde estado que no debe pasar a otro celular, se excluye aquí y en

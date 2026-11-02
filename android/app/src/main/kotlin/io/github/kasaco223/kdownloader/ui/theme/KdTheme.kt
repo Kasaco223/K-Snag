@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 //
 // Tema Material 3 con los colores de la app de Windows (src/kdownloader/ui/css/tokens.css, v2.0.1). Sin color

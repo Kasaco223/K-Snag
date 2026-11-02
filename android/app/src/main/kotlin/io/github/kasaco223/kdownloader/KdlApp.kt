@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader
 
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import io.github.kasaco223.kdownloader.engine.HintsStore
 
 /**
- * La Application de K-Downloader: arma el motor (uno por proceso) y los canales de notificación. En las
+ * La Application de K-Snag: arma el motor (uno por proceso) y los canales de notificación. En las
  * compilaciones debug activa StrictMode. La cola de descargas y los ajustes se suman más adelante.
  */
 class KdlApp : Application() {

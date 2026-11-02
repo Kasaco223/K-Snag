@@ -16,13 +16,14 @@
     "history": "Historial",
     "settings": "Ajustes",
     "help": "Ayuda",
+    "donate": "Apoyar el proyecto",
     "demo": "Demo",
     "demo_hint": "Modo demostración: datos de ejemplo, no se descarga nada."
   },
   "errors": {
     "unknown_title": "Algo salió mal",
     "generic": "Algo salió mal. Vuelve a intentarlo.",
-    "boot_title": "No pudimos iniciar K-Downloader",
+    "boot_title": "No pudimos iniciar K-Snag",
     "boot_text": "Cierra la app y ábrela de nuevo. Si sigue pasando, reinstálala desde la web."
   },
   "a11y": {
@@ -270,7 +271,7 @@
     "title": "Archivo cookies.txt",
     "desc": "Solo para videos que piden iniciar sesión (privados, de miembros o +18).",
     "warning_title": "Antes de usar tus cookies",
-    "warning_1": "Un archivo cookies.txt le da a K-Downloader acceso a tu sesión en ese sitio. Úsalo solo con videos a los que tu cuenta ya tiene acceso.",
+    "warning_1": "Un archivo cookies.txt le da a K-Snag acceso a tu sesión en ese sitio. Úsalo solo con videos a los que tu cuenta ya tiene acceso.",
     "warning_2": "Los sitios pueden limitar o bloquear las cuentas que se usan con descargadores. Te recomendamos usar una cuenta secundaria.",
     "warning_3": "En YouTube solo se usan si tú lo pides, porque bajan la calidad disponible. El archivo nunca sale de tu PC.",
     "risk_inline": "Usar tu cuenta en un descargador puede traerle problemas (límites o bloqueos). Úsalo solo si lo necesitas.",
@@ -284,13 +285,13 @@
     "label": "Bienvenida",
     "progress_label": "Progreso de la configuración",
     "step_n": "Paso {i} de {n}",
-    "welcome_title": "Te damos la bienvenida a K-Downloader",
+    "welcome_title": "Te damos la bienvenida a K-Snag",
     "welcome_lead": "Descarga tus videos favoritos en la mejor calidad, en pocos clics.",
     "responsible_title": "Uso responsable",
     "responsible_1": "Descarga solo videos propios, con licencia libre o que tengas permiso de guardar.",
     "responsible_2": "Respeta los derechos de autor y los términos de cada sitio.",
-    "responsible_3": "K-Downloader no evade protecciones anticopia (DRM) ni contenido de pago.",
-    "understand": "Entiendo y usaré K-Downloader de forma responsable",
+    "responsible_3": "K-Snag no evade protecciones anticopia (DRM) ni contenido de pago.",
+    "understand": "Entiendo y usaré K-Snag de forma responsable",
     "setup_title": "Preparando tu descargador…",
     "setup_lead": "Bajamos los componentes oficiales que hacen la magia. Solo pasa una vez.",
     "setup_note": "El componente de YouTube termina de bajarse en segundo plano; no hace falta esperarlo.",
@@ -302,7 +303,7 @@
     "format_title": "Tu formato favorito",
     "prefs_note": "Puedes cambiar esto cuando quieras en Ajustes.",
     "ready_title": "¡Listo!",
-    "ready_lead": "Copia el enlace de un video y pégalo en K-Downloader. Así de fácil.",
+    "ready_lead": "Copia el enlace de un video y pégalo en K-Snag. Así de fácil.",
     "start": "Empezar a descargar"
   },
   "settings": {
@@ -361,7 +362,7 @@
   "about": {
     "version": "Versión {v}",
     "license": "Software libre (MIT)",
-    "not_affiliated": "K-Downloader no está afiliado a YouTube ni a Google, ni a ningún otro sitio compatible.",
+    "not_affiliated": "K-Snag no está afiliado a YouTube ni a Google, ni a ningún otro sitio compatible.",
     "credits": "Funciona gracias a yt-dlp, FFmpeg y Deno, que se bajan de sus fuentes oficiales. Íconos de Lucide (licencia ISC).",
     "link_home": "Sitio web",
     "link_github": "Código en GitHub",
@@ -371,7 +372,7 @@
     "link_donate": "Apoyar el proyecto"
   },
   "update": {
-    "title": "Hay una nueva versión de K-Downloader.",
+    "title": "Hay una nueva versión de K-Snag.",
     "text": "La {v} está lista para instalar.",
     "available": "Hay una nueva versión: {v}",
     "apply": "Actualizar ahora",
@@ -384,7 +385,7 @@
     "failed": "No pudimos actualizar la app. Inténtalo más tarde."
   },
   "close": {
-    "title": "¿Cerrar K-Downloader?",
+    "title": "¿Cerrar K-Snag?",
     "body_one": "Hay 1 descarga en curso. Si cierras ahora, se detendrá y podrás reintentarla la próxima vez.",
     "body_other": "Hay {count} descargas en curso. Si cierras ahora, se detendrán y podrás reintentarlas la próxima vez.",
     "quit": "Cerrar de todos modos",
@@ -427,8 +428,8 @@
       "unsupported_url": { "title": "El enlace no es compatible", "text": "Cómo copiar el enlace correcto." }
     },
     "windows_title": "Windows dice que la app no es segura",
-    "windows_1": "K-Downloader es software libre y todavía no tiene firma digital propia. Por eso, al bajar el instalador, tu navegador o SmartScreen pueden mostrar una advertencia. Si lo bajaste desde la web oficial, elige «Más información» y luego «Ejecutar de todas formas». Si Windows no lo deja abrir, haz clic derecho en el archivo › Propiedades › marca «Desbloquear».",
-    "windows_2": "Con Smart App Control activo, Windows bloquea los programas nuevos sin firma. Por eso K-Downloader funciona sobre el Python oficial (firmado) y baja FFmpeg y Deno de sus fuentes oficiales.",
+    "windows_1": "K-Snag es software libre y todavía no tiene firma digital propia. Por eso, al bajar el instalador, tu navegador o SmartScreen pueden mostrar una advertencia. Si lo bajaste desde la web oficial, elige «Más información» y luego «Ejecutar de todas formas». Si Windows no lo deja abrir, haz clic derecho en el archivo › Propiedades › marca «Desbloquear».",
+    "windows_2": "Con Smart App Control activo, Windows bloquea los programas nuevos sin firma. Por eso K-Snag funciona sobre el Python oficial (firmado) y baja FFmpeg y Deno de sus fuentes oficiales.",
     "windows_3": "Si Windows bloquea un componente, ve a Ajustes › Componentes y pulsa Reparar.",
     "components_btn": "Ver componentes",
     "windows_more": "Más detalles",

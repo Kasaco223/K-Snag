@@ -1,11 +1,11 @@
-# Arquitectura de K-Downloader 2.0
+# Arquitectura de K-Snag 2.0
 
 Documento de contratos entre las partes de la app. Si cambias un contrato, actualiza este archivo primero.
 
 ## 1. Visión general
 
 ```text
-Usuario ─► Instalar-K-Downloader.cmd ─► kd-bundle-<ver>.zip (GitHub Releases, SHA-256 verificado)
+Usuario ─► Instalar-K-Snag.cmd ─► kd-bundle-<ver>.zip (GitHub Releases, SHA-256 verificado)
                                            │
 %LOCALAPPDATA%\Programs\K-Downloader\      ▼
   runtime\pythonw.exe launch.pyw ─► kdownloader.app (pywebview + WebView2)
@@ -208,9 +208,9 @@ Siempre se ofrece además "Ver detalles" / "Copiar detalles" y "Ayuda" → `open
 - **Desinstalación:** `HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\K-Downloader`.
   - `UninstallString` = `"%SystemRoot%\System32\cmd.exe" /c ""<raíz>\uninstall.cmd""`.
   - `uninstall.cmd` ejecuta `runtime\python.exe launch.pyw --uninstall`.
-- **Instalador `Instalar-K-Downloader.cmd`** (ASCII, generado por versión con `VERSION`, `BUNDLE_URL` y `BUNDLE_SHA256`):
+- **Instalador `Instalar-K-Snag.cmd`** (ASCII, generado por versión con `VERSION`, `BUNDLE_URL` y `BUNDLE_SHA256`):
   1. Baja el bundle con `curl.exe` (o usa `--local <zip>`) y verifica el SHA-256.
-  2. Cierra K-Downloader si está abierto y extrae con `tar.exe`.
+  2. Cierra K-Snag si está abierto y extrae con `tar.exe`.
   3. Ejecuta `runtime\python.exe launch.pyw --install-finish --version <v> [--desktop]` y abre la app.
 
 ## 9. Archivos remotos
@@ -220,7 +220,7 @@ Siempre se ofrece además "Ver detalles" / "Copiar detalles" y "Ayuda" → `open
 { "version": "2.0.0", "runtime": "3.13.16-1",
   "app":       { "url": ".../kd-app-2.0.0.zip",    "sha256": "…" },
   "bundle":    { "url": ".../kd-bundle-2.0.0.zip", "sha256": "…" },
-  "installer": { "url": ".../Instalar-K-Downloader.cmd", "sha256": "…" },
+  "installer": { "url": ".../Instalar-K-Snag.cmd", "sha256": "…" },
   "notes_url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/v2.0.0" }
 
 // engine.json (raíz del repo; solo campos en lista blanca, sin URLs)

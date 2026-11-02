@@ -1,8 +1,20 @@
-<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
-# K-Downloader para Android · Cambios
+# K-Snag para Android · Cambios
+
+Hasta la 1.0.2 la app se llamaba K-Downloader.
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
+
+## 1.0.3 - 2026-11-02
+
+**Español**
+- **K-Downloader ahora se llama K-Snag.** Es la misma app: se actualiza encima, sin perder tu historial ni tus ajustes. Las descargas nuevas quedan en **Descargas › K-Snag**; las de antes siguen en Descargas › K-Downloader y se abren igual desde el historial. La web nueva es **ksnagapp.vercel.app**.
+- «Donar» en la barra de abajo y un botón con corazón junto al cuadro del enlace en Inicio. Los dos abren la página de donaciones en el navegador.
+
+**English**
+- **K-Downloader is now K-Snag.** Same app: it updates in place and keeps your history and settings. New downloads go to **Downloads › K-Snag**; older ones stay in Downloads › K-Downloader and still open from the history. The new website is **ksnagapp.vercel.app**.
+- "Donate" in the bottom bar and a heart button next to the link box on Home. Both open the donation page in the browser.
 
 ## 1.0.2 - 2026-11-02
 

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+// SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 // SPDX-License-Identifier: GPL-3.0-or-later
 package io.github.kasaco223.kdownloader.core.update
 
@@ -34,6 +34,24 @@ class AppUpdateTest {
         assertTrue(a.url.endsWith("K-Downloader-Android-arm64-v8a.apk"))
         assertFalse(a.required)
         assertEquals(10000991L, AppUpdate.parse(v100, 10000011L, 34)!!.versionCode) // 32 bits
+    }
+
+    @Test
+    fun acceptsTheNewApkNameToo() {
+        val renamed = v100.toMutableMap()
+        renamed["apks"] = (v100["apks"] as Map<*, *>).mapValues { (abi, apk) ->
+            (apk as Map<*, *>).toMutableMap().apply {
+                put("url", "https://github.com/$repo/releases/download/android-v1.0.0/K-Snag-Android-$abi.apk")
+            }
+        }
+        assertTrue(AppUpdate.parse(renamed, rc1, 34)!!.url.endsWith("K-Snag-Android-arm64-v8a.apk"))
+        val other = v100.toMutableMap()
+        other["apks"] = (v100["apks"] as Map<*, *>).mapValues { (abi, apk) ->
+            (apk as Map<*, *>).toMutableMap().apply {
+                put("url", "https://github.com/$repo/releases/download/android-v1.0.0/Otra-App-Android-$abi.apk")
+            }
+        }
+        assertNull(AppUpdate.parse(other, rc1, 34))
     }
 
     @Test

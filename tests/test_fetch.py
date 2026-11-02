@@ -214,7 +214,7 @@ def test_download_sends_user_agent(http_server, dl: Path, monkeypatch: pytest.Mo
     monkeypatch.setattr(fetch, "_request", spy)
     url = http_server.add("/f", b"x")
     fetch.download(url, dl / "f", expected_sha256=hashlib.sha256(b"x").hexdigest())
-    assert captured and captured[0].startswith("K-Downloader/")
+    assert captured and captured[0].startswith("K-Snag/")
 
 
 def test_sha256_file(dl: Path):

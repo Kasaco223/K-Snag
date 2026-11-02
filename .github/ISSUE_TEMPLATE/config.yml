@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: Centro de ayuda
-    url: https://kdownloader.vercel.app/ayuda
+    url: https://ksnagapp.vercel.app/ayuda
     about: Soluciones a los errores de la app, con el mismo código que ves en la tarjeta del error.
-  - name: Descargar K-Downloader
-    url: https://kdownloader.vercel.app/descargar
+  - name: Descargar K-Snag
+    url: https://ksnagapp.vercel.app/descargar
     about: El instalador más reciente para Windows.
   - name: Uso responsable
-    url: https://kdownloader.vercel.app/uso-responsable
+    url: https://ksnagapp.vercel.app/uso-responsable
     about: Qué se puede descargar y qué no.

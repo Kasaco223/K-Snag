@@ -48,7 +48,7 @@ El archivo tiene una **lista blanca** de campos (ver `src/kdownloader/engine/hin
 - La app relee el archivo **como máximo una vez cada 24 horas** y lo guarda en `%LOCALAPPDATA%\K-Downloader\hints.json`.
 - `raw.githubusercontent.com` además tiene su propia caché de unos 5 minutos.
 - Cuenta con **hasta un día** para que el cambio llegue a todas las instalaciones.
-- Para probarlo en tu propia PC al momento: cierra K-Downloader, borra `%LOCALAPPDATA%\K-Downloader\hints.json` y ábrela de nuevo.
+- Para probarlo en tu propia PC al momento: cierra K-Snag, borra `%LOCALAPPDATA%\K-Downloader\hints.json` y ábrela de nuevo.
 - Si el archivo queda con un error de sintaxis JSON, la app conserva las últimas pistas válidas y vuelve a intentarlo en la próxima revisión.
 
 ## Cómo publicar una pista de emergencia (desde el navegador)

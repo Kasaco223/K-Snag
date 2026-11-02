@@ -1,7 +1,7 @@
-# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+# SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Compila K-Downloader para Android en Linux (Docker Desktop + WSL2) desde una PC con Windows y Smart App
+# Compila K-Snag para Android en Linux (Docker Desktop + WSL2) desde una PC con Windows y Smart App
 # Control: aquí no corre ningún .exe ni .dll sin firmar (el aapt2 de Maven, las DLL nativas de Gradle).
 # Uso: android/README.md › Compilar con Docker.
 FROM eclipse-temurin:21.0.12.1_1-jdk-noble@sha256:107215954359f1ab0be058a247d7c64ed6e69c71c1682d471d38ef751ec8e964

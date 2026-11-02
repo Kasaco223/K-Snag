@@ -1,16 +1,16 @@
 <!--
-SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader
+SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag
 SPDX-License-Identifier: GPL-3.0-or-later
 Generado por android/scripts/notices.py desde third_party/components.json: no lo edites a mano.
 -->
-# Avisos de terceros de K-Downloader para Android · Third-party notices
+# Avisos de terceros de K-Snag para Android · Third-party notices
 
-K-Downloader para Android se distribuye bajo la [GPL-3.0-or-later](LICENSE). Incluye software libre de otras
+K-Snag para Android se distribuye bajo la [GPL-3.0-or-later](LICENSE). Incluye software libre de otras
 personas, que conserva su propia licencia. Esta lista dice qué componentes trae el APK con el motor de
 descargas, con qué licencia y dónde está su código fuente. Los textos completos de las licencias están en
 [`third_party/licenses/`](third_party/licenses/).
 
-*English summary: K-Downloader for Android is GPL-3.0-or-later. The tables list every third-party component
+*English summary: K-Snag for Android is GPL-3.0-or-later. The tables list every third-party component
 in the APK with its SPDX license. The unmodified source code of every component marked “espejo” (all of
 them except the Android NDK libraries) is published in the pre-release [`android-sources-ytdl-0.18.1-r1`](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1) of this
 repository, together with the full Termux build tree (recipes and patches).*
@@ -83,7 +83,7 @@ se corrige con una revisión nueva (`-r2`), sin tocar la publicada.
 | [GLib](https://developer.gnome.org/glib/) | 2.86.0 | LGPL-2.1-or-later | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `glib-2.86.0.tar.xz` | [`LGPL-2.1-or-later.txt`](third_party/licenses/glib/LICENSES/LGPL-2.1-or-later.txt) |  |
 | [HarfBuzz](https://www.freedesktop.org/wiki/Software/HarfBuzz/) | 11.5.1 | MIT-Modern-Variant | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `harfbuzz-11.5.1.tar.gz` | [`COPYING`](third_party/licenses/harfbuzz/COPYING) |  |
 | [GNU FriBidi](https://github.com/fribidi/fribidi/) | 1.0.16 | LGPL-2.1-or-later | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `fribidi-1.0.16.tar.xz` | [`COPYING`](third_party/licenses/fribidi/COPYING) |  |
-| [FreeType](https://www.freetype.org) | 2.14.1 | FTL OR GPL-2.0-or-later | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `freetype-2.14.1.tar.xz` | [`LICENSE.TXT`](third_party/licenses/freetype/LICENSE.TXT), [`FTL.TXT`](third_party/licenses/freetype/docs/FTL.TXT), [`GPLv2.TXT`](third_party/licenses/freetype/docs/GPLv2.TXT) | Licencia doble: K-Downloader la usa bajo la FreeType License (FTL). Portions of this software are copyright © 2025 The FreeType Project (www.freetype.org). All rights reserved. |
+| [FreeType](https://www.freetype.org) | 2.14.1 | FTL OR GPL-2.0-or-later | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `freetype-2.14.1.tar.xz` | [`LICENSE.TXT`](third_party/licenses/freetype/LICENSE.TXT), [`FTL.TXT`](third_party/licenses/freetype/docs/FTL.TXT), [`GPLv2.TXT`](third_party/licenses/freetype/docs/GPLv2.TXT) | Licencia doble: K-Snag la usa bajo la FreeType License (FTL). Portions of this software are copyright © 2025 The FreeType Project (www.freetype.org). All rights reserved. |
 | [Fontconfig](https://www.freedesktop.org/wiki/Software/fontconfig/) | 2.17.1 | HPND-sell-variant | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `fontconfig-2.17.1.tar.gz` | [`COPYING`](third_party/licenses/fontconfig/COPYING) |  |
 | [libass](https://github.com/libass/libass) | 0.17.4 | ISC | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `libass-0.17.4.tar.xz` | [`COPYING`](third_party/licenses/libass/COPYING) |  |
 | [libbluray](https://code.videolan.org/videolan/libbluray/) | 1.3.4 | LGPL-2.1-or-later | [espejo](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1): `libbluray-1.3.4.tar.bz2` | [`COPYING`](third_party/licenses/libbluray/COPYING) |  |

@@ -40,8 +40,8 @@ function bridgeError(code, details) {
     message: '',
     details: details || '',
     texts: {
-      es: { title: 'No pudimos hablar con la app', message: 'Vuelve a intentarlo. Si sigue pasando, reinicia K-Downloader.' },
-      en: { title: "We couldn't reach the app", message: 'Try again. If it keeps happening, restart K-Downloader.' },
+      es: { title: 'No pudimos hablar con la app', message: 'Vuelve a intentarlo. Si sigue pasando, reinicia K-Snag.' },
+      en: { title: "We couldn't reach the app", message: 'Try again. If it keeps happening, restart K-Snag.' },
     },
   };
 }

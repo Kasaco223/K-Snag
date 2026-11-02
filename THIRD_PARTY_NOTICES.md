@@ -1,8 +1,8 @@
 # Avisos de terceros · Third-party notices
 
-K-Downloader se publica con la [licencia MIT](LICENSE). Se apoya en software libre de otras personas, que conserva su propia licencia. Este archivo dice qué componentes hay, bajo qué licencia y cómo los usa la app.
+K-Snag se publica con la [licencia MIT](LICENSE). Se apoya en software libre de otras personas, que conserva su propia licencia. Este archivo dice qué componentes hay, bajo qué licencia y cómo los usa la app.
 
-*English summary: K-Downloader is MIT-licensed. The tables below list every third-party component, its license (SPDX identifier) and how it is used: bundled in the installer's runtime, or downloaded at first run from the official upstream source and never redistributed by this project.*
+*English summary: K-Snag is MIT-licensed. The tables below list every third-party component, its license (SPDX identifier) and how it is used: bundled in the installer's runtime, or downloaded at first run from the official upstream source and never redistributed by this project.*
 
 - Las versiones exactas del runtime están en [`packaging/runtime.json`](packaging/runtime.json) y [`packaging/requirements-runtime.txt`](packaging/requirements-runtime.txt).
 - Los textos completos de cada licencia se copian en la carpeta `licenses\` de la instalación.
@@ -11,7 +11,7 @@ K-Downloader se publica con la [licencia MIT](LICENSE). Se apoya en software lib
 
 Van dentro de `kd-bundle-<versión>.zip` sin modificaciones. El código Python va como código fuente (`.py`), y algunos paquetes traen además módulos compilados (`.pyd`/`.dll`) publicados por sus autores en PyPI.
 
-| Componente | Licencia | Para qué lo usa K-Downloader |
+| Componente | Licencia | Para qué lo usa K-Snag |
 | --- | --- | --- |
 | [Python](https://www.python.org/) embeddable (Windows x64) | PSF-2.0 | Intérprete oficial firmado por la Python Software Foundation; ejecuta la app y yt-dlp. Su `LICENSE.txt` cubre también bzip2, libffi, OpenSSL (Apache-2.0) y el código distribuible de Microsoft (`vcruntime140.dll`); incluye SQLite, que es de dominio público. |
 | [pywebview](https://github.com/r0x0r/pywebview) | BSD-3-Clause | Ventana de la app con WebView2. Trae las DLL del SDK de Microsoft WebView2 (`Microsoft.Web.WebView2.*.dll`, `WebView2Loader.dll`), con la licencia BSD de Microsoft para ese SDK. |
@@ -28,7 +28,7 @@ Van dentro de `kd-bundle-<versión>.zip` sin modificaciones. El código Python v
 | [curl_cffi](https://github.com/lexiforest/curl_cffi) | MIT | Extra de yt-dlp: conexiones que imitan a un navegador real. Incluye `libcurl-impersonate` (MIT, sobre curl, que tiene licencia curl), BoringSSL (Apache-2.0, con partes OpenSSL/ISC), bibliotecas de HTTP/2 y HTTP/3 (nghttp2, ngtcp2 y nghttp3, MIT) y zlib (Zlib), entre otras. |
 | [Brotli](https://github.com/google/brotli) | MIT | Extra de yt-dlp: compresión Brotli. |
 | [websockets](https://github.com/python-websockets/websockets) | BSD-3-Clause | Extra de yt-dlp: sitios que transmiten por WebSocket. |
-| [mutagen](https://github.com/quodlibet/mutagen) | GPL-2.0-or-later | Extra de yt-dlp: incrusta portadas y metadatos. Es Python puro y se distribuye sin cambios, como código fuente y con su licencia (`COPYING`). K-Downloader no lo importa: solo lo usa yt-dlp, que corre como un programa aparte. |
+| [mutagen](https://github.com/quodlibet/mutagen) | GPL-2.0-or-later | Extra de yt-dlp: incrusta portadas y metadatos. Es Python puro y se distribuye sin cambios, como código fuente y con su licencia (`COPYING`). K-Snag no lo importa: solo lo usa yt-dlp, que corre como un programa aparte. |
 | [certifi](https://github.com/certifi/python-certifi) | MPL-2.0 | Certificados raíz para conexiones HTTPS. Se distribuye sin cambios; su código fuente está en el enlace. |
 | [requests](https://github.com/psf/requests) | Apache-2.0 | Extra de yt-dlp: cliente HTTP. Incluye su archivo `NOTICE`. |
 | [urllib3](https://github.com/urllib3/urllib3) | MIT | Dependencia de requests. |
@@ -37,9 +37,9 @@ Van dentro de `kd-bundle-<versión>.zip` sin modificaciones. El código Python v
 
 ## 2. Descargados en el primer uso, sin redistribuirse
 
-K-Downloader **no incluye** estos programas en su instalador ni en sus Releases. La app los baja en tu PC directamente desde la fuente oficial, comprueba su SHA-256 publicado y los guarda en `%LOCALAPPDATA%\K-Downloader\engine\`. Cada uno conserva su licencia y la distribuye su autor.
+K-Snag **no incluye** estos programas en su instalador ni en sus Releases. La app los baja en tu PC directamente desde la fuente oficial, comprueba su SHA-256 publicado y los guarda en `%LOCALAPPDATA%\K-Downloader\engine\`. Cada uno conserva su licencia y la distribuye su autor.
 
-| Componente | Licencia | Fuente | Para qué lo usa K-Downloader |
+| Componente | Licencia | Fuente | Para qué lo usa K-Snag |
 | --- | --- | --- | --- |
 | [yt-dlp](https://github.com/yt-dlp/yt-dlp), zipapp `yt-dlp` | Unlicense | [yt-dlp-nightly-builds](https://github.com/yt-dlp/yt-dlp-nightly-builds/releases) (por defecto) o [yt-dlp](https://github.com/yt-dlp/yt-dlp/releases) (estable), verificado con `SHA2-256SUMS` | Motor de descarga. Incluye [yt-dlp-ejs](https://github.com/yt-dlp/ejs) (Unlicense). Corre con el Python del runtime como proceso aparte. |
 | [FFmpeg](https://ffmpeg.org/), build *release essentials* de [gyan.dev](https://www.gyan.dev/ffmpeg/builds/) | GPL-3.0-or-later | gyan.dev, verificado con su `.sha256` | Une audio y video, convierte a MP3/M4A e incrusta portadas. Solo se usan `ffmpeg.exe` y `ffprobe.exe`, como programas aparte. El código fuente de FFmpeg está en <https://ffmpeg.org/download.html>. |
@@ -53,7 +53,7 @@ Si en tu PC ya hay un FFmpeg 9 o posterior, o un Deno 2.3 o posterior, en el `PA
 | --- | --- | --- |
 | [Lucide](https://lucide.dev/) | ISC (con partes de [Feather](https://feathericons.com/), MIT) | Íconos SVG de la app (`src/kdownloader/ui/js/icons.js`) y del sitio web (`web/assets/icons.svg`, con su licencia en `web/assets/icons-LICENSE.txt`). |
 
-La interfaz no incluye fuentes tipográficas propias: usa las del sistema (Segoe UI y Cascadia Mono). El logo y el ícono de K-Downloader son parte de este proyecto (MIT).
+La interfaz no incluye fuentes tipográficas propias: usa las del sistema (Segoe UI y Cascadia Mono). El logo y el ícono de K-Snag son parte de este proyecto (MIT).
 
 ## 4. Solo para desarrollar (no se distribuyen)
 
