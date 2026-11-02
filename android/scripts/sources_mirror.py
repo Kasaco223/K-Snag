@@ -32,7 +32,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(os.environ.get("KD_ROOT") or Path(__file__).resolve().parents[2])
-REPO = os.environ.get("GH_REPO") or "Kasaco223/K-YoutubeVideoDownloaderHD"
+REPO = os.environ.get("GH_REPO") or "Kasaco223/K-Snag"
 COMPONENTS = ROOT / "android" / "third_party" / "components.json"
 CATALOG = ROOT / "android" / "gradle" / "libs.versions.toml"
 UA = {"User-Agent": f"K-Snag-sources (+https://github.com/{REPO})"}

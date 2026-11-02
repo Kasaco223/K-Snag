@@ -10,7 +10,7 @@ APP_NAME = "K-Snag"
 DIR_NAME = "K-Downloader"
 APP_ID = "Kasaco223.KDownloader"  # AppUserModelID: agrupa la ventana con su acceso directo
 PROTOCOL = "kdownloader"
-REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
+REPO = "Kasaco223/K-Snag"
 USER_AGENT = f"K-Snag/{__version__} (+https://github.com/{REPO})"
 
 WEB_BASE = os.environ.get("KD_WEB_BASE", "https://ksnagapp.vercel.app").rstrip("/")

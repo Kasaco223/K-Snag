@@ -4,7 +4,7 @@
 
 import { storage } from './site.js';
 
-const REPO = 'Kasaco223/K-YoutubeVideoDownloaderHD';
+const REPO = 'Kasaco223/K-Snag';
 const API_URL = `https://api.github.com/repos/${REPO}/releases/latest`;
 const RELEASES_PREFIX = `https://github.com/${REPO}/releases/`;
 const CACHE_KEY = 'kd.release.v1';

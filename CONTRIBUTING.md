@@ -22,8 +22,8 @@
 Necesitas Windows 10 u 11, Python 3.11 o posterior y Git. Node 22 es opcional, solo para revisar la sintaxis del JS.
 
 ```powershell
-git clone https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD.git
-cd K-YoutubeVideoDownloaderHD
+git clone https://github.com/Kasaco223/K-Snag.git
+cd K-Snag
 python -m venv .venv
 .venv\Scripts\pip install -e ".[dev]"
 .venv\Scripts\python -m kdownloader
@@ -124,7 +124,7 @@ Abre <http://localhost:8000/index.html?mock=1&scenario=S4>.
 
 ## Reportar un problema
 
-Usa la [plantilla de errores](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues/new/choose) e incluye:
+Usa la [plantilla de errores](https://github.com/Kasaco223/K-Snag/issues/new/choose) e incluye:
 
 - **Versión de K-Snag:** está en Ajustes → Acerca de. Incluye también tu versión de Windows.
 - **Qué hiciste y qué pasó.** Si es un video público, incluye el enlace.

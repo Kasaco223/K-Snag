@@ -17,13 +17,13 @@
 <p align="center">
   <a href="https://ksnagapp.vercel.app/descargar"><b>Descargar para Windows</b></a> ·
   <a href="https://ksnagapp.vercel.app/android"><b>Descargar para Android</b></a> ·
-  <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases">Todas las versiones</a> ·
+  <a href="https://github.com/Kasaco223/K-Snag/releases">Todas las versiones</a> ·
   <a href="https://ksnagapp.vercel.app/ayuda">Centro de ayuda</a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest"><img alt="Última versión" src="https://img.shields.io/github/v/release/Kasaco223/K-YoutubeVideoDownloaderHD?label=versi%C3%B3n&color=6366F1"></a>
-  <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/actions/workflows/ci.yml/badge.svg?branch=master"></a>
+  <a href="https://github.com/Kasaco223/K-Snag/releases/latest"><img alt="Última versión" src="https://img.shields.io/github/v/release/Kasaco223/K-Snag?label=versi%C3%B3n&color=6366F1"></a>
+  <a href="https://github.com/Kasaco223/K-Snag/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Kasaco223/K-Snag/actions/workflows/ci.yml/badge.svg?branch=master"></a>
   <a href="LICENSE"><img alt="Licencia MIT" src="https://img.shields.io/badge/licencia-MIT-8B5CF6"></a>
 </p>
 
@@ -107,7 +107,7 @@ Es la versión 2.0 de este proyecto (antes "YouTube Ultra HD Video Downloader"),
 
 **Pasos:**
 
-1. Descarga **`Instalar-K-Snag.cmd`** desde <https://ksnagapp.vercel.app/descargar> (o desde [Releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest)).
+1. Descarga **`Instalar-K-Snag.cmd`** desde <https://ksnagapp.vercel.app/descargar> (o desde [Releases](https://github.com/Kasaco223/K-Snag/releases/latest)).
 2. **Si el navegador avisa** que el archivo "no se descarga habitualmente" o "puede dañar tu equipo", elige **Conservar** (*Keep*).
    - En Edge: menú **…** de la descarga → **Conservar** → **Mostrar más** → **Conservar de todos modos**.
 3. **Desbloquéalo.** Windows no deja abrir los `.cmd` descargados de internet, y por eso no se abre desde el navegador.
@@ -158,11 +158,11 @@ El resultado funciona incluso con Smart App Control activado. Lo único que Smar
 2. Ábrelo. La primera vez, Android pide **permitir instalar desde esa fuente**: toca **Configuración**, activa el permiso, vuelve y toca **Instalar**.
 3. Si Google Play Protect avisa, la página explica cada mensaje.
 
-**Requisitos:** Android 8.0 o superior. El APK pesa unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Hay APK de 64 bits (casi todos los celulares), de 32 bits y x86_64, todos en [Releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases?q=android&expanded=true) con sus SHA-256.
+**Requisitos:** Android 8.0 o superior. El APK pesa unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Hay APK de 64 bits (casi todos los celulares), de 32 bits y x86_64, todos en [Releases](https://github.com/Kasaco223/K-Snag/releases?q=android&expanded=true) con sus SHA-256.
 
 **¿Por qué no está en Google Play?** Google Play no acepta apps que descargan videos de YouTube. Las versiones salen de este repositorio, firmadas siempre con la misma llave (certificado SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
 
-**Código y licencia:** la app de Android está en [`android/`](android/), con licencia [GPL-3.0-or-later](android/LICENSE), porque incluye FFmpeg y otros componentes GPL. El código fuente de esos binarios está publicado en [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1) y la lista completa, en [android/THIRD_PARTY_NOTICES.md](android/THIRD_PARTY_NOTICES.md). Para compilar y publicar: [android/README.md](android/README.md) y [docs/release-android.md](docs/release-android.md).
+**Código y licencia:** la app de Android está en [`android/`](android/), con licencia [GPL-3.0-or-later](android/LICENSE), porque incluye FFmpeg y otros componentes GPL. El código fuente de esos binarios está publicado en [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-Snag/releases/tag/android-sources-ytdl-0.18.1-r1) y la lista completa, en [android/THIRD_PARTY_NOTICES.md](android/THIRD_PARTY_NOTICES.md). Para compilar y publicar: [android/README.md](android/README.md) y [docs/release-android.md](docs/release-android.md).
 
 ## Preguntas frecuentes y solución de problemas
 
@@ -243,7 +243,7 @@ Si tu antivirus lo vuelve a borrar, es un falso positivo: repórtalo a su fabric
 
 </details>
 
-¿No está tu problema? Revisa el [centro de ayuda](https://ksnagapp.vercel.app/ayuda) o [abre un issue](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues/new/choose).
+¿No está tu problema? Revisa el [centro de ayuda](https://ksnagapp.vercel.app/ayuda) o [abre un issue](https://github.com/Kasaco223/K-Snag/issues/new/choose).
 
 ## Privacidad
 
@@ -270,8 +270,8 @@ K-Snag **no evade protecciones** (DRM), no baja contenido de pago y no ayuda a s
 Necesitas Windows 10 u 11 y Python 3.11 o posterior. La app distribuida corre en Python 3.13; el CI prueba ambas versiones.
 
 ```powershell
-git clone https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD.git
-cd K-YoutubeVideoDownloaderHD
+git clone https://github.com/Kasaco223/K-Snag.git
+cd K-Snag
 python -m venv .venv
 .venv\Scripts\pip install -e ".[dev]"
 .venv\Scripts\python -m kdownloader
@@ -405,7 +405,7 @@ K-Snag es un proyecto independiente. **No está afiliado a YouTube ni a Google**
 
 It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to date by itself, so it keeps working when YouTube changes things. This is version 2.0, a full rebuild of the former "YouTube Ultra HD Video Downloader".
 
-**[Download for Windows](https://ksnagapp.vercel.app/descargar)** · **[Download for Android](https://ksnagapp.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases) · [Help center](https://ksnagapp.vercel.app/ayuda)
+**[Download for Windows](https://ksnagapp.vercel.app/descargar)** · **[Download for Android](https://ksnagapp.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-Snag/releases) · [Help center](https://ksnagapp.vercel.app/ayuda)
 
 ### Features
 
@@ -473,7 +473,7 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 
 **Why not Google Play?** Google Play doesn't accept apps that download YouTube videos. Every release comes from this repository, always signed with the same key (certificate SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
 
-**Code and license:** the Android app lives in [`android/`](android/) under [GPL-3.0-or-later](android/LICENSE); the source of its GPL binaries is published at [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1).
+**Code and license:** the Android app lives in [`android/`](android/) under [GPL-3.0-or-later](android/LICENSE); the source of its GPL binaries is published at [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-Snag/releases/tag/android-sources-ytdl-0.18.1-r1).
 
 ### FAQ
 

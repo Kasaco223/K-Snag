@@ -80,7 +80,7 @@ La llave firma todas las versiones. **Si se pierde, nadie puede actualizar la ap
    - la huella del certificado en las notas es la tuya;
    - instálalo encima de la versión anterior: tus descargas siguen ahí, compartir desde YouTube funciona y se bajan un MP4 y un MP3.
 6. **Publicar**: `gh release edit android-vX.Y.Z --draft=false --prerelease --latest=false`.
-7. **Comprobar Windows**: `gh api repos/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest --jq .tag_name` sigue diciendo `vX.Y.Z` (Windows).
+7. **Comprobar Windows**: `gh api repos/Kasaco223/K-Snag/releases/latest --jq .tag_name` sigue diciendo `vX.Y.Z` (Windows).
 8. **Promover**: Claude corre `python android/scripts/promote.py --tag android-vX.Y.Z` (con `--channel rc` para una rc) y abre el PR. Tú lo fusionas cuando el check de punteros esté en verde. Así la app instalada se entera de la versión nueva.
 
 ## 4. Antes de la 1.0 (obligatorio)
@@ -97,3 +97,11 @@ La llave firma todas las versiones. **Si se pierde, nadie puede actualizar la ap
 - **Nunca** borres ni muevas tags, ni reuses un `versionCode`.
 - **Llave perdida**: sin respaldo no hay solución; la app nueva tendría que ser otro paquete.
 - **Llave filtrada**: rota con `apksigner rotate` (ver el plan de entrega, §2.5), agrega la huella nueva como primera línea de `release-cert.sha256` y cambia los secretos.
+
+## Nombre anterior del repositorio
+
+El repositorio se llamaba `Kasaco223/K-YoutubeVideoDownloaderHD`, y GitHub redirige esa dirección a `Kasaco223/K-Snag`.
+
+- Las apps de Android 1.0.0–1.0.3 solo aceptan APK en `https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/...`. Por eso `android-release.json`, `web/data/android.json` y las redirecciones `/android/descargar` siguen con el nombre anterior: `LEGACY_REPO` en `android-release.yml`, `promote.py` y `AppUpdate.kt`.
+- Desde la 1.0.4, la app acepta los dos nombres.
+- **Nunca** crees un repositorio nuevo llamado `K-YoutubeVideoDownloaderHD` en esta cuenta: GitHub dejaría de redirigir y las apps viejas no encontrarían sus actualizaciones.

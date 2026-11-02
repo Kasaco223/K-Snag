@@ -8,7 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SourceLinksTest {
-    private val repo = "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD"
+    private val repo = "https://github.com/Kasaco223/K-Snag"
 
     @Test
     fun releasesLinkToTheirTag() {

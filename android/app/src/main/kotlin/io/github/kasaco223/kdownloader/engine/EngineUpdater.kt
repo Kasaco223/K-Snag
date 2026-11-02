@@ -167,6 +167,6 @@ class EngineUpdater(private val dirs: EngineDirs, private val runner: PyRunner) 
 
     companion object {
         private const val MAX_YTDLP = 16L * 1024 * 1024
-        val USER_AGENT = "K-Snag-Android/${BuildConfig.VERSION_NAME} (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)"
+        val USER_AGENT = "K-Snag-Android/${BuildConfig.VERSION_NAME} (+https://github.com/Kasaco223/K-Snag)"
     }
 }

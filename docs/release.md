@@ -78,7 +78,7 @@ El tag debe ser exactamente `v` + `__version__`. Si no coincide, el workflow se 
 El workflow **Release** arranca solo con el tag y hace esto:
 
 1. Comprueba que el tag coincide con `__version__`.
-2. Ejecuta `packaging/build.ps1 -Version 2.0.1 -BaseUrl https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/v2.0.1`, con ruff y pytest incluidos.
+2. Ejecuta `packaging/build.ps1 -Version 2.0.1 -BaseUrl https://github.com/Kasaco223/K-Snag/releases/download/v2.0.1`, con ruff y pytest incluidos.
 3. Comprueba que `latest.json` y `SHA256SUMS.txt` coinciden con los archivos de `dist/`.
 4. Instala en limpio en el runner:
    - `Instalar-K-Snag.cmd --local … --root $RUNNER_TEMP\kd --no-registry --quiet`;
@@ -130,7 +130,7 @@ Pulsa **Publish release**.
   - Corre al publicar, editar o borrar un Release, y además **cada hora**.
   - Los Releases de Android (`android-*`) son siempre *pre-release* y nunca pueden ser Latest. Si alguno se publica como versión normal, el guardián lo pasa a *pre-release*.
   - Comprueba en **Releases** que la versión de Windows diga **Latest**. Si no: *Edit* → **Set as the latest release** → *Update release*, o Actions → **Mantener Latest en la app de Windows** → **Run workflow**.
-- Desde ese momento, `https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest/download/latest.json` sirve la versión nueva.
+- Desde ese momento, `https://github.com/Kasaco223/K-Snag/releases/latest/download/latest.json` sirve la versión nueva.
 - Las apps instaladas la detectan en menos de 24 horas.
 - Las *pre-releases* **no** cuentan como *latest*: ni la web ni la autoactualización las ofrecen. Sirven para probar con el enlace directo del Release.
 

@@ -220,7 +220,7 @@ function engineView(ready) {
   };
 }
 
-const UPDATE = { version: '2.0.1', notes_url: 'https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/v2.0.1' };
+const UPDATE = { version: '2.0.1', notes_url: 'https://github.com/Kasaco223/K-Snag/releases/tag/v2.0.1' };
 const NOTICE = {
   es: 'YouTube está haciendo cambios hoy. Si una descarga falla, la app actualizará el motor sola.',
   en: 'YouTube is rolling out changes today. If a download fails, the app will update its engine automatically.',

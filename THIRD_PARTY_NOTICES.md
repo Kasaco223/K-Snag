@@ -65,4 +65,4 @@ La interfaz no incluye fuentes tipográficas propias: usa las del sistema (Segoe
 
 ---
 
-¿Falta algo o hay un dato incorrecto? Abre un [issue](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/issues). Lo corregimos con prioridad.
+¿Falta algo o hay un dato incorrecto? Abre un [issue](https://github.com/Kasaco223/K-Snag/issues). Lo corregimos con prioridad.

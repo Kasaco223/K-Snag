@@ -10,7 +10,10 @@ package io.github.kasaco223.kdownloader.core.update
 object AppUpdate {
     /** Prefijos aceptados en el nombre de los APK publicados. */
     val APK_NAMES = listOf("K-Downloader", "K-Snag")
-    const val REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
+    const val REPO = "Kasaco223/K-Snag"
+    /** Nombre del repo hasta noviembre de 2026; los punteros lo siguen usando (lo exigen las versiones 1.0.0-1.0.3). */
+    const val LEGACY_REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
+    private val REPOS = listOf(LEGACY_REPO, REPO)
     const val PACKAGE = "io.github.kasaco223.kdownloader"
     private val SHA256 = Regex("^[0-9a-f]{64}$")
     private val VERSION = Regex("""^\d{1,3}\.\d{1,2}\.\d{1,2}(-rc\.[1-9]\d?)?$""")
@@ -43,13 +46,13 @@ object AppUpdate {
         val url = apk["url"] as? String ?: return null
         // K-Downloader-Android-<abi>.apk es el nombre de siempre (lo exigen las versiones 1.0.0 a 1.0.2 ya instaladas);
         // desde la 1.0.3 también vale K-Snag-Android-<abi>.apk, para poder cambiarlo cuando todas se actualicen.
-        if (url !in APK_NAMES.map { "https://github.com/$REPO/releases/download/$tag/$it-Android-$abi.apk" }) return null
+        if (url !in REPOS.flatMap { r -> APK_NAMES.map { "https://github.com/$r/releases/download/$tag/$it-Android-$abi.apk" } }) return null
         val sha = (apk["sha256"] as? String)?.takeIf { SHA256.matches(it) } ?: return null
         val size = (apk["size"] as? Number)?.toLong()?.takeIf { it in 1..MAX_APK } ?: return null
         val code = (apk["version_code"] as? Number)?.toLong() ?: return null
         if (code % 10 != installedCode % 10) return null // otra ABI: nunca
         val minCode = (m["min_version_code"] as? Number)?.toLong()
-        val notes = (m["notes_url"] as? String)?.takeIf { it.startsWith("https://github.com/$REPO/releases/tag/") }
+        val notes = (m["notes_url"] as? String)?.takeIf { n -> REPOS.any { n.startsWith("https://github.com/$it/releases/tag/") } }
         return Available(version, code, url, sha, size, notes, required = minCode != null && installedCode < minCode)
     }
 

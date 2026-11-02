@@ -54,7 +54,7 @@ $BuildDir = Join-Path $Repo 'build'
 $CacheDir = Join-Path $BuildDir 'cache'
 $Stage = Join-Path $BuildDir 'stage'
 $WheelDir = Join-Path $BuildDir 'wheels'
-$RepoName = 'Kasaco223/K-YoutubeVideoDownloaderHD'
+$RepoName = 'Kasaco223/K-Snag'
 $Clock = [Diagnostics.Stopwatch]::StartNew()
 
 Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem

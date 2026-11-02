@@ -24,7 +24,16 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(os.environ.get("KD_ROOT") or Path(__file__).resolve().parents[2])
-REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
+REPO = "Kasaco223/K-Snag"
+# Los punteros (android.json y las redirecciones de los APK) siguen con el nombre anterior del repo: las apps de
+# Android 1.0.0-1.0.3 solo aceptan esa dirección. GitHub la redirige al repo renombrado.
+LEGACY_REPO = "Kasaco223/K-YoutubeVideoDownloaderHD"
+
+
+def legacy_url(url: str) -> str:
+    """La misma dirección de GitHub con el nombre anterior del repo (la API ya devuelve el nuevo)."""
+    return url.replace(f"https://github.com/{REPO}/", f"https://github.com/{LEGACY_REPO}/", 1)
+
 VERCEL = ROOT / "web" / "vercel.json"
 ABIS = ("arm64-v8a", "armeabi-v7a", "x86_64")
 CHANNELS = {  # canal -> (archivo del puntero, tags aceptados)
@@ -57,8 +66,8 @@ def problems_in(manifest: dict, channel: str) -> list[str]:
     if not match or match.group(1) != manifest.get("version"):
         out.append(f"tag/version no válidos para el canal {channel}: {manifest.get('tag')!r} / {manifest.get('version')!r}")
         return out
-    base = f"https://github.com/{REPO}/releases/download/{manifest['tag']}/"
-    if manifest.get("notes_url") != f"https://github.com/{REPO}/releases/tag/{manifest['tag']}":
+    base = f"https://github.com/{LEGACY_REPO}/releases/download/{manifest['tag']}/"
+    if manifest.get("notes_url") != f"https://github.com/{LEGACY_REPO}/releases/tag/{manifest['tag']}":
         out.append("notes_url no apunta a la página del Release")
     if not SHA256.match(str(manifest.get("cert_sha256", ""))):
         out.append("cert_sha256 debe ser el SHA-256 del certificado actual (64 hex en minúsculas)")
@@ -134,7 +143,7 @@ def online_problems(pointer: dict) -> list[str]:
         asset = assets.get(f"K-Downloader-Android-{abi}.apk")
         if not asset:
             out.append(f"{abi}: el Release no tiene el APK")
-        elif asset.get("browser_download_url") != apk["url"] or asset.get("size") != apk["size"]:
+        elif legacy_url(str(asset.get("browser_download_url"))) != apk["url"] or asset.get("size") != apk["size"]:
             out.append(f"{abi}: url o tamaño distintos de los del Release")
         elif asset.get("digest") != f"sha256:{apk['sha256']}":
             out.append(f"{abi}: el SHA-256 no coincide con el del Release ({asset.get('digest')})")

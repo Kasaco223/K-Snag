@@ -37,6 +37,19 @@ class AppUpdateTest {
     }
 
     @Test
+    fun acceptsTheLegacyRepoPath() {
+        val legacy = v100.toMutableMap()
+        legacy["apks"] = (v100["apks"] as Map<*, *>).mapValues { (abi, apk) ->
+            (apk as Map<*, *>).toMutableMap().apply {
+                put("url", "https://github.com/${AppUpdate.LEGACY_REPO}/releases/download/android-v1.0.0/K-Downloader-Android-$abi.apk")
+            }
+        }
+        legacy["notes_url"] = "https://github.com/${AppUpdate.LEGACY_REPO}/releases/tag/android-v1.0.0"
+        val a = AppUpdate.parse(legacy, rc1, 34)!!
+        assertTrue(a.url.contains(AppUpdate.LEGACY_REPO))
+    }
+
+    @Test
     fun acceptsTheNewApkNameToo() {
         val renamed = v100.toMutableMap()
         renamed["apks"] = (v100["apks"] as Map<*, *>).mapValues { (abi, apk) ->

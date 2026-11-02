@@ -16,12 +16,12 @@
     },
     {
       "source": "/descargar",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest/download/Instalar-K-Snag.cmd",
+      "destination": "https://github.com/Kasaco223/K-Snag/releases/latest/download/Instalar-K-Snag.cmd",
       "permanent": false
     },
     {
       "source": "/instalar",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/latest/download/Instalar-K-Snag.cmd",
+      "destination": "https://github.com/Kasaco223/K-Snag/releases/latest/download/Instalar-K-Snag.cmd",
       "permanent": false
     },
     {
