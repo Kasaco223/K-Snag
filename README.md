@@ -5,16 +5,18 @@
 <h1 align="center">K-Downloader</h1>
 
 <p align="center">
-  Descarga tus videos favoritos en la mejor calidad, con una app moderna para Windows.<br>
+  Descarga tus videos favoritos en la mejor calidad, con una app moderna para Windows y Android.<br>
   <sub><a href="#english">Read in English</a></sub>
 </p>
 
 <p align="center">
   <a href="https://kdownloader.vercel.app/descargar"><img alt="Descargar para Windows" src="https://img.shields.io/badge/Descargar_para_Windows-6366F1?style=for-the-badge"></a>
+  <a href="https://kdownloader.vercel.app/android"><img alt="Descargar para Android" src="https://img.shields.io/badge/Descargar_para_Android-8B5CF6?style=for-the-badge"></a>
 </p>
 
 <p align="center">
   <a href="https://kdownloader.vercel.app/descargar"><b>Descargar para Windows</b></a> ·
+  <a href="https://kdownloader.vercel.app/android"><b>Descargar para Android</b></a> ·
   <a href="https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases">Todas las versiones</a> ·
   <a href="https://kdownloader.vercel.app/ayuda">Centro de ayuda</a>
 </p>
@@ -36,7 +38,7 @@
 
 ## Qué es K-Downloader
 
-K-Downloader es una app gratuita y de código abierto para Windows:
+K-Downloader es una app gratuita y de código abierto para Windows y [Android](#android):
 
 1. Pegas el enlace de un video.
 2. Eliges la calidad.
@@ -141,6 +143,26 @@ Por eso K-Downloader **no genera ningún ejecutable propio**:
 - El instalador es un script `.cmd` que puedes leer.
 
 El resultado funciona incluso con Smart App Control activado. Lo único que Smart App Control frena es abrir el `.cmd` recién descargado, porque viene de internet; por eso existe el paso de **Desbloquear**. Si algún día el proyecto obtiene firma de código (ver la [política de firma](#política-de-firma-de-código)), podría ofrecer un `.exe` firmado.
+
+## Android
+
+**K-Downloader para Android** hace lo mismo desde el celular: en YouTube o en cualquier app, toca **Compartir › K-Downloader**, elige el formato y el archivo queda en **Descargas › K-Downloader**. También puedes pegar el enlace.
+
+- **Formatos:** video MP4 hasta 1080p, máxima calidad en MKV (4K si existe), audio MP3 o M4A, y otras alturas en «Más calidades». Antes de bajar muestra la miniatura, el título y el tamaño real de cada opción.
+- **Listas:** se baja la lista entera, hasta 500 videos.
+- **Se mantiene sola:** el motor (yt-dlp) se actualiza cuando YouTube cambia, con reintentos automáticos. La app avisa cuando hay una versión nueva y se actualiza con tu confirmación.
+- **En segundo plano:** las descargas siguen con la pantalla apagada, se retoman si Android cierra la app y pueden esperar el Wi-Fi.
+
+**Instalación:**
+1. Entra a **<https://kdownloader.vercel.app/android>** desde el celular y toca **Descargar APK**.
+2. Ábrelo. La primera vez, Android pide **permitir instalar desde esa fuente**: toca **Configuración**, activa el permiso, vuelve y toca **Instalar**.
+3. Si Google Play Protect avisa, la página explica cada mensaje.
+
+**Requisitos:** Android 8.0 o superior. El APK pesa unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Hay APK de 64 bits (casi todos los celulares), de 32 bits y x86_64, todos en [Releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases?q=android&expanded=true) con sus SHA-256.
+
+**¿Por qué no está en Google Play?** Google Play no acepta apps que descargan videos de YouTube. Las versiones salen de este repositorio, firmadas siempre con la misma llave (certificado SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
+
+**Código y licencia:** la app de Android está en [`android/`](android/), con licencia [GPL-3.0-or-later](android/LICENSE), porque incluye FFmpeg y otros componentes GPL. El código fuente de esos binarios está publicado en [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1) y la lista completa, en [android/THIRD_PARTY_NOTICES.md](android/THIRD_PARTY_NOTICES.md). Para compilar y publicar: [android/README.md](android/README.md) y [docs/release-android.md](docs/release-android.md).
 
 ## Preguntas frecuentes y solución de problemas
 
@@ -362,17 +384,20 @@ Lista completa de componentes y licencias: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_
 
 ## Licencia
 
-[MIT](LICENSE). Los componentes de terceros conservan sus propias licencias ([THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+- **App de Windows:** [MIT](LICENSE).
+- **App de Android** (carpeta `android/`): [GPL-3.0-or-later](android/LICENSE).
+
+Los componentes de terceros conservan sus propias licencias ([THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) y [android/THIRD_PARTY_NOTICES.md](android/THIRD_PARTY_NOTICES.md)).
 
 ## Aviso
 
-K-Downloader es un proyecto independiente. **No está afiliado a YouTube ni a Google**, ni cuenta con su respaldo. YouTube es una marca de Google LLC; Windows es una marca de Microsoft Corporation. Cada persona es responsable de cómo usa la app.
+K-Downloader es un proyecto independiente. **No está afiliado a YouTube ni a Google**, ni cuenta con su respaldo. YouTube, Android y Google Play son marcas de Google LLC; Windows es una marca de Microsoft Corporation. Cada persona es responsable de cómo usa la app.
 
 ---
 
 ## English
 
-**K-Downloader** is a free, open-source Windows app to download your favorite videos in the best quality:
+**K-Downloader** is a free, open-source app for Windows and [Android](#android-1) to download your favorite videos in the best quality:
 
 1. Paste a link.
 2. Pick a quality.
@@ -380,7 +405,7 @@ K-Downloader es un proyecto independiente. **No está afiliado a YouTube ni a Go
 
 It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to date by itself, so it keeps working when YouTube changes things. This is version 2.0, a full rebuild of the former "YouTube Ultra HD Video Downloader".
 
-**[Download for Windows](https://kdownloader.vercel.app/descargar)** · [All releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases) · [Help center](https://kdownloader.vercel.app/ayuda)
+**[Download for Windows](https://kdownloader.vercel.app/descargar)** · **[Download for Android](https://kdownloader.vercel.app/android)** · [All releases](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases) · [Help center](https://kdownloader.vercel.app/ayuda)
 
 ### Features
 
@@ -435,6 +460,20 @@ It is powered by [yt-dlp](https://github.com/yt-dlp/yt-dlp) and keeps it up to d
 - yt-dlp is a Python zipapp;
 - FFmpeg and Deno already have reputation;
 - the installer is a readable `.cmd` script. Smart App Control only blocks opening it right after download, because it comes from the internet; that is what the **Unblock** step is for.
+
+### Android
+
+**K-Downloader for Android** does the same on your phone: in YouTube or any other app, tap **Share › K-Downloader**, pick the format and the file lands in **Downloads › K-Downloader**. You can also paste the link.
+
+- **Formats:** MP4 up to 1080p, best quality in MKV, MP3 or M4A audio, plus other heights under "More qualities", with the real size of each option before downloading. Playlists of up to 500 videos.
+- **Keeps itself working:** the engine (yt-dlp) updates when YouTube changes, with automatic retries; the app tells you about new versions and updates with your confirmation.
+- **Background:** downloads keep going with the screen off, resume if Android closes the app and can wait for Wi-Fi.
+
+**Install:** open **<https://kdownloader.vercel.app/android>** on your phone, tap **Download APK**, open it and allow installing from that source the first time. Requires Android 8.0+.
+
+**Why not Google Play?** Google Play doesn't accept apps that download YouTube videos. Every release comes from this repository, always signed with the same key (certificate SHA-256 `79:F7:78:12:B9:9F:3F:21:39:38:F6:66:3E:7C:00:EF:3D:B8:E1:74:7A:10:C9:81:F2:66:A6:AB:E2:24:F3:1F`).
+
+**Code and license:** the Android app lives in [`android/`](android/) under [GPL-3.0-or-later](android/LICENSE); the source of its GPL binaries is published at [android-sources-ytdl-0.18.1-r1](https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-sources-ytdl-0.18.1-r1).
 
 ### FAQ
 
@@ -503,5 +542,5 @@ python -m venv .venv
 ### Credits, license and disclaimer
 
 - **Credits:** [yt-dlp](https://github.com/yt-dlp/yt-dlp), [FFmpeg](https://ffmpeg.org/) (builds by [gyan.dev](https://www.gyan.dev/ffmpeg/builds/)), [Deno](https://deno.com/), [pywebview](https://pywebview.flowrl.com/), [pythonnet](https://pythonnet.github.io/), [Python](https://www.python.org/) and [Lucide](https://lucide.dev/) icons. The full list is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-- **License:** [MIT](LICENSE).
-- **Disclaimer:** K-Downloader is an independent project and is **not affiliated with YouTube or Google**. YouTube is a trademark of Google LLC; Windows is a trademark of Microsoft Corporation.
+- **License:** Windows app [MIT](LICENSE); Android app (`android/`) [GPL-3.0-or-later](android/LICENSE).
+- **Disclaimer:** K-Downloader is an independent project and is **not affiliated with YouTube or Google**. YouTube, Android and Google Play are trademarks of Google LLC; Windows is a trademark of Microsoft Corporation.
