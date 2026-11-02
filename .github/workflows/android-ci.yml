@@ -96,7 +96,7 @@ jobs:
           status=0
           for apk in android/app/build/outputs/apk/github/*/*.apk; do
             files=$(unzip -Z1 "$apk")
-            known='^lib/[^/]+/(libandroidx\.graphics\.path|libpython|libpython\.zip|libqjs|libffmpeg|libffprobe|libffmpeg\.zip)\.so$'
+            known='^lib/[^/]+/(libandroidx\.graphics\.path|libpython|libpython\.zip|libqjs|libffmpeg|libffprobe|libffmpeg\.zip|libkd_webp|libkd_webpmux|libkd_sharpyuv)\.so$'
             others=$(grep -E '^lib/' <<< "$files" | grep -vE "$known" || true)
             if [ -n "$others" ]; then
               echo "::error file=$apk::Bibliotecas nativas no permitidas todavía: $(paste -sd ' ' <<< "$others")"
