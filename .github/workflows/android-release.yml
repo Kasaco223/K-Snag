@@ -126,7 +126,7 @@ jobs:
         working-directory: android
         env:
           KDL_SOURCE_COMMIT: ${{ github.sha }}
-        run: ./gradlew --stacktrace :core:test :app:testGithubReleaseUnitTest :app:assembleGithubRelease :app:assembleGithubQa
+        run: ./gradlew --stacktrace :core:test :app:testGithubDebugUnitTest :app:assembleGithubRelease :app:assembleGithubQa
 
       - name: "Páginas de 16 KB en las bibliotecas nativas (estables: sin pendientes)"
         env:
