@@ -215,4 +215,63 @@
         <item quantity="other">%d were already in Downloads.</item>
     </plurals>
     <string name="option_height">Video %1$dp</string>
+    <!-- Welcome, appearance and donations -->
+    <string name="welcome_title">Welcome to K-Downloader</string>
+    <string name="welcome_lead">Save videos and music from the internet to your phone, free and without ads.</string>
+    <string name="welcome_step1">Copy the link, or tap Share in YouTube or any other app.</string>
+    <string name="welcome_step2">Pick the format: video, best quality or audio.</string>
+    <string name="welcome_step3">It\'s saved to Downloads › K-Downloader.</string>
+    <string name="welcome_responsible_title">Responsible use</string>
+    <string name="welcome_responsible_body">Only download what you have the right to: your own content, content with a free license or with the author\'s permission. Respect copyright and the rules of each site. K-Downloader doesn\'t download DRM-protected content.</string>
+    <string name="welcome_accept">I understand</string>
+    <string name="welcome_start">Get started</string>
+    <string name="settings_theme_title">Appearance</string>
+    <string name="settings_theme_system">Same as the phone</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="donate_title">Support K-Downloader</string>
+    <string name="donate_detail">It\'s free and has no ads. If it helps you, a donation keeps it going.</string>
+    <!-- Settings: downloads and engine -->
+    <string name="settings_downloads_title">Downloads</string>
+    <string name="settings_wifi_only">Only on Wi-Fi</string>
+    <string name="settings_wifi_only_detail">Downloads wait for a Wi-Fi network (or one without a data limit) to start.</string>
+    <string name="engine_settings_title">Download engine</string>
+    <string name="engine_settings_version">yt-dlp %1$s (%2$s)</string>
+    <string name="engine_settings_auto">Update the engine automatically</string>
+    <string name="engine_settings_auto_detail">YouTube changes often; a new yt-dlp fixes it. It\'s checked once a day and only when nothing is downloading.</string>
+    <string name="engine_channel_nightly">Nightly (recommended)</string>
+    <string name="engine_channel_nightly_detail">Gets fixes for YouTube the same day.</string>
+    <string name="engine_channel_stable">Stable</string>
+    <string name="engine_channel_stable_detail">Fewer changes, but fixes arrive later.</string>
+    <string name="engine_update_now">Check for an update now</string>
+    <string name="engine_rollback">Go back to yt-dlp %1$s</string>
+    <string name="engine_update_checking">Checking for a new version…</string>
+    <string name="engine_update_uptodate">You have the latest version (%1$s).</string>
+    <string name="engine_update_done">Updated to yt-dlp %1$s.</string>
+    <string name="engine_update_rolled_back">Back on yt-dlp %1$s. The other version won\'t be installed again on its own.</string>
+    <string name="engine_update_busy">The engine is busy. Try again when the downloads finish.</string>
+    <string name="engine_update_failed">We couldn\'t check for an update. Check your connection and try again later.</string>
+    <!-- Background work -->
+    <string name="home_waiting_wifi">Waiting for Wi-Fi: you turned on “Only on Wi-Fi” in Settings.</string>
+    <string name="settings_battery">Keep downloads running in the background</string>
+    <string name="settings_battery_detail">Some phones (Xiaomi, Samsung, Huawei…) stop apps in the background to save battery. In that list, pick K-Downloader and choose “Don\'t optimize”.</string>
+    <!-- App updates -->
+    <string name="app_update_title">App updates</string>
+    <string name="app_update_current">You have version %1$s.</string>
+    <string name="app_update_test_build">This is a test build: it doesn\'t update itself. The published app does.</string>
+    <string name="app_update_auto">Check for updates automatically</string>
+    <string name="app_update_check">Check for updates</string>
+    <string name="app_update_checking">Checking…</string>
+    <string name="app_update_uptodate">You have the latest version.</string>
+    <string name="app_update_available">Version %1$s is available.</string>
+    <string name="app_update_required">Version %1$s is available, and this one no longer works well: update it.</string>
+    <string name="app_update_downloading">Downloading %1$s… %2$s%%</string>
+    <string name="app_update_permission">Android needs your permission to install updates from K-Downloader. Turn on “Allow from this source”, come back and tap Install.</string>
+    <string name="app_update_installing">Installing… Confirm in the Android window.</string>
+    <string name="app_update_failed">We couldn\'t update. Check your connection and try again.</string>
+    <string name="app_update_install">Download and install</string>
+    <string name="app_update_grant">Give permission</string>
+    <string name="app_update_notes">What\'s new</string>
+    <string name="app_update_banner">K-Downloader %1$s is available.</string>
+    <string name="app_update_see">See</string>
 </resources>

@@ -1,0 +1,42 @@
+name: Android · punteros de actualización
+
+# web/data/android.json (estable: la web y la app) y web/data/android-rc.json (solo las versiones -rc.N de la
+# app) dicen cuál es la última versión. Este check comprueba que cada uno sea copia exacta del
+# android-release.json de un Release PUBLICADO como pre-release, con los mismos SHA-256, y que /descargar e
+# /instalar sigan apuntando al instalador de Windows (contrato de las apps de Windows instaladas).
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "web/data/android.json"
+      - "web/data/android-rc.json"
+      - "web/vercel.json"
+      - "android/scripts/promote.py"
+      - ".github/workflows/android-pointer.yml"
+  pull_request:
+    paths:
+      - "web/data/android.json"
+      - "web/data/android-rc.json"
+      - "web/vercel.json"
+      - "android/scripts/promote.py"
+      - ".github/workflows/android-pointer.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pointer:
+    name: Punteros y web/vercel.json
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Validar contra los Releases publicados
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 android/scripts/promote.py --check --online

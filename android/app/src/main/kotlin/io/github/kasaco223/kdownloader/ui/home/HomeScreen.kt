@@ -3,6 +3,7 @@
 package io.github.kasaco223.kdownloader.ui.home
 
 import android.content.res.Resources
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -95,6 +97,9 @@ fun HomeScreen(
     onRemoveHistory: (String) -> Unit,
     onOpenItem: (HistoryItem) -> Unit,
     onOpenDownloads: () -> Unit,
+    waitingForWifi: Boolean = false,
+    updateVersion: String? = null,
+    onOpenUpdate: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -191,10 +196,38 @@ fun HomeScreen(
             )
         }
 
+        if (updateVersion != null) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(14.dp))
+                    .padding(start = 14.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.app_update_banner, updateVersion),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier.weight(1f),
+                )
+                TextButton(onClick = onOpenUpdate) { Text(stringResource(R.string.app_update_see)) }
+            }
+        }
         if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
 
         if (running.isNotEmpty() || queued.isNotEmpty()) {
             ListHeader(stringResource(R.string.home_now))
+            if (waitingForWifi && running.isEmpty()) {
+                Text(
+                    text = stringResource(R.string.home_waiting_wifi),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiaryContainer, RoundedCornerShape(12.dp))
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                )
+            }
             running.forEach { ActiveJobCard(it, onCancel) }
             queued.forEach { JobRow(it, onCancel, onRetry, onRemove) }
         }

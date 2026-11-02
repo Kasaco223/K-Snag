@@ -13,6 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.ui.AppRoot
 import io.github.kasaco223.kdownloader.ui.theme.KdTheme
+import io.github.kasaco223.kdownloader.ui.theme.darkFor
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 
 /**
@@ -30,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         val fromHistory = (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0
         if (savedInstanceState == null && !fromHistory) DeepLinks.url(intent)?.let(viewModel::onLinkReceived)
         setContent {
-            KdTheme { AppRoot(viewModel) }
+            val theme by (application as KdlApp).uiPrefs.theme.collectAsStateWithLifecycle()
+            KdTheme(dark = darkFor(theme)) { AppRoot(viewModel) }
         }
         if (savedInstanceState == null) runSelfTestIfAsked(intent)
     }
@@ -40,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         val app = application as KdlApp
         app.engine.prepare() // no hace nada si el motor ya está listo o preparándose
         app.queue.startService() // retoma lo que quedó en cola
+        app.onForeground() // pistas del motor y, si toca, una versión nueva de yt-dlp
     }
 
     /** scripts/ci_emulator.sh abre la app con --ez kdl.selftest true y lee la línea KDL-SELFTEST de logcat. */

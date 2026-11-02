@@ -10,13 +10,13 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import io.github.kasaco223.kdownloader.contracts.EngineController
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
 import io.github.kasaco223.kdownloader.download.MediaAnalyzer
 import io.github.kasaco223.kdownloader.download.Thumbnails
+import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.platform.UiPrefs
 import io.github.kasaco223.kdownloader.ui.analyze.LinkAnalysis
 import io.github.kasaco223.kdownloader.ui.jobs.DownloadRequest
@@ -51,10 +51,11 @@ enum class RepairOutcome { RUNNING, DONE, BUSY, FAILED }
  */
 class MainViewModel(
     private val savedState: SavedStateHandle,
-    private val engine: EngineController,
+    private val engine: KdEngine,
     private val queue: DownloadQueue,
     private val uiPrefs: UiPrefs,
     analyzer: MediaAnalyzer,
+    appUpdater: io.github.kasaco223.kdownloader.update.AppUpdater,
 ) : ViewModel() {
     private val _screen = MutableStateFlow(
         savedState.get<String>(KEY_SCREEN)?.let { name -> Screen.entries.firstOrNull { it.name == name } } ?: Screen.HOME,
@@ -78,6 +79,20 @@ class MainViewModel(
     val favorite: StateFlow<String> = uiPrefs.favorite
 
     fun setFavorite(option: String) = uiPrefs.setFavorite(option)
+
+    /** Todos los ajustes (Ajustes los lee y cambia directamente). */
+    val prefs: UiPrefs = uiPrefs
+
+    /** Las actualizaciones de la app (Ajustes y el aviso de Inicio). */
+    val updater: io.github.kasaco223.kdownloader.update.AppUpdater = appUpdater
+
+    /** Hay descargas esperando el Wi-Fi («Solo con Wi-Fi»). */
+    val waitingForWifi: StateFlow<Boolean> = queue.waitingForWifi
+
+    fun setWifiOnly(value: Boolean) {
+        uiPrefs.setWifiOnly(value)
+        queue.startService() // sin la restricción, lo que esperaba arranca
+    }
 
     suspend fun enqueue(request: DownloadRequest): DownloadQueue.EnqueueResult = request.urls?.let {
         queue.enqueueAll(it, request.option, request.allowDuplicate)
@@ -131,6 +146,17 @@ class MainViewModel(
 
     fun retryEngine() = engine.retrySetup()
 
+    /** La última búsqueda de una versión nueva de yt-dlp (Ajustes › Motor). */
+    val engineUpdate: StateFlow<KdEngine.UpdateState> = engine.update
+
+    fun checkEngineUpdate() {
+        viewModelScope.launch { engine.updateYtdlp(prefs.engineChannel.value) }
+    }
+
+    fun rollbackEngine() {
+        viewModelScope.launch { engine.rollbackYtdlp() }
+    }
+
     fun repairEngine() {
         if (_repair.value == RepairOutcome.RUNNING) return
         _repair.value = RepairOutcome.RUNNING
@@ -159,7 +185,7 @@ class MainViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as KdlApp
-                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs, app.analyzer)
+                MainViewModel(createSavedStateHandle(), app.engine, app.queue, app.uiPrefs, app.analyzer, app.updater)
             }
         }
     }

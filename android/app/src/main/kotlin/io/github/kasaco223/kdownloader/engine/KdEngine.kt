@@ -33,6 +33,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.io.IOException
+import io.github.kasaco223.kdownloader.core.engine.YtdlpVersion
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -50,6 +51,25 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
     private val versionCode: Long = installedVersionCode(context)
     private val installer = PayloadInstaller(dirs, versionCode)
     private val store = EngineStore(context, dirs)
+    private val updater = EngineUpdater(dirs, runner)
+
+    /** Lo que pasó con la última búsqueda de una versión nueva de yt-dlp (Ajustes › Motor). */
+    sealed interface UpdateState {
+        data object Idle : UpdateState
+        data object Checking : UpdateState
+        data class UpToDate(val version: String) : UpdateState
+        data class Updated(val version: String) : UpdateState
+        data class RolledBack(val version: String) : UpdateState
+        data object Busy : UpdateState
+        data class Failed(val reason: String) : UpdateState
+    }
+
+    private val _update = MutableStateFlow<UpdateState>(UpdateState.Idle)
+    val update: StateFlow<UpdateState> = _update.asStateFlow()
+    private val updateLock = Mutex()
+
+    /** Las pistas remotas (engine.json), que pone [HintsStore]. */
+    @Volatile var hints: io.github.kasaco223.kdownloader.core.engine.UpdateParsing.Hints = io.github.kasaco223.kdownloader.core.engine.UpdateParsing.Hints()
 
     private val _status = MutableStateFlow<EngineStatus>(EngineStatus.NotReady)
     override val status: StateFlow<EngineStatus> = _status.asStateFlow()
@@ -65,6 +85,7 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
 
     fun warmUp() {
         warmUpJob = scope.async(Dispatchers.IO) {
+            sweepOrphans()
             val ready = runCatching { quickCheck() }.getOrNull()
             if (ready != null && _status.value == EngineStatus.NotReady) _status.value = EngineStatus.Ready(ready)
             ready != null
@@ -121,6 +142,85 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         }
     }
 
+    /** El mínimo de yt-dlp para [channel]: el de engine.json o el de la app. */
+    fun minimum(channel: String): String =
+        hints.minYtdlp[channel] ?: io.github.kasaco223.kdownloader.core.engine.UpdateParsing.MIN_YTDLP.getValue(channel)
+
+    /** Si toca buscar una versión nueva: 24 h desde la última vez, otro canal o por debajo del mínimo. */
+    fun updateDue(channel: String): Boolean {
+        val s = state
+        val active = s.active ?: return false
+        val below = YtdlpVersion.parse(active.version)?.let { it < YtdlpVersion.parse(minimum(channel))!! } == true
+        val wait = if (below) 3_600_000L else 24 * 3_600_000L
+        return active.channel != channel || System.currentTimeMillis() - s.checkedAt > wait
+    }
+
+    /**
+     * Busca y activa una versión nueva de yt-dlp (diseño del motor §4). Nunca con una descarga o un análisis
+     * corriendo ([UpdateState.Busy]). La anterior queda para «Volver a la versión anterior».
+     */
+    suspend fun updateYtdlp(channel: String): UpdateState = updateLock.withLock {
+        if (ensureReady() !is EngineStatus.Ready) return@withLock UpdateState.Failed("motor no listo").also { _update.value = it }
+        if (leases.get() > 0) return@withLock UpdateState.Busy.also { _update.value = it }
+        _update.value = UpdateState.Checking
+        val result = kotlinx.coroutines.withContext(Dispatchers.IO) {
+            leases.incrementAndGet()
+            try {
+                updater.check(state.active, channel, state.skipVersions, minimum(channel), runMode())
+            } finally {
+                leases.decrementAndGet()
+            }
+        }
+        val now = System.currentTimeMillis()
+        val out = when (result) {
+            is EngineUpdater.Result.UpToDate -> {
+                save(state.copy(checkedAt = now, lastError = null))
+                UpdateState.UpToDate(result.version)
+            }
+            is EngineUpdater.Result.Failed -> {
+                save(state.copy(checkedAt = now, lastError = result.reason))
+                UpdateState.Failed(result.reason)
+            }
+            is EngineUpdater.Result.Downloaded -> {
+                val prev = state.active
+                var next = state.copy(active = result.copy, previous = prev, checkedAt = now, lastError = null,
+                    skipVersions = state.skipVersions.filter { v -> YtdlpVersion.parse(v)?.let { it > YtdlpVersion.parse(result.copy.version)!! } == true }.toSet())
+                // La prueba de humo ya corrió: la autoprueba sigue valiendo para la versión nueva.
+                next = next.copy(selfTest = next.selfTest?.copy(key = selfTestKey(next)))
+                save(next)
+                pruneVersions()
+                _status.value = EngineStatus.Ready(versions(next))
+                UpdateState.Updated(result.copy.version)
+            }
+        }
+        _update.value = out
+        out
+    }
+
+    /** Vuelve a la copia anterior; la que se deja queda en la lista de descartadas (no vuelve sola). */
+    suspend fun rollbackYtdlp(): UpdateState = updateLock.withLock {
+        if (leases.get() > 0) return@withLock UpdateState.Busy.also { _update.value = it }
+        val prev = state.previous?.takeIf(store::verifies) ?: return@withLock UpdateState.Failed("sin versión anterior").also { _update.value = it }
+        val current = state.active
+        var next = state.copy(active = prev, previous = current, skipVersions = state.skipVersions + listOfNotNull(current?.version))
+        next = next.copy(selfTest = next.selfTest?.copy(key = selfTestKey(next)))
+        save(next)
+        _status.value = EngineStatus.Ready(versions(next))
+        UpdateState.RolledBack(prev.version).also { _update.value = it }
+    }
+
+    private fun save(next: EngineState) {
+        state = next
+        EngineState.save(dirs.stateFile, next)
+    }
+
+    /** Borra las copias que no son ni la activa ni la anterior (solo sin ejecuciones en curso). */
+    private fun pruneVersions() {
+        if (leases.get() > 0) return
+        val keep = setOfNotNull(state.active?.version, state.previous?.version)
+        dirs.ytdlp.listFiles()?.filter { it.isDirectory && it.name !in keep }?.forEach { it.deleteRecursively() }
+    }
+
     /** La copia activa de yt-dlp, o null si el motor no está listo. */
     fun activeYtdlp(): File? = state.active?.let(store::file)?.takeIf { _status.value is EngineStatus.Ready }
 
@@ -154,6 +254,30 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         else -> SelfTestLine.fail(EngineErrors.UNKNOWN, s.toString())
     }
 
+    /**
+     * Al arrancar el proceso: mata los Python, FFmpeg o QuickJS nuestros que quedaron vivos de un proceso anterior
+     * de la app (mismo UID, ejecutable dentro de nuestra carpeta de bibliotecas). Nunca a la app misma.
+     */
+    private fun sweepOrphans() {
+        val me = Os.getpid()
+        val uid = android.os.Process.myUid()
+        val names = listOf("/libpython.so", "/libffmpeg.so", "/libffprobe.so", "/libqjs.so")
+        File("/proc").listFiles { f -> f.name.all(Char::isDigit) }?.forEach { dir ->
+            val pid = dir.name.toIntOrNull() ?: return@forEach
+            if (pid == me) return@forEach
+            runCatching {
+                val status = File(dir, "status").readLines()
+                val procUid = status.firstOrNull { it.startsWith("Uid:") }?.split(Regex("\\s+"))?.getOrNull(1)?.toIntOrNull()
+                if (procUid != uid) return@forEach
+                val cmd0 = File(dir, "cmdline").readText().substringBefore('\u0000')
+                if (names.any { cmd0.endsWith(it) } && context.packageName in cmd0) {
+                    Log.w(TAG, "Proceso huérfano $pid ($cmd0): se termina")
+                    Os.kill(pid, OsConstants.SIGKILL)
+                }
+            }
+        }
+    }
+
     // ------------------------------------------------------------------------------------------------ preparar
     private fun quickCheck(): EngineVersions? {
         val loaded = EngineState.load(dirs.stateFile)
@@ -161,7 +285,8 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
             store.verifies(loaded.active) &&
             dirs.caFile.exists() && EngineStore.sha256(dirs.caFile.inputStream()) == BuildConfig.CACERT_SHA256 &&
             loaded.selfTest?.let { it.ok && it.key == selfTestKey(loaded) } == true &&
-            loaded.bundledOfferedVersionCode == versionCode // una versión nueva de la app pasa por ensureActive
+            loaded.bundledOfferedVersionCode == versionCode && // una versión nueva de la app pasa por ensureActive
+            lib16kOk()
         if (!ok) return null
         state = loaded
         return versions(loaded)
@@ -196,6 +321,7 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
             phase = EnginePhase.FINISH
             _status.value = EngineStatus.Preparing(phase, null)
             installCaBundle()
+            setupLib16k()
             var next = store.ensureActive(EngineState.load(dirs.stateFile), versionCode)
             EngineState.save(dirs.stateFile, next)
             phase = EnginePhase.SELF_TEST
@@ -222,6 +348,32 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         _status.value = status
         if (status is EngineStatus.Failed) Log.w(TAG, "Motor: ${status.error.code} en ${status.phase}: ${status.error.detail}")
         return status
+    }
+
+    /**
+     * Páginas de 16 KB (Android 15+): las libwebp del paquete de FFmpeg están alineadas a 4 KB y no cargan. El APK
+     * trae copias propias (libkd_*.so, app/src/main/cpp); aquí se enlazan con su nombre original en lib16k, que
+     * va primero en LD_LIBRARY_PATH. Con páginas de 4 KB no se usa (lib16k no existe).
+     */
+    private fun setupLib16k() {
+        val dir = dirs.lib16k
+        dir.deleteRecursively()
+        if (Os.sysconf(OsConstants._SC_PAGESIZE) <= 4096L) return
+        val pairs = LIB16K.map { (name, apkName) -> name to dirs.lib(apkName) }
+        if (pairs.any { !it.second.isFile }) {
+            Log.w(TAG, "Páginas de 16 KB sin los reemplazos de libwebp en ${dirs.nativeLibDir}")
+            return
+        }
+        dir.mkdirs()
+        for ((name, target) in pairs) Os.symlink(target.path, File(dir, name).path)
+    }
+
+    /** lib16k está como tiene que estar para este tamaño de página y esta instalación de la app. */
+    private fun lib16kOk(): Boolean {
+        if (Os.sysconf(OsConstants._SC_PAGESIZE) <= 4096L) return !dirs.lib16k.exists()
+        return LIB16K.all { (name, apkName) ->
+            runCatching { Os.readlink(File(dirs.lib16k, name).path) == dirs.lib(apkName).path }.getOrDefault(false)
+        }
     }
 
     /** Hay [bytes] libres para la app en el disco de noBackupFilesDir (pide liberar caché si hace falta). */
@@ -352,11 +504,13 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         const val QUICKJS_VERSION = "2025-04-26"
 
         /** Sube cuando cambia la autoprueba o el instalador: obliga a repetirla. */
-        private const val SELFTEST_PATCH = 2 // 2: lanzador sin env (toybox env se comía el -c de Python)
+        private const val SELFTEST_PATCH = 3 // 2: lanzador sin env; 3: lib16k (libwebp de 16 KB)
         private const val EXTRA_SPACE = 40L shl 20
         private const val PROBE_TIMEOUT = 60_000L
         private const val YTDLP_TIMEOUT = 60_000L
         private const val FFMPEG_TIMEOUT = 30_000L
+        /** Reemplazos de 16 KB: nombre que busca FFmpeg → archivo del APK. */
+        private val LIB16K = listOf("libwebp.so" to "libkd_webp.so", "libwebpmux.so" to "libkd_webpmux.so", "libsharpyuv.so" to "libkd_sharpyuv.so")
         private val ABI_DIRS = mapOf("arm64" to "arm64-v8a", "arm" to "armeabi-v7a", "x86_64" to "x86_64", "x86" to "x86")
 
         private fun installedVersionCode(context: Context): Long = try {

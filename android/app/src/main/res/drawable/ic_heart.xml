@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Downloader -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Apoya el proyecto: un corazón. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+        <path
+        android:pathData="M12,20.5C12,20.5 3.5,15.5 3.5,9.5A4.5,4.5 0,0 1,12 7.3A4.5,4.5 0,0 1,20.5 9.5C20.5,15.5 12,20.5 12,20.5Z"
+        android:strokeWidth="2"
+        android:strokeColor="#FF000000"
+        android:strokeLineJoin="round" />
+</vector>

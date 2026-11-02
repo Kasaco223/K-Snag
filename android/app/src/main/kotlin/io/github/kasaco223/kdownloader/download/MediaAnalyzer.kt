@@ -15,6 +15,7 @@ import io.github.kasaco223.kdownloader.core.media.Tile
 import io.github.kasaco223.kdownloader.core.media.Tiles
 import io.github.kasaco223.kdownloader.engine.KdEngine
 import io.github.kasaco223.kdownloader.engine.PyRunner
+import io.github.kasaco223.kdownloader.platform.UiPrefs
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,7 +55,7 @@ data class Analysis(
  * Todavía no: actualizar yt-dlp ante un análisis degradado y reusar el info.json en la descarga (llegan con la
  * robustez del motor).
  */
-class MediaAnalyzer(private val engine: KdEngine, private val queue: DownloadQueue) {
+class MediaAnalyzer(private val engine: KdEngine, private val queue: DownloadQueue, private val prefs: UiPrefs) {
     sealed interface Result {
         data class Ok(val analysis: Analysis) : Result
         data class Failed(val error: JobError) : Result
@@ -75,7 +76,18 @@ class MediaAnalyzer(private val engine: KdEngine, private val queue: DownloadQue
         val me = currentCoroutineContext()[Job]
         active?.takeIf { it != me }?.cancel()
         active = me
-        return lock.withLock { withContext(Dispatchers.IO) { run(url, playlist, testFile) } }
+        return lock.withLock {
+            withContext(Dispatchers.IO) {
+                val first = run(url, playlist, testFile)
+                // YouTube dio solo 360p: puede ser un yt-dlp viejo. Se actualiza (si toca) y se analiza otra vez.
+                val degraded = (first as? Result.Ok)?.analysis?.degraded == true
+                if (degraded && prefs.autoUpdateEngine.value && engine.updateYtdlp(prefs.engineChannel.value) is KdEngine.UpdateState.Updated) {
+                    run(url, playlist, testFile)
+                } else {
+                    first
+                }
+            }
+        }
     }
 
     private suspend fun run(url: String, playlist: Boolean, testFile: Boolean): Result {
@@ -90,7 +102,7 @@ class MediaAnalyzer(private val engine: KdEngine, private val queue: DownloadQue
             val paths = Args.Paths(dirs.cache.apply { mkdirs() }.path, dirs.lib("libqjs.so").path, dirs.lib("libffmpeg.so").path, dir.path, File(dir, "tmp").path)
             val args = buildList {
                 add(ytdlp.path)
-                addAll(Args.base(paths))
+                addAll(Args.base(paths, engine.hints.youtubePlayerClient.takeIf { Urls.isYoutube(url) }))
                 addAll(if (playlist) listOf("--yes-playlist", "--flat-playlist") else listOf("--no-playlist"))
                 add("-J")
                 if (testFile) add("--enable-file-urls")

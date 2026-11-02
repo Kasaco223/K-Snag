@@ -93,7 +93,7 @@ case("dos fuentes del espejo con el mismo nombre",
      lambda d: comp(d, "ffmpeg")["sources"][0].update(file="youtubedl-android-0.18.1.tar.gz"), 1)
 case("nombre de archivo con ruta", lambda d: comp(d, "ffmpeg")["sources"][0].update(file="../ffmpeg.tar.xz"), 1)
 case("ruta de payload inválida", lambda d: comp(d, "python")["files"].append("usr/lib/libz.so"), 1)
-case("ruta apk: fuera de res/ o assets/", lambda d: comp(d, "yt-dlp")["files"].append("apk:lib/x86_64/libx.so"), 1)
+case("ruta apk: fuera de res/, assets/ o lib/", lambda d: comp(d, "yt-dlp")["files"].append("apk:META-INF/x.so"), 1)
 case("componente sin files", lambda d: comp(d, "python").pop("files"), 1)
 case("componente sin fuente ni receta", lambda d: comp(d, "freetype").pop("recipe"), 1)
 case("licencia citada que no existe", lambda d: comp(d, "python")["license_files"].append("python/NOTICE"), 1)

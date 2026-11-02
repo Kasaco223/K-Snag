@@ -1,0 +1,53 @@
+name: Reportar un problema (Android)
+description: Algo no funciona como debería en K-Downloader para Android.
+title: "[Android] "
+labels: ["bug", "android"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por avisar. **Nunca pegues contraseñas ni datos personales.** Este reporte es público.
+
+        *English is welcome too.*
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnóstico
+      description: En la app, Ajustes › Acerca de K-Downloader › «Copiar detalles», y pégalo aquí. No incluye enlaces ni datos personales.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: Qué pasó
+      description: Qué hiciste, qué esperabas y qué pasó. Si hubo un error, copia su título y su mensaje.
+    validations:
+      required: true
+
+  - type: input
+    id: site
+    attributes:
+      label: Sitio
+      description: De qué sitio era el video (YouTube, TikTok…). No hace falta el enlace.
+      placeholder: "YouTube"
+
+  - type: dropdown
+    id: format
+    attributes:
+      label: Formato
+      options:
+        - "Video (MP4)"
+        - "Máxima (MKV)"
+        - "Audio MP3"
+        - "Audio M4A"
+        - "Otra calidad (Más calidades)"
+        - "No aplica"
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Capturas (opcional)
+      description: Arrastra aquí las capturas de pantalla.

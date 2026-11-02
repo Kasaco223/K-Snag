@@ -13,6 +13,14 @@ import android.os.Build
 /** Acciones que salen de la app: abrir una página en el navegador y copiar texto. */
 object SystemActions {
     /** Abre [url] en el navegador. Devuelve false si no hay ninguna app que lo abra (nunca lanza). */
+    /** La lista de apps sin optimización de batería (sin pedir el permiso especial). */
+    fun openBatterySettings(context: android.content.Context): Boolean = runCatching {
+        context.startActivity(
+            android.content.Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK),
+        )
+        true
+    }.getOrDefault(false)
+
     fun openWebPage(context: Context, url: String): Boolean {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE)
         return try {

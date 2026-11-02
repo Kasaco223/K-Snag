@@ -109,7 +109,7 @@ else
     done
     echo "Autoprueba del motor: ${result:-sin respuesta}" | tee -a "$out/selftest.txt"
     allowlist="$(dirname "$0")/elf_alignment_allowlist.txt"
-    if [ "${page_size:-}" = "16384" ] && grep -q 'pending=M5' "$allowlist" 2>/dev/null; then
+    if [ "${page_size:-}" = "16384" ] && grep -qE '^[^#].* pending=M5' "$allowlist" 2>/dev/null; then
       case "$result" in
         "FAIL engine_incompatible:"*)
           echo "::notice::Páginas de 16 KB: engine_incompatible es lo esperado hasta M5 (libwebp propia)."

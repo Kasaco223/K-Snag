@@ -93,6 +93,7 @@ class DownloadService : Service() {
         }
         withContext(Dispatchers.IO) {
             while (true) {
+                if (!queue.networkAllowed()) break // «Solo con Wi-Fi»: KdlApp avisa cuando vuelve el Wi-Fi
                 val job = queue.nextQueued() ?: break
                 acquireWakeLock()
                 try {
@@ -110,7 +111,7 @@ class DownloadService : Service() {
     private fun stopIfIdle() {
         if (preparing || running) return
         val app = application as KdlApp
-        if (app.queue.hasQueued()) { // llegó algo mientras terminaba la vuelta anterior
+        if (app.queue.hasQueued() && app.queue.networkAllowed()) { // llegó algo mientras terminaba la vuelta anterior
             startRun(app)
             return
         }
@@ -135,10 +136,12 @@ class DownloadService : Service() {
         wakeLock = null
     }
 
-    /** Android 15+: se acabó el tiempo de dataSync. La vuelta automática llega más adelante; por ahora se cancela lo que corre. */
+    /**
+     * Android 15+: se acabó el tiempo de dataSync (6 h por día). Lo que corre queda «interrumpido» sin perder lo
+     * bajado y se retoma la próxima vez que se abra la app.
+     */
     override fun onTimeout(startId: Int, fgsType: Int) {
-        val app = application as KdlApp
-        app.queue.jobs.value.firstOrNull { it.isActive }?.let { app.queue.cancel(it.id) }
+        (application as KdlApp).queue.interruptActive()
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         stopSelf()
     }

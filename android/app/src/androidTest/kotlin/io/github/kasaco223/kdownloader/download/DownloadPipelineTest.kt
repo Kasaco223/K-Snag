@@ -6,8 +6,6 @@ import android.Manifest
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.system.Os
-import android.system.OsConstants
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.kasaco223.kdownloader.KdlApp
@@ -39,7 +37,6 @@ class DownloadPipelineTest {
 
     @Before
     fun setUp() {
-        assumeTrue("El motor necesita páginas de 4 KB hasta M5", Os.sysconf(OsConstants._SC_PAGESIZE) == 4096L)
         if (Build.VERSION.SDK_INT <= 28) {
             // Respaldo de `adb install -g` (ci_emulator.sh): se espera a que el comando termine.
             instrumentation.uiAutomation.executeShellCommand("pm grant ${app.packageName} ${Manifest.permission.WRITE_EXTERNAL_STORAGE}")

@@ -30,6 +30,9 @@ data class EngineState(
     val bundledOfferedVersionCode: Long? = null,
     val selfTest: SelfTestRecord? = null,
     val sessionMode: String? = null,
+    /** Última vez que se buscó una versión nueva de yt-dlp, y el error de esa búsqueda (null si salió bien). */
+    val checkedAt: Long = 0,
+    val lastError: String? = null,
 ) {
     fun toJson(): JSONObject = JSONObject().apply {
         put("schema", SCHEMA)
@@ -44,6 +47,8 @@ data class EngineState(
             } ?: JSONObject.NULL,
         )
         put("session_mode", sessionMode ?: JSONObject.NULL)
+        put("checked_at", checkedAt)
+        put("last_error", lastError ?: JSONObject.NULL)
     }
 
     companion object {
@@ -70,6 +75,8 @@ data class EngineState(
                 bundledOfferedVersionCode = if (json.isNull("bundled_offered_vc")) null else json.optLong("bundled_offered_vc"),
                 selfTest = self,
                 sessionMode = if (json.isNull("session_mode")) null else json.optString("session_mode"),
+                checkedAt = json.optLong("checked_at"),
+                lastError = if (json.isNull("last_error")) null else json.optString("last_error").takeIf { json.has("last_error") },
             )
         }
 

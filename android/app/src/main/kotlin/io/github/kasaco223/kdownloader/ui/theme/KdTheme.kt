@@ -93,7 +93,15 @@ val KdShapes = Shapes(
     extraLarge = RoundedCornerShape(28.dp),
 )
 
-/** El tema sigue al sistema (claro u oscuro). El selector de tema de la app llega con la pestaña Ajustes. */
+/** "system" sigue al sistema; "light" y "dark" lo fijan (Ajustes › Apariencia). */
+@Composable
+fun darkFor(theme: String): Boolean = when (theme) {
+    "light" -> false
+    "dark" -> true
+    else -> isSystemInDarkTheme()
+}
+
+/** El tema de la app: oscuro o claro según [dark]. */
 @Composable
 fun KdTheme(dark: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     MaterialTheme(

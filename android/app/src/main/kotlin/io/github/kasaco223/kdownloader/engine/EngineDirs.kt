@@ -40,8 +40,15 @@ class EngineDirs(context: Context) {
 
     fun ytdlpFile(version: String) = File(ytdlp, "$version/yt-dlp")
 
-    /** LD_LIBRARY_PATH de Python y sus hijos: primero las bibliotecas de Python, después las de FFmpeg. */
-    fun libraryPath(): String = listOf("python", "ffmpeg").joinToString(":") { File(payloadDir(it), "usr/lib").path }
+    /**
+     * LD_LIBRARY_PATH de Python y sus hijos: primero los reemplazos de 16 KB (solo si existen), después las
+     * bibliotecas de Python y las de FFmpeg.
+     */
+    fun libraryPath(): String = (listOfNotNull(lib16k.takeIf { it.isDirectory }?.path) +
+        listOf("python", "ffmpeg").map { File(payloadDir(it), "usr/lib").path }).joinToString(":")
+
+    /** Enlaces con el nombre original (libwebp.so…) a las copias de 16 KB del APK (libkd_webp.so…). */
+    val lib16k = File(payload, "lib16k")
 
     fun pythonHome() = File(payloadDir("python"), "usr")
 

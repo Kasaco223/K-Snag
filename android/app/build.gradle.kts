@@ -47,6 +47,15 @@ android {
     namespace = "io.github.kasaco223.kdownloader"
     // AGP 9.4 resuelve 37 como platforms;android-37.0. Compose 1.12 y core 1.19 lo exigen (minCompileSdk).
     compileSdk = 37
+    // NDK y CMake solo para los reemplazos de 16 KB (libwebp, app/src/main/cpp). Los mismos que SDK_PACKAGES en CI.
+    ndkVersion = "29.0.14206865"
+
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.31.5"
+        }
+    }
 
     defaultConfig {
         applicationId = "io.github.kasaco223.kdownloader" // no cambia nunca después del primer Release
@@ -58,6 +67,8 @@ android {
         buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
         buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD\"")
         buildConfigField("String", "WEB_BASE", "\"https://kdownloader.vercel.app\"")
+        // Enlace de donación (PayPal). Vacío: la app no muestra «Apoya K-Downloader».
+        buildConfigField("String", "DONATE_URL", "\"\"")
         buildConfigField("String", "YOUTUBEDL_ANDROID_VERSION", "\"${libs.versions.youtubedl.get()}\"")
         buildConfigField("String", "YTDLP_BUNDLED_VERSION", "\"${pin("ytdlp.version")}\"")
         buildConfigField("String", "YTDLP_BUNDLED_CHANNEL", "\"${pin("ytdlp.channel")}\"")
@@ -66,6 +77,14 @@ android {
         buildConfigField("String", "CACERT_SHA256", "\"${pin("cacert.sha256")}\"")
         buildConfigField("boolean", "KD_TEST_HOOKS", "false")
         if (devAbi != null) ndk { abiFilters += devAbi } // un solo APK (-Pkdl.devAbi=…); nunca junto con splits
+        // Reemplazos de 16 KB (M5): solo las ABI de 64 bits (no hay páginas de 16 KB en 32 bits).
+        externalNativeBuild {
+            cmake {
+                abiFilters += listOf("arm64-v8a", "x86_64")
+                targets += listOf("webp", "libwebpmux", "sharpyuv")
+                arguments += listOf("-DKD_WEBP_SRC=${layout.buildDirectory.dir("generated/kd/webp-src").get().asFile.path}")
+            }
+        }
     }
 
     flavorDimensions += "distribution"
@@ -167,6 +186,15 @@ val kdEngineAssets = tasks.register<KdEngineAssetsTask>("kdEngineAssets") {
     cacertUrl.set(pin("cacert.url"))
     cacertSha256.set(pin("cacert.sha256"))
     outputDir.set(layout.buildDirectory.dir("generated/kd/engineAssets"))
+}
+// Fuentes de libwebp 1.6.0 (las mismas, con el mismo SHA-256, que third_party/components.json → libwebp).
+val kdWebpSource = tasks.register<KdNativeSourceTask>("kdWebpSource") {
+    url.set("https://github.com/webmproject/libwebp/archive/v1.6.0.tar.gz")
+    sha256.set("93a852c2b3efafee3723efd4636de855b46f9fe1efddd607e1f42f60fc8f2136")
+    outputDir.set(layout.buildDirectory.dir("generated/kd/webp-src"))
+}
+tasks.configureEach {
+    if (name.contains("CMake") || name.startsWith("externalNativeBuild") || name.contains("JsonModel")) dependsOn(kdWebpSource)
 }
 val kdEngineRes = tasks.register<KdResTask>("kdEngineRes") {
     ytdlpUrl.set(pin("ytdlp.url"))

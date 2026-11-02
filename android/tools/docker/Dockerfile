@@ -42,8 +42,8 @@ RUN mkdir -p "$ANDROID_HOME/cmdline-tools" \
 
 # Los mismos paquetes que SDK_PACKAGES en .github/workflows/android-ci.yml: compileSdk 37
 # (platforms;android-37.0) y build-tools 36.0.0 (el mínimo y el predeterminado de AGP 9.4.1). Solo se
-# responden las licencias de estos paquetes; el NDK y CMake llegan con la libwebp propia (16 KB).
-RUN (yes || true) | sdkmanager --install "platforms;android-37.0" "build-tools;36.0.0" > /dev/null \
+# responden las licencias de estos paquetes. El NDK y CMake compilan la libwebp propia de 16 KB (app/src/main/cpp).
+RUN (yes || true) | sdkmanager --install "platforms;android-37.0" "build-tools;36.0.0" "ndk;29.0.14206865" "cmake;3.31.5" > /dev/null \
  && rm -rf /root/.android/cache
 
 COPY kdl-build.sh /usr/local/bin/kdl-build
