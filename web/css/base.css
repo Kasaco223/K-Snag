@@ -441,3 +441,6 @@ main { flex: 1; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* El atributo hidden gana siempre (los avisos que se muestran según la plataforma). */
+[hidden] { display: none !important; }
