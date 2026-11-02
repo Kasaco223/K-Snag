@@ -81,7 +81,7 @@ android {
         externalNativeBuild {
             cmake {
                 abiFilters += listOf("arm64-v8a", "x86_64")
-                targets += listOf("webp", "webpmux", "sharpyuv")
+                targets += listOf("webp", "libwebpmux", "sharpyuv")
                 arguments += listOf("-DKD_WEBP_SRC=${layout.buildDirectory.dir("generated/kd/webp-src").get().asFile.path}")
             }
         }

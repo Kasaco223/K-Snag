@@ -21,7 +21,11 @@ set(WEBP_BUILD_LIBWEBPMUX ON CACHE BOOL "" FORCE)
 
 add_subdirectory(${KD_WEBP_SRC} webp)
 
-foreach(t webp webpmux sharpyuv)
-  set_target_properties(${t} PROPERTIES OUTPUT_NAME kd_${t} NO_SONAME ON)
-  target_link_options(${t} PRIVATE "-Wl,-soname,lib${t}.so" "-Wl,-z,max-page-size=16384" "-Wl,-z,common-page-size=16384")
+# Destino de CMake de libwebp → nombre de la biblioteca (libwebpmux se llama así como destino).
+foreach(pair "webp:webp" "libwebpmux:webpmux" "sharpyuv:sharpyuv")
+  string(REPLACE ":" ";" parts "${pair}")
+  list(GET parts 0 target)
+  list(GET parts 1 lib)
+  set_target_properties(${target} PROPERTIES OUTPUT_NAME kd_${lib} NO_SONAME ON)
+  target_link_options(${target} PRIVATE "-Wl,-soname,lib${lib}.so" "-Wl,-z,max-page-size=16384" "-Wl,-z,common-page-size=16384")
 endforeach()

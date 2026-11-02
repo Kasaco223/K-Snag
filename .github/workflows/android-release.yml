@@ -1,0 +1,473 @@
+name: Android Release
+
+# Se dispara al subir un tag android-vX.Y.Z (o android-vX.Y.Z-rc.N). Nunca toca los Releases de Windows.
+# - build: exige el espejo de fuentes publicado, compila los APK por ABI SIN firmar (y el qa x86_64 para
+#   el humo). No ve ningún secreto. Las versiones estables no salen con "pending" en la lista de 16 KB.
+# - smoke: autoprueba del qa en emuladores API 26, 36 y 36 con páginas de 16 KB (obligatorio en estables).
+# - sign: environment protegido "android-release" (aprobación + solo tags android-v*): firma con apksigner,
+#   verifica el certificado, calcula hashes, atestigua la procedencia y crea el Release como BORRADOR,
+#   PRE-RELEASE y sin Latest. Tú lo revisas y lo publicas (docs/release-android.md).
+# "Run workflow" desde una rama es siempre un ensayo: firma con una llave temporal y no crea nada.
+
+on:
+  push:
+    tags:
+      - "android-v*.*.*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Ensayo: compilar y firmar con una llave temporal, sin crear el Release"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ABIS: "arm64-v8a armeabi-v7a x86_64"
+  BUILD_TOOLS: "36.0.0"
+  SDK_PACKAGES: "platforms;android-37.0 build-tools;36.0.0 ndk;29.0.14206865 cmake;3.31.5"
+  ANDROID_PACKAGE: "io.github.kasaco223.kdownloader"  # = applicationId de android/app/build.gradle.kts
+
+jobs:
+  build:
+    name: Compilar APK sin firmar
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+      channel: ${{ steps.meta.outputs.channel }}
+      version_codes: ${{ steps.meta.outputs.version_codes }}
+      publish: ${{ steps.meta.outputs.publish }}
+      min_sdk: ${{ steps.apks.outputs.min_sdk }}
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # GPL/LGPL/MPL: antes de que este run suba un solo APK (también el ensayo), el código fuente de los
+      # binarios de terceros tiene que estar publicado y completo.
+      - name: Espejo de fuentes publicado y completo
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 android/scripts/sources_mirror.py --verify
+
+      - name: Comprobar versión y tag
+        id: meta
+        shell: python
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          import json, os, re, sys
+          from pathlib import Path
+
+          def fail(message):
+              print(f"::error file=android/version.properties::{message}", flush=True)
+              sys.exit(1)
+
+          props = {}
+          for line in Path("android/version.properties").read_text(encoding="utf-8").splitlines():
+              line = line.strip()
+              if line and not line.startswith("#") and "=" in line:
+                  key, value = line.split("=", 1)
+                  props[key.strip()] = value.strip()
+          version = props.get("VERSION_NAME", "")
+          m = re.fullmatch(r"(\d{1,3})\.(\d{1,2})\.(\d{1,2})(?:-rc\.([1-9]\d?))?", version)
+          if not m or (m.group(4) and int(m.group(4)) > 98):
+              fail(f"VERSION_NAME = {version!r}: usa X.Y.Z o X.Y.Z-rc.N (Y y Z hasta 99, N de 1 a 98)")
+          major, minor, patch = (int(g) for g in m.groups()[:3])
+          rc = int(m.group(4)) if m.group(4) else None
+          tag = f"android-v{version}"
+          is_tag = os.environ["REF_TYPE"] == "tag"
+          if is_tag and os.environ["REF_NAME"] != tag:
+              fail(f"El tag {os.environ['REF_NAME']} no coincide con VERSION_NAME ({version}). Corrige uno de los dos.")
+          # Misma fórmula que android/app/build.gradle.kts: las rc quedan por debajo de la final,
+          # y el último dígito es la ABI (las de 64 bits, más altas).
+          base = major * 1_000_000 + minor * 10_000 + patch * 100 + (rc if rc else 99)
+          codes = {"armeabi-v7a": base * 10 + 1, "arm64-v8a": base * 10 + 3, "x86_64": base * 10 + 4}
+          publish = is_tag and os.environ.get("DRY_RUN", "") != "true"
+          outputs = {
+              "version": version,
+              "tag": tag,
+              "channel": "rc" if rc else "stable",
+              "version_codes": json.dumps(codes, separators=(",", ":")),
+              "publish": str(publish).lower(),
+          }
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              for key, value in outputs.items():
+                  f.write(f"{key}={value}\n")
+          print(outputs)
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Paquetes del SDK fijados
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install $SDK_PACKAGES > /dev/null
+
+      - name: Preparar Gradle (sin caché: el build de release sale de cero)
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-disabled: true
+
+      - name: Compilar los APK de release (sin firmar), el qa para el humo y correr las pruebas
+        working-directory: android
+        env:
+          KDL_SOURCE_COMMIT: ${{ github.sha }}
+        run: ./gradlew --stacktrace :core:test :app:testGithubReleaseUnitTest :app:assembleGithubRelease :app:assembleGithubQa
+
+      - name: Páginas de 16 KB en las bibliotecas nativas (estables: sin pendientes)
+        env:
+          STRICT: ${{ steps.meta.outputs.channel == 'stable' && '--fail-on-pending' || '' }}
+        run: python3 android/scripts/check_elf_alignment.py $STRICT android/app/build/outputs/apk/github/release/*.apk
+
+      - name: Comprobar los APK (paquete, versión, ABI y SDK)
+        id: apks
+        shell: python
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          VERSION_CODES: ${{ steps.meta.outputs.version_codes }}
+        run: |
+          import json, os, re, subprocess, sys
+          from pathlib import Path
+
+          aapt2 = Path(os.environ["ANDROID_HOME"], "build-tools", os.environ["BUILD_TOOLS"], "aapt2")
+          codes = json.loads(os.environ["VERSION_CODES"])
+          problems, min_sdks = [], set()
+          for abi in os.environ["ABIS"].split():
+              found = sorted(Path("android/app/build/outputs/apk").rglob(f"*-{abi}-release-unsigned.apk"))
+              if len(found) != 1:
+                  problems.append(f"{abi}: se esperaba 1 APK sin firmar, hay {len(found)}")
+                  continue
+              badging = subprocess.run([str(aapt2), "dump", "badging", str(found[0])],
+                                       capture_output=True, text=True, check=True).stdout
+              pkg = re.search(r"^package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'", badging, re.M)
+              native = re.search(r"^native-code: (.+)$", badging, re.M)
+              sdk = re.search(r"^(?:minSdkVersion|sdkVersion):'(\d+)'", badging, re.M)
+              if not pkg:
+                  problems.append(f"{abi}: aapt2 no pudo leer el paquete")
+                  continue
+              name, code, version_name = pkg.groups()
+              if name != os.environ["ANDROID_PACKAGE"]:
+                  problems.append(f"{abi}: paquete {name}, se esperaba {os.environ['ANDROID_PACKAGE']}")
+              if version_name != os.environ["VERSION"]:
+                  problems.append(f"{abi}: versionName {version_name}, se esperaba {os.environ['VERSION']}")
+              if int(code) != codes[abi]:
+                  problems.append(f"{abi}: versionCode {code}, se esperaba {codes[abi]}")
+              if not native or native.group(1).strip() != f"'{abi}'":
+                  problems.append(f"{abi}: native-code = {native.group(1) if native else 'ninguno'}")
+              if sdk:
+                  min_sdks.add(int(sdk.group(1)))
+              print(f"{abi}: {found[0].name} {name} {version_name} ({code})")
+          if len(min_sdks) != 1:
+              problems.append(f"minSdk distinto o ausente entre ABIs: {sorted(min_sdks)}")
+          if problems:
+              print("::error::" + " | ".join(problems))
+              sys.exit(1)
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"min_sdk={min_sdks.pop()}\n")
+
+      - name: Guardar los APK sin firmar
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-unsigned-${{ steps.meta.outputs.tag }}
+          path: |
+            android/app/build/outputs/apk/**/*-release-unsigned.apk
+            android/app/build/outputs/mapping/**/mapping.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Guardar el qa x86_64 (humo en emuladores)
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-qa-${{ steps.meta.outputs.tag }}
+          path: android/app/build/outputs/apk/github/qa/*x86_64*.apk
+          if-no-files-found: error
+          retention-days: 7
+
+  smoke:
+    name: Humo ${{ matrix.name }}
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    # El de 16 KB es obligatorio para versiones estables (1.0 no sale sin M5); informativo en las rc.
+    continue-on-error: ${{ matrix.ps16k && needs.build.outputs.channel == 'rc' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: "API 26", api: 26, target: default, ps16k: false }
+          - { name: "API 36", api: 36, target: google_apis, ps16k: false }
+          - { name: "API 36 · 16 KB", api: 36, target: google_apis_ps16k, ps16k: true }
+    steps:
+      - name: Descargar los scripts
+        uses: actions/checkout@v7
+        with:
+          sparse-checkout: android/scripts
+          persist-credentials: false
+      - name: Bajar el qa x86_64
+        uses: actions/download-artifact@v8
+        with:
+          name: android-qa-${{ needs.build.outputs.tag }}
+          path: qa
+      - name: Habilitar KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Autoprueba del motor (init, yt-dlp, FFmpeg)
+        uses: reactivecircus/android-emulator-runner@v2.38.0
+        with:
+          api-level: ${{ matrix.api }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          cores: 4
+          ram-size: 4096M
+          disk-size: 8G
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -no-snapshot -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: bash android/scripts/ci_emulator.sh qa out --only-selftest
+      - name: Guardar logcat
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-humo-api${{ matrix.api }}-${{ matrix.target }}-${{ github.run_id }}
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  sign:
+    name: Firmar y crear el borrador
+    needs: [build, smoke]
+    if: needs.build.outputs.publish == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: android-release
+    permissions:
+      contents: write          # crear el Release
+      id-token: write          # atestación de procedencia (Sigstore)
+      attestations: write
+      artifact-metadata: write
+    env:
+      VERSION: ${{ needs.build.outputs.version }}
+      TAG: ${{ needs.build.outputs.tag }}
+      CHANNEL: ${{ needs.build.outputs.channel }}
+      VERSION_CODES: ${{ needs.build.outputs.version_codes }}
+      MIN_SDK: ${{ needs.build.outputs.min_sdk }}
+    steps:
+      - name: Descargar el código (scripts y CHANGELOG, sin Gradle)
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Requisitos (huella del certificado y código fuente de los binarios GPL)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          cert_file=android/signing/release-cert.sha256   # una huella por línea; la primera = llave actual
+          current=$(head -n 1 "$cert_file" 2>/dev/null || true)
+          if ! [[ "$current" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "::error file=${cert_file}::Falta la huella SHA-256 del certificado de release (docs/release-android.md, paso 0)."
+            exit 1
+          fi
+          echo "EXPECTED_CERT_SHA256=${current}" >> "$GITHUB_ENV"
+          # GPL-3.0 §6 / MPL-2.0 §3.2: el código fuente de FFmpeg y compañía, publicado ANTES que el APK.
+          python3 android/scripts/sources_mirror.py --verify
+          ytdl=$(sed -n 's/^youtubedl *= *"\([^"]*\)".*/\1/p' android/gradle/libs.versions.toml)
+          echo "SOURCES_TAG=android-sources-ytdl-${ytdl}" >> "$GITHUB_ENV"
+
+      - name: Bajar los APK sin firmar
+        uses: actions/download-artifact@v8
+        with:
+          name: android-unsigned-${{ needs.build.outputs.tag }}
+          path: unsigned
+
+      - name: Firmar con la llave del proyecto y verificar
+        env:
+          ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }} # PKCS12: una sola contraseña (almacén y llave)
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ANDROID_KEYSTORE_B64}" ] || [ -z "${KS_PASS}" ] || [ -z "${KEY_ALIAS}" ]; then
+            echo "::error::Faltan los secretos del environment android-release (docs/release-android.md, paso 0)."
+            exit 1
+          fi
+          export KS_FILE="${RUNNER_TEMP}/kd-release.p12"
+          trap 'rm -f "$KS_FILE"' EXIT
+          printf '%s' "$ANDROID_KEYSTORE_B64" | base64 --decode > "$KS_FILE"
+          chmod 600 "$KS_FILE"
+          bash android/scripts/sign_apks.sh unsigned dist
+
+      - name: android-release.json, SHA256SUMS-android.txt y notas
+        shell: python
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          import hashlib, json, os, re, subprocess
+          from pathlib import Path
+
+          def sha256(path):
+              h = hashlib.sha256()
+              with open(path, "rb") as f:
+                  for chunk in iter(lambda: f.read(1 << 20), b""):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          version, tag, repo = os.environ["VERSION"], os.environ["TAG"], os.environ["REPO"]
+          cert_hex = os.environ["EXPECTED_CERT_SHA256"].replace(":", "").strip().lower()
+          codes = json.loads(os.environ["VERSION_CODES"])
+          dist = Path("dist")
+          base = f"https://github.com/{repo}/releases/download/{tag}"
+          apks = {}
+          for abi in os.environ["ABIS"].split():
+              apk = dist / f"K-Downloader-Android-{abi}.apk"
+              apks[abi] = {"url": f"{base}/{apk.name}", "sha256": sha256(apk), "size": apk.stat().st_size,
+                           "version_code": codes[abi]}
+          manifest = {
+              "schema": 1, "version": version, "tag": tag, "package": os.environ["ANDROID_PACKAGE"],
+              "min_sdk": int(os.environ["MIN_SDK"]), "notes_url": f"https://github.com/{repo}/releases/tag/{tag}",
+              "cert_sha256": cert_hex, "published_at": None, "min_version_code": None,
+              "apks": apks,
+          }
+          (dist / "android-release.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+          names = sorted(p.name for p in dist.iterdir())
+          (dist / "SHA256SUMS-android.txt").write_text("".join(f"{sha256(dist / n)}  {n}\n" for n in names),
+                                                       encoding="utf-8")
+
+          # Notas: sección del CHANGELOG + descargas + verificación + fuentes y licencias.
+          changelog = Path("android/CHANGELOG.md").read_text(encoding="utf-8")
+          section = re.search(rf"^## \[?{re.escape(version)}\]?[^\n]*\n(.*?)(?=^## |\Z)", changelog, re.M | re.S)
+          if not section and os.environ["CHANNEL"] == "stable":
+              raise SystemExit(f"::error file=android/CHANGELOG.md::Falta la sección '## {version}' en android/CHANGELOG.md")
+          prev = subprocess.run(["git", "describe", "--tags", "--abbrev=0", "--match", "android-v*",
+                                 "--exclude", "android-v*-rc.*", f"{tag}^"], capture_output=True, text=True).stdout.strip()
+          log_range = [f"{prev}..{tag}"] if prev else [tag]
+          commits = subprocess.run(["git", "log", "--no-merges", "--format=- %s (%h)", *log_range, "--",
+                                    "android", "src/kdownloader/engine/errors_catalog.json"],
+                                   capture_output=True, text=True, check=True).stdout.strip()
+          mb = lambda abi: f"{apks[abi]['size'] / 1e6:.0f} MB"
+          cert = ":".join(re.findall("..", cert_hex.upper()))
+          kind = "versión de prueba" if os.environ["CHANNEL"] == "rc" else "versión estable"
+          notes = f"""**K-Downloader para Android {version}** · {kind}
+
+          > GitHub la muestra como *Pre-release* a propósito: así «Latest» sigue siendo la app de Windows, de la que dependen su botón de descarga y su actualización automática. *Shown as Pre-release on purpose, so that "Latest" stays on the Windows app.*
+
+          ## Novedades · What's new
+
+          {section.group(1).strip() if section else "_Versión de prueba: sin notas todavía._"}
+
+          ## Descargar · Download
+
+          Instrucciones paso a paso: https://kdownloader.vercel.app/android
+
+          | Archivo | Para | Tamaño |
+          | --- | --- | --- |
+          | `K-Downloader-Android-arm64-v8a.apk` | Casi todos los celulares Android (64 bits) | {mb('arm64-v8a')} |
+          | `K-Downloader-Android-armeabi-v7a.apk` | Celulares antiguos de 32 bits | {mb('armeabi-v7a')} |
+          | `K-Downloader-Android-x86_64.apk` | Chromebooks y emuladores | {mb('x86_64')} |
+
+          ## Verificar · Verify
+
+          - SHA-256 de cada archivo: `SHA256SUMS-android.txt`.
+          - Certificado de firma (SHA-256): `{cert}`
+          - Procedencia: `gh attestation verify K-Downloader-Android-arm64-v8a.apk -R {repo} --signer-workflow {repo}/.github/workflows/android-release.yml --source-ref refs/tags/{tag}`
+
+          ## Código fuente y licencias · Source code and licenses
+
+          K-Downloader para Android es software libre con licencia GPL-3.0-or-later. Su código es la carpeta `android/` del *Source code* de este Release. Componentes de terceros y sus licencias: [android/THIRD_PARTY_NOTICES.md](https://github.com/{repo}/blob/{tag}/android/THIRD_PARTY_NOTICES.md). Código fuente de los binarios GPL/LGPL que trae el APK (FFmpeg, Python y sus bibliotecas): [{os.environ['SOURCES_TAG']}](https://github.com/{repo}/releases/tag/{os.environ['SOURCES_TAG']}).
+
+          <details><summary>Cambios en android/ {"desde " + prev if prev else ""}</summary>
+
+          {commits or "- (sin cambios)"}
+
+          </details>
+          """
+          Path(os.environ["RUNNER_TEMP"], "notes.md").write_text(notes, encoding="utf-8")
+          print(json.dumps(manifest, indent=2))
+
+      - name: Atestiguar la procedencia de los APK
+        uses: actions/attest@v4
+        with:
+          subject-path: "dist/K-Downloader-Android-*.apk"
+
+      - name: Crear el Release (borrador, pre-release, nunca Latest)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          files=(dist/K-Downloader-Android-*.apk dist/android-release.json dist/SHA256SUMS-android.txt)
+          notes="${RUNNER_TEMP}/notes.md"
+          if draft=$(gh release view "$TAG" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [ "$draft" != "true" ]; then
+              echo "::error::El Release $TAG ya está publicado. No se reemplazan archivos de un Release publicado: sube una versión nueva."
+              exit 1
+            fi
+            gh release upload "$TAG" "${files[@]}" --clobber
+            gh release edit "$TAG" --prerelease --latest=false --notes-file "$notes"
+          else
+            gh release create "$TAG" "${files[@]}" --draft --prerelease --latest=false --verify-tag \
+              --title "K-Downloader para Android ${VERSION}" --notes-file "$notes"
+          fi
+          {
+            echo "### Borrador listo: K-Downloader para Android ${VERSION}"
+            echo ""
+            echo "Certificado: \`${EXPECTED_CERT_SHA256}\`"
+            echo ""
+            echo "Revísalo y publícalo como **pre-release** (checklist en docs/release-android.md)."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  dry-run:
+    name: Ensayo de firma (llave temporal)
+    needs: [build, smoke]
+    if: needs.build.outputs.publish != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Bajar los APK sin firmar
+        uses: actions/download-artifact@v8
+        with:
+          name: android-unsigned-${{ needs.build.outputs.tag }}
+          path: unsigned
+
+      - name: Firmar con una llave temporal y verificar
+        run: |
+          set -euo pipefail
+          export KS_FILE="${RUNNER_TEMP}/ensayo.p12" KS_PASS="ensayo-$RANDOM$RANDOM" KEY_ALIAS=ensayo
+          export KEY_PASS="$KS_PASS"
+          keytool="${JAVA_HOME_17_X64:-$JAVA_HOME}/bin/keytool"
+          "$keytool" -genkeypair -keystore "$KS_FILE" -storetype PKCS12 -storepass "$KS_PASS" -alias "$KEY_ALIAS" \
+            -keyalg RSA -keysize 2048 -validity 1 -dname "CN=Ensayo K-Downloader" -noprompt
+          EXPECTED_CERT_SHA256=$("$keytool" -exportcert -keystore "$KS_FILE" -storepass "$KS_PASS" -alias "$KEY_ALIAS" \
+            | sha256sum | cut -d' ' -f1)
+          export EXPECTED_CERT_SHA256
+          bash android/scripts/sign_apks.sh unsigned dist
+          sha256sum dist/*.apk | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Guardar los APK del ensayo (no instalables junto a la versión real)
+        uses: actions/upload-artifact@v7
+        with:
+          name: android-ensayo-${{ github.run_id }}
+          path: dist/*.apk
+          retention-days: 7
