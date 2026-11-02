@@ -35,8 +35,8 @@ CHANNELS = {  # canal -> (archivo del puntero, tags aceptados)
 LOCAL_FIELDS = {"published_at", "min_version_code"}  # lo único que el puntero agrega al android-release.json
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 REDIRECTS = {"/android/descargar": "arm64-v8a", **{f"/android/descargar/{abi}": abi for abi in ABIS}}
-# Nombre anterior (K-Downloader): existe en todos los Releases de Windows, también con copia desde la 2.0.3.
-WINDOWS = f"https://github.com/{REPO}/releases/latest/download/Instalar-K-Downloader.cmd"
+# Desde la 2.0.3 el instalador se llama Instalar-K-Snag.cmd (el Release trae además la copia con el nombre anterior).
+WINDOWS = f"https://github.com/{REPO}/releases/latest/download/Instalar-K-Snag.cmd"
 
 
 def http_json(url: str, api: bool = False) -> dict:
