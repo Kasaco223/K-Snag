@@ -113,7 +113,9 @@ jobs:
           java-version: "21"
 
       - name: Paquetes del SDK fijados
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install $SDK_PACKAGES > /dev/null
+        run: |
+          # shellcheck disable=SC2086 # SDK_PACKAGES es una lista separada por espacios
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install $SDK_PACKAGES > /dev/null
 
       - name: "Preparar Gradle (sin caché: el build de release sale de cero)"
         uses: gradle/actions/setup-gradle@v6
@@ -129,7 +131,9 @@ jobs:
       - name: "Páginas de 16 KB en las bibliotecas nativas (estables: sin pendientes)"
         env:
           STRICT: ${{ steps.meta.outputs.channel == 'stable' && '--fail-on-pending' || '' }}
-        run: python3 android/scripts/check_elf_alignment.py $STRICT android/app/build/outputs/apk/github/release/*.apk
+        run: |
+          # shellcheck disable=SC2086 # STRICT es vacío o una sola opción
+          python3 android/scripts/check_elf_alignment.py $STRICT android/app/build/outputs/apk/github/release/*.apk
 
       - name: Comprobar los APK (paquete, versión, ABI y SDK)
         id: apks
