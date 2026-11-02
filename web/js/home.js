@@ -7,7 +7,7 @@ import { initTour } from './tour.js';
 
 const $ = (id) => document.getElementById(id);
 
-/** El botón del hero lleva a la guía de tu sistema; en iPhone se explica que no se puede. */
+/** El enlace del hero lleva a la guía de tu sistema (el botón de descarga está al final de ella). */
 function initPlatformHero(platform) {
   document.documentElement.dataset.platform = platform;
   if (platform === 'ios') {
@@ -15,8 +15,8 @@ function initPlatformHero(platform) {
     return;
   }
   const label = $('cta-install-label');
-  if (label && platform === 'android') label.textContent = 'Instalar en Android';
-  else if (label && platform === 'windows') label.textContent = 'Instalar en Windows';
+  if (label && platform === 'android') label.textContent = 'Mira cómo instalarla en Android';
+  else if (label && platform === 'windows') label.textContent = 'Mira cómo instalarla en Windows';
 }
 
 initSite();

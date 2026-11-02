@@ -74,7 +74,14 @@
   letter-spacing: -0.035em;
   line-height: 1.02;
 }
-.hero-title .gradient-text { white-space: nowrap; }
+/* Con line-height 1.02 el fondo del degradado terminaba antes de la cola de la «g» y se cortaba:
+   se alarga hacia abajo con padding y se compensa con margen negativo. */
+.hero-title .gradient-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
 .hero-logo {
   width: 64px;
   height: 64px;
@@ -117,6 +124,35 @@
   transition: color var(--dur) var(--ease);
 }
 .hero-link:hover { color: var(--text); text-decoration: underline; }
+/* Invita a bajar a la guía: no es un botón de descarga (ese está al final de la guía). */
+.hero-scroll {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 6px;
+  color: var(--text);
+  font-size: 1.125rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.hero-scroll:hover { color: var(--accent-text); }
+.hero-scroll-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--accent-text);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-scroll-arrow { animation: hero-bob 1.8s var(--ease) infinite; }
+}
+@keyframes hero-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
 .hero-meta {
   display: flex;
   flex-wrap: wrap;
