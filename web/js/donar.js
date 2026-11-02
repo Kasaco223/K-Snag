@@ -1,4 +1,4 @@
-// /donar: pestañas «Desde Colombia» / «Desde otro país» y botón para copiar la llave Bre-B.
+// /donar: pestañas «Desde Colombia» / «Desde otro país» y botones para copiar la llave Bre-B y la dirección cripto.
 // Sin JavaScript se ven las dos secciones completas, una debajo de la otra.
 import { initSite, storage } from './site.js';
 
@@ -70,8 +70,8 @@ function initCopy() {
         const code = button.parentElement.querySelector('code');
         if (code) window.getSelection()?.selectAllChildren(code);
       }
-      if (label) label.textContent = ok ? '¡Copiada!' : 'Selecciónala y cópiala';
-      if (status) status.textContent = ok ? 'Llave copiada. Pégala en la app de tu banco.' : '';
+      if (label) label.textContent = ok ? '¡Copiado!' : 'Selecciónalo y cópialo';
+      if (status) status.textContent = ok ? (button.dataset.copiedMsg || 'Llave copiada. Pégala en la app de tu banco.') : '';
       window.clearTimeout(button._timer);
       button._timer = window.setTimeout(() => {
         if (label) label.textContent = button.dataset.copyLabel;

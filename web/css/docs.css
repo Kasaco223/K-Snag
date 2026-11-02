@@ -582,3 +582,15 @@
 .donate-note { margin-top: 24px; }
 .donate-thanks-actions { justify-content: flex-start; margin-top: 24px; }
 @media (max-width: 479px) { .donate-tabs .tab-extra { display: none; } }
+.donate-key-long code { font-size: 0.875rem; font-weight: 600; line-height: 1.5; }
+.donate-warning {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-soft);
+  color: var(--text);
+  font-size: 0.8125rem;
+}
+.donate-warning .icon { flex: none; margin-top: 2px; color: var(--warning); }
