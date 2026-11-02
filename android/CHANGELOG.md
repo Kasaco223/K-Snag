@@ -4,7 +4,17 @@
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
 
-## 1.0.0-rc.1 - sin fecha
+## 1.0.0-rc.2 - 2026-11-02
+
+**Español**
+- Segunda versión de prueba: sirve para comprobar que la rc.1 encuentra esta versión y se actualiza sola desde Ajustes › Actualizaciones de la app.
+- Las sumas SHA-256 del Release ya no listan archivos .idsig que no se publican.
+
+**English**
+- Second test release: it checks that rc.1 finds this version and updates itself from Settings › App updates.
+- The Release's SHA-256 sums no longer list .idsig files that aren't published.
+
+## 1.0.0-rc.1 - 2026-11-02
 
 **Español**
 - Primera versión de prueba: pega o comparte un enlace y bájalo como video (MP4 hasta 1080p o la máxima calidad en MKV) o audio (MP3 o M4A), a Descargas › K-Downloader.
