@@ -1,31 +1,31 @@
 {
   "schema": 1,
-  "version": "1.0.0-rc.1",
-  "tag": "android-v1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
+  "tag": "android-v1.0.0-rc.2",
   "package": "io.github.kasaco223.kdownloader",
   "min_sdk": 26,
-  "notes_url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-v1.0.0-rc.1",
+  "notes_url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/android-v1.0.0-rc.2",
   "cert_sha256": "79f77812b99f3f213938f6663e7c00ef3db8e1747a10c981f266a6abe224f31f",
-  "published_at": "2026-11-02T15:10:23Z",
+  "published_at": "2026-11-02T15:46:49Z",
   "min_version_code": null,
   "apks": {
     "arm64-v8a": {
-      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.1/K-Downloader-Android-arm64-v8a.apk",
-      "sha256": "f82da0b7d926e832633f855450cbdcd7227fd8ff343ff40e5fb34f6daf6d2229",
+      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.2/K-Downloader-Android-arm64-v8a.apk",
+      "sha256": "3c16173adb4ac6eee1a94b23a03bb599e983345356f2735de490ffb618bb5d56",
       "size": 56697400,
-      "version_code": 10000013
+      "version_code": 10000023
     },
     "armeabi-v7a": {
-      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.1/K-Downloader-Android-armeabi-v7a.apk",
-      "sha256": "ec238f9fd10ef57fbd101777755e070fd43b0f8f031fe4c1e7313f9bc8f395f4",
+      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.2/K-Downloader-Android-armeabi-v7a.apk",
+      "sha256": "4b03458986c2acb46ab7b60a66da15cafbfc66b7f10957e1a78108444d628bd1",
       "size": 49099108,
-      "version_code": 10000011
+      "version_code": 10000021
     },
     "x86_64": {
-      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.1/K-Downloader-Android-x86_64.apk",
-      "sha256": "0b573e56b6152633aff228e64f7c219550abfe09b2b79c413ca5661bdc13114e",
+      "url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.0-rc.2/K-Downloader-Android-x86_64.apk",
+      "sha256": "3510442c64aa3be0a34b834d3c2d94b2e342e8360ca56067415d831126adb9e7",
       "size": 59839002,
-      "version_code": 10000014
+      "version_code": 10000024
     }
   }
 }
