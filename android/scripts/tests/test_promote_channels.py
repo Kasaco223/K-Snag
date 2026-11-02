@@ -33,15 +33,15 @@ def case(name, stable, rc, want):
         (root / "web/data").mkdir(parents=True)
         shutil.copy(vercel, root / "web/vercel.json")
         if stable is not None and stable["tag"] == STABLE["tag"]:
-            # Antes de la 1.0, web/vercel.json todavía no tiene las redirecciones de Android: se agregan como
-            # las escribiría `promote.py --tag android-v1.0.0`.
+            # Las redirecciones de Android del web/vercel.json real apuntan a la versión publicada hoy: se
+            # reescriben como las dejaría `promote.py --tag` para la versión de prueba, así el caso no depende
+            # de qué versión esté publicada.
             cfg = json.loads((root / "web/vercel.json").read_text(encoding="utf-8"))
-            have = {r.get("source") for r in cfg.get("redirects", [])}
             base = f"https://github.com/{REPO}/releases/download/{STABLE['tag']}/K-Downloader-Android-"
             wanted = {"/android/descargar": "arm64-v8a", **{f"/android/descargar/{a}": a for a in ("arm64-v8a", "armeabi-v7a", "x86_64")}}
-            cfg.setdefault("redirects", []).extend(
-                {"source": src, "destination": f"{base}{abi}.apk", "permanent": False} for src, abi in wanted.items() if src not in have
-            )
+            cfg["redirects"] = [r for r in cfg.get("redirects", []) if r.get("source") not in wanted] + [
+                {"source": src, "destination": f"{base}{abi}.apk", "permanent": False} for src, abi in wanted.items()
+            ]
             (root / "web/vercel.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
         if stable is not None:
             (root / "web/data/android.json").write_text(json.dumps(stable), encoding="utf-8")
