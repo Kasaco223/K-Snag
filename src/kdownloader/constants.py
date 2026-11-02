@@ -20,6 +20,7 @@ WEB_PAGES = {
     "home": WEB_BASE,
     "help": f"{WEB_BASE}/ayuda",
     "responsible": f"{WEB_BASE}/uso-responsable",
+    "donate": f"{WEB_BASE}/donar",
     "download": f"{WEB_BASE}/descargar",
     "github": f"https://github.com/{REPO}",
     "releases": f"https://github.com/{REPO}/releases",

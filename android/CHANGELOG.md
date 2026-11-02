@@ -4,6 +4,14 @@
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
 
+## 1.0.2 - 2026-11-02
+
+**Español**
+- Nuevo: «Apoya K-Downloader» en Ajustes y en Acerca de. Abre la página de donaciones de la web: Bre-B desde Colombia o PayPal desde cualquier país. Donar es voluntario y no cambia nada de la app.
+
+**English**
+- New: "Support K-Downloader" in Settings and About. It opens the website's donation page: PayPal from any country, or Bre-B in Colombia. Donating is optional and changes nothing in the app.
+
 ## 1.0.1 - 2026-11-02
 
 **Español**

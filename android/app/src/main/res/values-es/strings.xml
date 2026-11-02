@@ -237,7 +237,7 @@
     <string name="settings_theme_light">Claro</string>
     <string name="settings_theme_dark">Oscuro</string>
     <string name="donate_title">Apoya K-Downloader</string>
-    <string name="donate_detail">Es gratis y sin anuncios. Si te sirve, una donación ayuda a que siga.</string>
+    <string name="donate_detail">Es gratis y sin anuncios. Si te sirve, puedes donar con Bre-B desde Colombia o con PayPal desde cualquier país.</string>
     <!-- Ajustes: descargas y motor -->
     <string name="settings_downloads_title">Descargas</string>
     <string name="settings_wifi_only">Solo con Wi-Fi</string>

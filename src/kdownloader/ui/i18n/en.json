@@ -367,7 +367,8 @@
     "link_github": "Code on GitHub",
     "link_releases": "What's new",
     "link_issues": "Report a problem",
-    "link_responsible": "Responsible use"
+    "link_responsible": "Responsible use",
+    "link_donate": "Support the project"
   },
   "update": {
     "title": "A new version of K-Downloader is available.",
