@@ -114,6 +114,7 @@ Abre <http://localhost:8000/index.html>. Las direcciones sin `.html` (`/android`
 ### JavaScript, HTML y CSS (`src/kdownloader/ui/` y `web/`)
 
 - JavaScript "a mano": sin frameworks, sin build y sin dependencias de npm.
+  - Única excepción: la guía animada de la página de inicio usa GSAP y ScrollTrigger, copiados en `web/js/vendor/` (sin build, servidos desde el mismo sitio). Para actualizarlos, sigue `web/js/vendor/GSAP-LICENSE.txt`. Las animaciones respetan «reducir movimiento» y, sin JavaScript, la guía se ve completa.
 - Los datos remotos (títulos, canales, mensajes de error) se pintan **siempre con `textContent`**, nunca con `innerHTML`.
 - **Respeta la CSP:**
   - la de la app está en `docs/architecture.md`, y la de la web, en `web/vercel.json`;

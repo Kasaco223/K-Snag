@@ -81,7 +81,8 @@ function initDownloadThanks() {
   let shown = false;
   document.addEventListener('click', (event) => {
     const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
-    if (!link || shown) return;
+    // Los botones de la guía de inicio muestran su propio aviso (data-no-thanks).
+    if (!link || shown || link.hasAttribute('data-no-thanks')) return;
     const path = new URL(link.href, window.location.href).pathname;
     if (!/^\/(android\/)?descargar(\/|$)/.test(path)) return;
     shown = true;
