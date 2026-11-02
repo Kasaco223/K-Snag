@@ -490,6 +490,8 @@
 /* ---------- /android: descarga y archivos ---------- */
 .apk-cta { margin-top: 24px; }
 .apk-cta .btn { min-width: 220px; justify-content: center; }
+.apk-note { display: flex; gap: 8px; align-items: flex-start; max-width: 560px; margin-top: 8px; color: var(--text-muted); font-size: 0.875rem; }
+.apk-note .icon { flex: none; margin-top: 2px; }
 .apk-table { display: grid; gap: 8px; margin: 16px 0; }
 .apk-row {
   display: grid;
