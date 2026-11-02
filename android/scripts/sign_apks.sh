@@ -27,7 +27,8 @@ for abi in $ABIS; do
   # zipalign va ANTES de firmar (la firma v2/v3 cubre el archivo entero). -P 16: .so sin comprimir a 16 KB.
   "$bt/zipalign" -P 16 -f 4 "${found[0]}" "$aligned"
   "$bt/apksigner" sign --ks "$KS_FILE" --ks-type PKCS12 --ks-key-alias "$KEY_ALIAS" \
-    --ks-pass env:KS_PASS --key-pass env:KEY_PASS --out "$out" "$aligned"
+    --ks-pass env:KS_PASS --key-pass env:KEY_PASS --v4-signing-enabled false --out "$out" "$aligned"
+  # Sin firma v4 (.idsig): solo sirve para instalar por adb incremental, y no se publica.
   rm -f "$aligned"
 
   report=$("$bt/apksigner" verify --verbose --print-certs "$out")
