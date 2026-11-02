@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import io.github.kasaco223.kdownloader.BuildConfig
 import io.github.kasaco223.kdownloader.R
+import io.github.kasaco223.kdownloader.platform.NotificationAccess
 import io.github.kasaco223.kdownloader.platform.SystemActions
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.engine.KdEngine
@@ -120,6 +121,10 @@ fun SettingsScreen(
                 Text(stringResource(R.string.settings_battery))
             }
             Text(stringResource(R.string.settings_battery_detail), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            TextButton(onClick = { NotificationAccess.openSettings(context) }) {
+                Text(stringResource(R.string.settings_notifications))
+            }
+            Text(stringResource(R.string.settings_notifications_detail), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
         EngineSettingsCard(prefs, engineStatus, engineUpdate, onCheckEngineUpdate, onRollbackEngine)

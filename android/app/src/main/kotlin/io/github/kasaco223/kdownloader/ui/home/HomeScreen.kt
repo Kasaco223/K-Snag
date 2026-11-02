@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -45,12 +46,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
 import io.github.kasaco223.kdownloader.core.Urls
 import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
 import io.github.kasaco223.kdownloader.download.HistoryItem
 import io.github.kasaco223.kdownloader.download.Job
+import io.github.kasaco223.kdownloader.platform.NotificationAccess
 import io.github.kasaco223.kdownloader.platform.SystemActions
 import io.github.kasaco223.kdownloader.ui.analyze.AnalysisState
 import io.github.kasaco223.kdownloader.ui.analyze.MediaPreview
@@ -111,6 +114,13 @@ fun HomeScreen(
         }
     }
     val msgQueued = stringResource(R.string.download_queued)
+    val msgQueuedHere = stringResource(R.string.download_queued_here)
+    // Aviso de notificaciones apagadas: se revisa al volver a la app (por ejemplo, desde los ajustes).
+    var notifWarn by remember { mutableStateOf(false) }
+    LifecycleResumeEffect(Unit) {
+        notifWarn = NotificationAccess.shouldWarn(context)
+        onPauseOrDispose { }
+    }
     val msgInvalid = stringResource(R.string.download_invalid)
     val msgStorage = stringResource(R.string.download_storage_denied)
     val msgAlready = stringResource(R.string.download_already)
@@ -118,12 +128,17 @@ fun HomeScreen(
     val msgNoLink = stringResource(R.string.home_paste_empty)
     val res = LocalResources.current
     lateinit var start: (DownloadRequest) -> Unit
-    start = rememberDownloadStarter(enqueue) { request, result ->
+    start = rememberDownloadStarter(
+        enqueue = enqueue,
+        onNotificationPrompt = { open -> if (!open) notifWarn = NotificationAccess.shouldWarn(context) },
+    ) { request, result ->
+        // Si la pregunta del permiso se acaba de abrir, el avance se verá en cuanto la persona acepte.
+        val visible = NotificationAccess.progressVisible(context) || NotificationAccess.needsPermission(context)
         scope.launch {
             when (result) {
                 is EnqueueResult.Queued -> {
                     text = ""
-                    snackbar.showSnackbar(msgQueued)
+                    snackbar.showSnackbar(if (visible) msgQueued else msgQueuedHere)
                 }
                 is EnqueueResult.AlreadyInDownloads -> {
                     val r = snackbar.showSnackbar("$msgAlready: ${result.item.displayName}", actionLabel = msgAgain, duration = SnackbarDuration.Long)
@@ -213,6 +228,15 @@ fun HomeScreen(
                 TextButton(onClick = onOpenUpdate) { Text(stringResource(R.string.app_update_see)) }
             }
         }
+        if (notifWarn) {
+            NotificationsOffBanner(
+                onEnable = { NotificationAccess.openSettings(context) },
+                onHide = {
+                    NotificationAccess.hideWarning(context)
+                    notifWarn = false
+                },
+            )
+        }
         if (engineStatus !is EngineStatus.Ready) EngineCard(status = engineStatus, onRetry = onRetryEngine)
 
         if (running.isNotEmpty() || queued.isNotEmpty()) {
@@ -243,6 +267,41 @@ fun HomeScreen(
         } else if (jobs.isEmpty()) {
             EmptyDownloads()
         }
+    }
+}
+
+/** Las notificaciones están apagadas: sin ellas el avance no se ve con la app cerrada. */
+@Composable
+private fun NotificationsOffBanner(onEnable: () -> Unit, onHide: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.tertiaryContainer, RoundedCornerShape(14.dp))
+            .padding(start = 14.dp, end = 4.dp, top = 10.dp, bottom = 2.dp),
+    ) {
+        Row(verticalAlignment = Alignment.Top) {
+            Column(Modifier.weight(1f).padding(top = 2.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = stringResource(R.string.notif_off_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                )
+                Text(
+                    text = stringResource(R.string.notif_off_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                )
+            }
+            IconButton(onClick = onHide) {
+                Icon(
+                    painterResource(R.drawable.ic_close),
+                    contentDescription = stringResource(R.string.common_close),
+                    tint = MaterialTheme.colorScheme.onTertiaryContainer,
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+        }
+        TextButton(onClick = onEnable) { Text(stringResource(R.string.notif_off_enable)) }
     }
 }
 

@@ -3,7 +3,6 @@
 package io.github.kasaco223.kdownloader.ui.jobs
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -18,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import io.github.kasaco223.kdownloader.download.DownloadQueue
 import io.github.kasaco223.kdownloader.download.DownloadQueue.EnqueueResult
+import io.github.kasaco223.kdownloader.platform.NotificationAccess
 import kotlinx.coroutines.launch
 
 /**
@@ -34,33 +34,39 @@ data class DownloadRequest(
 
 /**
  * Encola una descarga desde un clic, pidiendo antes los permisos que hagan falta (contrato de la app con el
- * motor): en Android 8 y 9, escribir en Descargas (sin él no se encola); desde Android 13, después de la
- * primera descarga y una sola vez, mostrar notificaciones (sin él la descarga sigue, solo sin avisos).
+ * motor): en Android 8 y 9, escribir en Descargas (sin él no se encola); desde Android 13, mostrar
+ * notificaciones, justo después de encolar (sin él la descarga sigue igual, pero el avance solo se ve en la app).
+ *
+ * El permiso de notificaciones se pide en cada descarga mientras falte: Android deja de mostrar la pregunta
+ * después de dos «No permitir», y desde ahí el aviso de Inicio lleva a los ajustes. [onNotificationPrompt]
+ * avisa cuando la pregunta se abre (true) y cuando se cierra (false), siempre antes de [onResult] la primera
+ * vez: la hoja de compartir la usa para no cerrarse con la pregunta abierta.
  */
 @Composable
 fun rememberDownloadStarter(
     enqueue: suspend (DownloadRequest) -> EnqueueResult,
+    onNotificationPrompt: (open: Boolean) -> Unit = {},
     onResult: (DownloadRequest, EnqueueResult) -> Unit,
 ): (DownloadRequest) -> Unit {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var pending by remember { mutableStateOf<DownloadRequest?>(null) }
-    val notifications = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
+    val notifications = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { onNotificationPrompt(false) }
 
-    fun afterQueued() {
-        if (Build.VERSION.SDK_INT < 33) return
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) return
-        val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        if (prefs.getBoolean(KEY_ASKED_NOTIFICATIONS, false)) return
-        prefs.edit().putBoolean(KEY_ASKED_NOTIFICATIONS, true).apply()
+    /** Abre la pregunta del permiso de notificaciones si hace falta; true si se abrió. */
+    fun askNotifications(): Boolean {
+        if (!NotificationAccess.needsPermission(context)) return false
+        NotificationAccess.markAsked(context)
+        onNotificationPrompt(true)
         notifications.launch(Manifest.permission.POST_NOTIFICATIONS)
+        return true
     }
 
     fun run(request: DownloadRequest) {
         scope.launch {
             val result = enqueue(request)
+            if (result is EnqueueResult.Queued || (result is EnqueueResult.QueuedMany && result.queued > 0)) askNotifications()
             onResult(request, result)
-            if (result is EnqueueResult.Queued || (result is EnqueueResult.QueuedMany && result.queued > 0)) afterQueued()
         }
     }
 
@@ -83,6 +89,3 @@ fun rememberDownloadStarter(
         }
     }
 }
-
-private const val PREFS = "kd_ui"
-private const val KEY_ASKED_NOTIFICATIONS = "asked_notifications"

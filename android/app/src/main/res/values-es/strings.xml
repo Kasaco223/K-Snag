@@ -281,4 +281,12 @@
     <string name="app_update_notes">Qué hay de nuevo</string>
     <string name="app_update_banner">Está disponible K-Downloader %1$s.</string>
     <string name="app_update_see">Ver</string>
+    <string name="download_queued_no_notif">Descargando… Las notificaciones de K-Downloader están apagadas: abre la app para ver el avance.</string>
+    <string name="download_queued_here">Descargando… El avance se ve aquí abajo.</string>
+    <string name="notif_off_toast">Las notificaciones están apagadas: el avance solo se ve dentro de K-Downloader.</string>
+    <string name="notif_off_title">Activa las notificaciones</string>
+    <string name="notif_off_body">Así ves el porcentaje de cada descarga aunque la app esté cerrada, por ejemplo al compartir desde YouTube. Las descargas siguen igual sin ellas.</string>
+    <string name="notif_off_enable">Activar notificaciones</string>
+    <string name="settings_notifications">Ver el avance en las notificaciones</string>
+    <string name="settings_notifications_detail">Si no aparece la notificación con el porcentaje, activa ahí las notificaciones de K-Downloader y la categoría «Trabajo en curso».</string>
 </resources>
