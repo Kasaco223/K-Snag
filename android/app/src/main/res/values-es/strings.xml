@@ -145,6 +145,7 @@
     <string name="tab_home">Inicio</string>
     <string name="tab_downloads">Descargas</string>
     <string name="tab_settings">Ajustes</string>
+    <string name="tab_donate">Donar</string>
     <string name="home_lead">Pega un enlace o compártelo desde la app donde estás viendo el video.</string>
     <string name="home_paste_link">Pegar enlace</string>
     <string name="home_paste_empty">No hay un enlace copiado. Copia primero el enlace del video.</string>

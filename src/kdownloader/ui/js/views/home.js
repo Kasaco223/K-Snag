@@ -11,7 +11,7 @@ import {
 import { toast, announce } from '../ui/feedback.js';
 import {
   coerceUrl, hasListParam, isPlaylistPage, guessVideoId, saveSettings, chooseFolder, chooseCookiesFile,
-  errorTexts, showError, openHelp, copyText, navigate,
+  errorTexts, showError, openHelp, copyText, navigate, openPage,
 } from '../actions.js';
 import { createDownloads } from './downloads.js';
 
@@ -91,7 +91,9 @@ export function createHome() {
   const chipSlot = h('div', { class: 'clip-slot' });
   const quickNote = h('div', { class: 'quick-note', hidden: true });
   const meta = h('div', { class: 'urlbar-meta' }, hint, chipSlot, quickNote);
-  const urlArea = h('div', { class: 'url-area' }, h('div', { class: 'aurora', attrs: { 'aria-hidden': 'true' } }), bar, meta);
+  const donateBtn = btn({ label: t('nav.donate'), iconName: 'heart', kind: 'secondary', iconOnly: true, cls: 'donate-btn', onClick: () => openPage('donate') });
+  const barRow = h('div', { class: 'urlbar-row' }, bar, donateBtn);
+  const urlArea = h('div', { class: 'url-area' }, h('div', { class: 'aurora', attrs: { 'aria-hidden': 'true' } }), barRow, meta);
 
   input.addEventListener('input', () => {
     st.input = input.value;

@@ -4,6 +4,14 @@
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
 
+## 1.0.3 - 2026-11-02
+
+**Español**
+- «Donar» en la barra de abajo y un botón con corazón junto al cuadro del enlace en Inicio. Los dos abren la página de donaciones en el navegador.
+
+**English**
+- "Donate" in the bottom bar and a heart button next to the link box on Home. Both open the donation page in the browser.
+
 ## 1.0.2 - 2026-11-02
 
 **Español**

@@ -128,6 +128,11 @@ function buildRail() {
     }
     items.append(b);
   }
+  // «Apoyar el proyecto» no es una vista: abre /donar en el navegador (clave "donate" de WEB_PAGES).
+  items.append(h('button', {
+    class: 'rail-btn rail-donate', type: 'button', attrs: { 'aria-label': t('nav.donate') },
+    on: { click: () => openPage('donate') },
+  }, icon('heart', { size: 22 }), h('span', { class: 'tooltip', attrs: { 'aria-hidden': 'true' }, text: t('nav.donate') })));
   rail.append(items, h('div', { class: 'rail-spacer' }));
   railRefs.engineDot = h('span', { class: 'engine-dot' });
   railRefs.engineTip = h('span', { class: 'tooltip', attrs: { 'aria-hidden': 'true' } });

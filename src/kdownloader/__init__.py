@@ -1,3 +1,3 @@
 """K-Downloader: descarga tus videos favoritos en la mejor calidad."""
 
-__version__ = "2.0.2"
+__version__ = "2.0.3"

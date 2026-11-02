@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.kasaco223.kdownloader.BuildConfig
 import io.github.kasaco223.kdownloader.MainViewModel
 import io.github.kasaco223.kdownloader.R
 import io.github.kasaco223.kdownloader.Screen
@@ -172,6 +173,7 @@ private fun FullScreen(viewModel: MainViewModel, screen: Screen, engineStatus: E
 
 @Composable
 private fun TabBar(current: Screen, onSelect: (Screen) -> Unit) {
+    val context = LocalContext.current
     NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainerLow) {
         for (tab in tabs) {
             NavigationBarItem(
@@ -180,6 +182,15 @@ private fun TabBar(current: Screen, onSelect: (Screen) -> Unit) {
                 icon = { Icon(painterResource(tab.icon), contentDescription = null) },
                 label = { Text(stringResource(tab.label)) },
                 colors = NavigationBarItemDefaults.colors(indicatorColor = MaterialTheme.colorScheme.secondaryContainer),
+            )
+        }
+        // «Donar» no es una pestaña: abre la página de donaciones en el navegador y nunca queda marcada.
+        if (BuildConfig.DONATE_URL.isNotEmpty()) {
+            NavigationBarItem(
+                selected = false,
+                onClick = { SystemActions.openWebPage(context, BuildConfig.DONATE_URL) },
+                icon = { Icon(painterResource(R.drawable.ic_heart), contentDescription = null, tint = MaterialTheme.colorScheme.tertiary) },
+                label = { Text(stringResource(R.string.tab_donate)) },
             )
         }
     }

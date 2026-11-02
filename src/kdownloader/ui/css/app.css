@@ -359,7 +359,11 @@ input.switch:checked::after { transform: translateX(18px); background: #fff; }
   padding: var(--sp-5) var(--gutter) var(--sp-3);
   background: var(--bg);
 }
-.url-area > .urlbar, .url-area > .urlbar-meta { max-width: var(--content-max); margin-left: auto; margin-right: auto; }
+.url-area > .urlbar-row, .url-area > .urlbar-meta { max-width: var(--content-max); margin-left: auto; margin-right: auto; }
+.urlbar-row { display: flex; align-items: center; gap: var(--sp-2); }
+.urlbar-row > .urlbar { flex: 1; min-width: 0; }
+.donate-btn { flex: none; width: 60px; height: 60px; border-radius: var(--r-lg, 16px); }
+.donate-btn svg, .rail-donate svg { color: var(--coral-text); }
 .aurora {
   position: absolute; inset: -30% -10% -20%; z-index: -1; pointer-events: none;
   background:
