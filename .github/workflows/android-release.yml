@@ -291,8 +291,9 @@ jobs:
           echo "EXPECTED_CERT_SHA256=${current}" >> "$GITHUB_ENV"
           # GPL-3.0 §6 / MPL-2.0 §3.2: el código fuente de FFmpeg y compañía, publicado ANTES que el APK.
           python3 android/scripts/sources_mirror.py --verify
-          ytdl=$(sed -n 's/^youtubedl *= *"\([^"]*\)".*/\1/p' android/gradle/libs.versions.toml)
-          echo "SOURCES_TAG=android-sources-ytdl-${ytdl}" >> "$GITHUB_ENV"
+          # El tag del espejo es el de components.json (lleva la revisión: -r1, -r2…), el mismo que verifica arriba.
+          sources_tag=$(python3 -c 'import json; print(json.load(open("android/third_party/components.json", encoding="utf-8"))["mirror_release"]["tag"])')
+          echo "SOURCES_TAG=${sources_tag}" >> "$GITHUB_ENV"
 
       - name: Bajar los APK sin firmar
         uses: actions/download-artifact@v8
