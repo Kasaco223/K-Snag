@@ -3,7 +3,7 @@
 // si falta o no es válido, la página se queda con los enlaces /android/descargar del HTML.
 
 const DATA_URL = '/data/android.json';
-const REPO = 'Kasaco223/K-YoutubeVideoDownloaderHD';
+const REPO = 'Kasaco223/K-Snag';
 const DOWNLOAD_PREFIX = `https://github.com/${REPO}/releases/download/android-v`;
 const NOTES_PREFIX = `https://github.com/${REPO}/releases/tag/android-v`;
 const VERSION_RE = /^\d{1,3}\.\d{1,2}\.\d{1,2}$/;

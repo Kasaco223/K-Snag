@@ -76,6 +76,6 @@ class HintsStore(private val file: File, private val engine: KdEngine) {
     companion object {
         private const val TAG = "HintsStore"
         private const val MAX_BYTES = 64_000
-        const val URL_HINTS = "https://raw.githubusercontent.com/Kasaco223/K-YoutubeVideoDownloaderHD/master/engine.json"
+        const val URL_HINTS = "https://raw.githubusercontent.com/Kasaco223/K-Snag/master/engine.json"
     }
 }

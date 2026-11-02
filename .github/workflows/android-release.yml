@@ -323,6 +323,8 @@ jobs:
         shell: python
         env:
           REPO: ${{ github.repository }}
+          # Las apps de Android 1.0.0-1.0.3 solo aceptan APK en esta dirección (GitHub la redirige al repo actual).
+          LEGACY_REPO: Kasaco223/K-YoutubeVideoDownloaderHD
         run: |
           import hashlib, json, os, re, subprocess
           from pathlib import Path
@@ -338,7 +340,8 @@ jobs:
           cert_hex = os.environ["EXPECTED_CERT_SHA256"].replace(":", "").strip().lower()
           codes = json.loads(os.environ["VERSION_CODES"])
           dist = Path("dist")
-          base = f"https://github.com/{repo}/releases/download/{tag}"
+          legacy = os.environ["LEGACY_REPO"]
+          base = f"https://github.com/{legacy}/releases/download/{tag}"
           apks = {}
           for abi in os.environ["ABIS"].split():
               apk = dist / f"K-Downloader-Android-{abi}.apk"
@@ -346,7 +349,7 @@ jobs:
                            "version_code": codes[abi]}
           manifest = {
               "schema": 1, "version": version, "tag": tag, "package": os.environ["ANDROID_PACKAGE"],
-              "min_sdk": int(os.environ["MIN_SDK"]), "notes_url": f"https://github.com/{repo}/releases/tag/{tag}",
+              "min_sdk": int(os.environ["MIN_SDK"]), "notes_url": f"https://github.com/{legacy}/releases/tag/{tag}",
               "cert_sha256": cert_hex, "published_at": None, "min_version_code": None,
               "apks": apks,
           }

@@ -5,7 +5,7 @@
 La app lo lee desde la rama `master`:
 
 ```text
-https://raw.githubusercontent.com/Kasaco223/K-YoutubeVideoDownloaderHD/master/engine.json
+https://raw.githubusercontent.com/Kasaco223/K-Snag/master/engine.json
 ```
 
 > Solo cuenta la copia de `master`. Editar el archivo en otra rama o en un fork no tiene ningún efecto.
@@ -53,7 +53,7 @@ El archivo tiene una **lista blanca** de campos (ver `src/kdownloader/engine/hin
 
 ## Cómo publicar una pista de emergencia (desde el navegador)
 
-1. Entra a <https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/blob/master/engine.json> con tu cuenta, que debe tener la verificación en dos pasos activa.
+1. Entra a <https://github.com/Kasaco223/K-Snag/blob/master/engine.json> con tu cuenta, que debe tener la verificación en dos pasos activa.
 2. Pulsa el lápiz (**Edit this file**).
 3. Cambia **solo los valores**:
    - Respeta las comillas en las versiones y los textos.
@@ -64,7 +64,7 @@ El archivo tiene una **lista blanca** de campos (ver `src/kdownloader/engine/hin
    - Elige **Commit directly to the `master` branch**.
 5. Abre la pestaña **Actions**. El flujo **CI** valida el archivo en el paso "Validar engine.json".
    - Si queda en rojo, corrígelo enseguida: la app descarta los campos inválidos.
-6. Comprueba la copia pública en <https://raw.githubusercontent.com/Kasaco223/K-YoutubeVideoDownloaderHD/master/engine.json> (puede tardar unos minutos).
+6. Comprueba la copia pública en <https://raw.githubusercontent.com/Kasaco223/K-Snag/master/engine.json> (puede tardar unos minutos).
 7. **Cuando ya no haga falta, revierte el cambio:**
    - El cliente vuelve a `null` y el aviso a `null`.
    - Los mínimos pueden quedarse: no molestan.

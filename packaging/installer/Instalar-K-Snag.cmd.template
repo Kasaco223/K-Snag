@@ -1,7 +1,7 @@
 @echo off
 rem ==========================================================================================
 rem  Instalar-K-Snag.cmd - instalador de K-Snag {{VERSION}}
-rem  https://ksnagapp.vercel.app  -  https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD
+rem  https://ksnagapp.vercel.app  -  https://github.com/Kasaco223/K-Snag
 rem
 rem  Que hace (puedes leerlo entero; es texto):
 rem   1. Descarga {{BUNDLE_NAME}} desde GitHub Releases con curl.exe (incluido en Windows).

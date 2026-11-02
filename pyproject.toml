@@ -24,7 +24,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://ksnagapp.vercel.app"
-Source = "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD"
+Source = "https://github.com/Kasaco223/K-Snag"
 
 [tool.setuptools.dynamic]
 version = { attr = "kdownloader.__version__" }

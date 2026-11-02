@@ -42,7 +42,7 @@ fun fetchVerified(url: String, sha256: String, maxBytes: Int = 16 shl 20): ByteA
                 connectTimeout = 30_000
                 readTimeout = 60_000
                 instanceFollowRedirects = true
-                setRequestProperty("User-Agent", "K-Snag-build (+https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD)")
+                setRequestProperty("User-Agent", "K-Snag-build (+https://github.com/Kasaco223/K-Snag)")
             }
             val bytes = conn.inputStream.use { it.readNBytes(maxBytes + 1) }
             if (bytes.size > maxBytes) throw GradleException("$url pesa más de $maxBytes bytes")

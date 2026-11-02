@@ -221,7 +221,7 @@ Siempre se ofrece además "Ver detalles" / "Copiar detalles" y "Ayuda" → `open
   "app":       { "url": ".../kd-app-2.0.0.zip",    "sha256": "…" },
   "bundle":    { "url": ".../kd-bundle-2.0.0.zip", "sha256": "…" },
   "installer": { "url": ".../Instalar-K-Snag.cmd", "sha256": "…" },
-  "notes_url": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/tag/v2.0.0" }
+  "notes_url": "https://github.com/Kasaco223/K-Snag/releases/tag/v2.0.0" }
 
 // engine.json (raíz del repo; solo campos en lista blanca, sin URLs)
 { "schema": 1, "min_ytdlp": { "nightly": "2026.09.27.232945", "stable": "2026.08.19" },

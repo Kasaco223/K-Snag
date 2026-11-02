@@ -65,7 +65,7 @@ android {
         versionCode = baseCode * 10 // por variante; cada APK por ABI recibe el suyo abajo (onVariants)
         testInstrumentationRunner = "io.github.kasaco223.kdownloader.testing.KdlTestRunner"
         buildConfigField("String", "SOURCE_COMMIT", "\"$sourceCommit\"")
-        buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD\"")
+        buildConfigField("String", "REPO_URL", "\"https://github.com/Kasaco223/K-Snag\"")
         buildConfigField("String", "WEB_BASE", "\"https://ksnagapp.vercel.app\"")
         // Página de donaciones de la web (Bre-B desde Colombia, PayPal desde cualquier país): los datos se
         // cambian en la web, sin sacar otra versión. Vacío: la app no muestra «Apoya K-Snag».

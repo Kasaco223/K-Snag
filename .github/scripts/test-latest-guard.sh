@@ -6,7 +6,7 @@
 # Invariante de todos los casos: al terminar, Latest NUNCA es un android-*.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-export PATH="$HERE/mockbin:$PATH" GH_REPO="Kasaco223/K-YoutubeVideoDownloaderHD" KD_SLEEP_SCALE=0
+export PATH="$HERE/mockbin:$PATH" GH_REPO="Kasaco223/K-Snag" KD_SLEEP_SCALE=0
 total=0; bad=0
 
 run() {
