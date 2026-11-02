@@ -10,7 +10,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.kasaco223.kdownloader.BuildConfig
 import io.github.kasaco223.kdownloader.KdlApp
 import io.github.kasaco223.kdownloader.contracts.EngineStatus
-import io.github.kasaco223.kdownloader.core.engine.EngineErrors
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Assert.assertEquals
@@ -41,16 +40,22 @@ class EngineTest {
     }
 
     @Test
-    fun t0_sixteenKbPagesReportIncompatibleUntilM5() {
-        assumeTrue("Solo en celulares con páginas de 16 KB", pageSize == 16_384L)
-        val status = runBlocking { withTimeout(300_000) { engine.ensureReady() } }
-        assertTrue("$status", status is EngineStatus.Failed)
-        assertEquals(EngineErrors.INCOMPATIBLE, (status as EngineStatus.Failed).error.code)
+    fun t0_sixteenKbPagesUseTheOwnLibwebp() {
+        ready()
+        val lib16k = engine.dirs.lib16k
+        if (pageSize == 16_384L) {
+            // M5: las libwebp de 16 KB del APK, con el nombre que busca FFmpeg, van primero en LD_LIBRARY_PATH.
+            for (name in listOf("libwebp.so", "libwebpmux.so", "libsharpyuv.so")) {
+                assertTrue(name, File(lib16k, name).exists())
+            }
+            assertTrue(engine.dirs.libraryPath().startsWith(lib16k.path + ":"))
+        } else {
+            assertTrue("Con páginas de 4 KB no se usa lib16k", !lib16k.exists())
+        }
     }
 
     @Test
     fun t1_preparesFromScratchAndVerifiesEverything() {
-        assumeTrue("El motor necesita páginas de 4 KB hasta M5", pageSize == 4096L)
         val versions = ready().versions
         assertEquals(BuildConfig.YTDLP_BUNDLED_VERSION, versions.ytdlp)
         val dirs = engine.dirs
@@ -75,7 +80,6 @@ class EngineTest {
 
     @Test
     fun t2_runnerGivesPythonItsOwnSessionAndEnvironment() {
-        assumeTrue(pageSize == 4096L)
         ready()
         // Con toybox setsid (Android 8+), Python tiene que quedar en su propia sesión: si no, cancelar no detiene
         // a FFmpeg ni a QuickJS. Que caiga al modo PID es un error a corregir, no un respaldo aceptable aquí.
@@ -104,7 +108,6 @@ class EngineTest {
 
     @Test
     fun t3_cancelStopsPythonAndItsFfmpegChild() {
-        assumeTrue(pageSize == 4096L)
         ready()
         assumeTrue("Solo con sesión propia (el modo PID no detiene a los hijos)", engine.runMode() == PyRunner.Mode.SESSION)
         val runDir = File(engine.dirs.runs, "test-cancel").apply { deleteRecursively(); mkdirs() }
@@ -131,7 +134,6 @@ class EngineTest {
 
     @Test
     fun t4_repairReinstallsInTheSameProcess() {
-        assumeTrue(pageSize == 4096L)
         ready()
         val lib = File(engine.dirs.payloadDir("python"), "usr/lib/libpython3.12.so.1.0")
         assertTrue(lib.delete())

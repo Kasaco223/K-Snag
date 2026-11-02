@@ -1682,7 +1682,10 @@
       ],
       "files": [
         "libffmpeg.zip.so:usr/lib/libwebp*.so*",
-        "libffmpeg.zip.so:usr/lib/libsharpyuv.so*"
+        "libffmpeg.zip.so:usr/lib/libsharpyuv.so*",
+        "apk:lib/*/libkd_webp.so",
+        "apk:lib/*/libkd_webpmux.so",
+        "apk:lib/*/libkd_sharpyuv.so"
       ],
       "license_files": [
         "libwebp/COPYING",

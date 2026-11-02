@@ -215,3 +215,64 @@ abstract class RepoRootArgs : org.gradle.process.CommandLineArgumentProvider {
 
     override fun asArguments() = listOf("-Dkd.repoRoot=${repoRoot.get().asFile.absolutePath}")
 }
+
+/**
+ * Las fuentes de libwebp para el reemplazo de 16 KB (M5): baja el .tar.gz fijado por SHA-256 (el mismo de
+ * third_party/components.json) y lo descomprime sin la carpeta de arriba. CMake (app/src/main/cpp) lo compila.
+ */
+@CacheableTask
+abstract class KdNativeSourceTask : DefaultTask() {
+    @get:Input
+    abstract val url: Property<String>
+
+    @get:Input
+    abstract val sha256: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun run() {
+        val out = outputDir.get().asFile.apply { deleteRecursively(); mkdirs() }
+        val root = out.canonicalFile
+        val tar = java.util.zip.GZIPInputStream(fetchVerified(url.get(), sha256.get()).inputStream()).readBytes()
+        var pos = 0
+        var longName: String? = null
+        while (pos + 512 <= tar.size) {
+            val header = tar.copyOfRange(pos, pos + 512)
+            if (header.all { it == 0.toByte() }) break
+            fun field(off: Int, len: Int) = String(header, off, len, Charsets.UTF_8).substringBefore('\u0000')
+            val size = field(124, 12).trim().ifEmpty { "0" }.toLong(8).toInt()
+            val type = header[156].toInt().toChar()
+            val prefix = field(345, 155)
+            var name = longName ?: (if (prefix.isNotEmpty()) "$prefix/" else "") + field(0, 100)
+            longName = null
+            val body = tar.copyOfRange(pos + 512, pos + 512 + size)
+            pos += 512 + ((size + 511) / 512) * 512
+            when (type) {
+                'x' -> { // cabecera PAX: puede traer el nombre largo (path=)
+                    longName = String(body, Charsets.UTF_8).lineSequence().mapNotNull { line ->
+                        line.substringAfter(' ', "").takeIf { it.startsWith("path=") }?.removePrefix("path=")
+                    }.firstOrNull()
+                    continue
+                }
+                'g', 'L' -> {
+                    if (type == 'L') longName = String(body, Charsets.UTF_8).substringBefore('\u0000')
+                    continue
+                }
+            }
+            name = name.substringAfter('/', "") // sin libwebp-1.6.0/
+            if (name.isEmpty()) continue
+            val target = root.resolve(name).canonicalFile
+            if (!target.path.startsWith(root.path + java.io.File.separator)) throw GradleException("Ruta fuera del destino en el tar: $name")
+            when (type) {
+                '5' -> target.mkdirs()
+                '0', '\u0000' -> {
+                    target.parentFile.mkdirs()
+                    target.writeBytes(body)
+                }
+                else -> Unit // enlaces: libwebp no los usa
+            }
+        }
+    }
+}

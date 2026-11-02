@@ -7,11 +7,11 @@
 # Al terminar M5, cada "pending=M5" pasa a "replaced_by=lib/<abi>/<mismo nombre>".
 arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpdecoder.so unused
 arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpdemux.so unused
-arm64-v8a:libffmpeg.zip.so!usr/lib/libwebp.so pending=M5
-arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpmux.so pending=M5
-arm64-v8a:libffmpeg.zip.so!usr/lib/libsharpyuv.so pending=M5
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebp.so replaced_by=lib/arm64-v8a/libkd_webp.so
+arm64-v8a:libffmpeg.zip.so!usr/lib/libwebpmux.so replaced_by=lib/arm64-v8a/libkd_webpmux.so
+arm64-v8a:libffmpeg.zip.so!usr/lib/libsharpyuv.so replaced_by=lib/arm64-v8a/libkd_sharpyuv.so
 x86_64:libffmpeg.zip.so!usr/lib/libwebpdecoder.so unused
 x86_64:libffmpeg.zip.so!usr/lib/libwebpdemux.so unused
-x86_64:libffmpeg.zip.so!usr/lib/libwebp.so pending=M5
-x86_64:libffmpeg.zip.so!usr/lib/libwebpmux.so pending=M5
-x86_64:libffmpeg.zip.so!usr/lib/libsharpyuv.so pending=M5
+x86_64:libffmpeg.zip.so!usr/lib/libwebp.so replaced_by=lib/x86_64/libkd_webp.so
+x86_64:libffmpeg.zip.so!usr/lib/libwebpmux.so replaced_by=lib/x86_64/libkd_webpmux.so
+x86_64:libffmpeg.zip.so!usr/lib/libsharpyuv.so replaced_by=lib/x86_64/libkd_sharpyuv.so

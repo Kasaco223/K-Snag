@@ -285,7 +285,8 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
             store.verifies(loaded.active) &&
             dirs.caFile.exists() && EngineStore.sha256(dirs.caFile.inputStream()) == BuildConfig.CACERT_SHA256 &&
             loaded.selfTest?.let { it.ok && it.key == selfTestKey(loaded) } == true &&
-            loaded.bundledOfferedVersionCode == versionCode // una versión nueva de la app pasa por ensureActive
+            loaded.bundledOfferedVersionCode == versionCode && // una versión nueva de la app pasa por ensureActive
+            lib16kOk()
         if (!ok) return null
         state = loaded
         return versions(loaded)
@@ -320,6 +321,7 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
             phase = EnginePhase.FINISH
             _status.value = EngineStatus.Preparing(phase, null)
             installCaBundle()
+            setupLib16k()
             var next = store.ensureActive(EngineState.load(dirs.stateFile), versionCode)
             EngineState.save(dirs.stateFile, next)
             phase = EnginePhase.SELF_TEST
@@ -346,6 +348,32 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         _status.value = status
         if (status is EngineStatus.Failed) Log.w(TAG, "Motor: ${status.error.code} en ${status.phase}: ${status.error.detail}")
         return status
+    }
+
+    /**
+     * Páginas de 16 KB (Android 15+): las libwebp del paquete de FFmpeg están alineadas a 4 KB y no cargan. El APK
+     * trae copias propias (libkd_*.so, app/src/main/cpp); aquí se enlazan con su nombre original en lib16k, que
+     * va primero en LD_LIBRARY_PATH. Con páginas de 4 KB no se usa (lib16k no existe).
+     */
+    private fun setupLib16k() {
+        val dir = dirs.lib16k
+        dir.deleteRecursively()
+        if (Os.sysconf(OsConstants._SC_PAGESIZE) <= 4096L) return
+        val pairs = LIB16K.map { (name, apkName) -> name to dirs.lib(apkName) }
+        if (pairs.any { !it.second.isFile }) {
+            Log.w(TAG, "Páginas de 16 KB sin los reemplazos de libwebp en ${dirs.nativeLibDir}")
+            return
+        }
+        dir.mkdirs()
+        for ((name, target) in pairs) Os.symlink(target.path, File(dir, name).path)
+    }
+
+    /** lib16k está como tiene que estar para este tamaño de página y esta instalación de la app. */
+    private fun lib16kOk(): Boolean {
+        if (Os.sysconf(OsConstants._SC_PAGESIZE) <= 4096L) return !dirs.lib16k.exists()
+        return LIB16K.all { (name, apkName) ->
+            runCatching { Os.readlink(File(dirs.lib16k, name).path) == dirs.lib(apkName).path }.getOrDefault(false)
+        }
     }
 
     /** Hay [bytes] libres para la app en el disco de noBackupFilesDir (pide liberar caché si hace falta). */
@@ -476,11 +504,13 @@ class KdEngine(private val context: Context, private val scope: CoroutineScope) 
         const val QUICKJS_VERSION = "2025-04-26"
 
         /** Sube cuando cambia la autoprueba o el instalador: obliga a repetirla. */
-        private const val SELFTEST_PATCH = 2 // 2: lanzador sin env (toybox env se comía el -c de Python)
+        private const val SELFTEST_PATCH = 3 // 2: lanzador sin env; 3: lib16k (libwebp de 16 KB)
         private const val EXTRA_SPACE = 40L shl 20
         private const val PROBE_TIMEOUT = 60_000L
         private const val YTDLP_TIMEOUT = 60_000L
         private const val FFMPEG_TIMEOUT = 30_000L
+        /** Reemplazos de 16 KB: nombre que busca FFmpeg → archivo del APK. */
+        private val LIB16K = listOf("libwebp.so" to "libkd_webp.so", "libwebpmux.so" to "libkd_webpmux.so", "libsharpyuv.so" to "libkd_sharpyuv.so")
         private val ABI_DIRS = mapOf("arm64" to "arm64-v8a", "arm" to "armeabi-v7a", "x86_64" to "x86_64", "x86" to "x86")
 
         private fun installedVersionCode(context: Context): Long = try {

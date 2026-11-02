@@ -36,7 +36,7 @@ NOTICES = ANDROID / "THIRD_PARTY_NOTICES.md"
 REPO_URL = "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD"
 COPYLEFT = re.compile(r"\b(A?GPL|LGPL|MPL|EPL|CDDL|EUPL|OSL|CC-BY-SA|GFDL)-")
 PAYLOADS = ("libpython.zip.so", "libffmpeg.zip.so")
-FILE_RE = re.compile(r"^(jni:[^/]+|lib(python|ffmpeg)\.zip\.so:[^\s]+|apk:(res|assets)/[^\s]+)$")
+FILE_RE = re.compile(r"^(jni:[^/]+|lib(python|ffmpeg)\.zip\.so:[^\s]+|apk:(res|assets|lib)/[^\s]+)$")
 SAFE_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]*$")
 SECTIONS = [  # (título, prueba sobre el componente)
     ("Motor de descargas: yt-dlp y certificados (`res/raw/ytdlp`, `assets/kd/cacert.pem`)",
