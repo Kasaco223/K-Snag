@@ -377,7 +377,8 @@ function Invoke-StepCheck {
     $root = $St.Root
     $driveRoot = [IO.Path]::GetPathRoot($root)
     if (-not $driveRoot -or $driveRoot.TrimEnd('\') -ieq $root) { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
-    if (-not $Opt.ExplicitRoot -and (Split-Path -Leaf $root) -ine 'K-Snag') { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
+    # La carpeta conserva el nombre anterior de la app (constants.DIR_NAME): las instalaciones existentes viven ahi.
+    if (-not $Opt.ExplicitRoot -and (Split-Path -Leaf $root) -ine 'K-Downloader') { throw (New-KdError (S 'La carpeta de instalaci~on no es v~alida.') $root) }
     if (Test-Path -LiteralPath $root) {
         if (-not (Test-Path -LiteralPath $root -PathType Container)) {
             throw (New-KdError (S 'Ya existe un archivo con el nombre de la carpeta de instalaci~on.') $root)
