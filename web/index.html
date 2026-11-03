@@ -3,26 +3,57 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>K-Snag · Descarga tus videos en la mejor calidad</title>
-  <meta name="description" content="Descarga tus videos favoritos de YouTube y más de mil sitios en la mejor calidad, hasta 4K, o solo el audio en MP3. Gratis, sin anuncios y de código abierto. Para Windows y Android.">
+  <title>K-Snag · Descarga videos de YouTube en 4K y MP3 gratis</title>
+  <meta name="description" content="App gratis para descargar videos de YouTube y más de mil sitios en MP4 hasta 4K, o solo el audio en MP3. Sin anuncios y de código abierto. Para Windows y Android.">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#101218" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
   <link rel="canonical" href="https://ksnagapp.vercel.app/">
+  <meta name="google-site-verification" content="nt7V6GEE06ZsvroveUXwksP16PI0aIqrCsq3MBsAnaM">
   <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_419">
   <meta property="og:site_name" content="K-Snag">
-  <meta property="og:title" content="K-Snag · Descarga tus videos en la mejor calidad">
-  <meta property="og:description" content="Gratis, sin anuncios y de código abierto. YouTube hasta 4K, solo audio en MP3, listas completas y errores explicados en español.">
+  <meta property="og:title" content="K-Snag · Descarga videos de YouTube en 4K y MP3 gratis">
+  <meta property="og:description" content="Gratis, sin anuncios y de código abierto. YouTube hasta 4K, solo audio en MP3 y listas completas. Para Windows y Android.">
   <meta property="og:url" content="https://ksnagapp.vercel.app/">
   <meta property="og:image" content="https://ksnagapp.vercel.app/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Logo de K-Snag con el lema: descarga tus videos favoritos en la mejor calidad">
   <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "K-Snag",
+        "url": "https://ksnagapp.vercel.app/",
+        "inLanguage": "es"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "K-Snag",
+        "alternateName": "K-Downloader",
+        "description": "App gratis y de código abierto para descargar videos de YouTube y más de mil sitios en MP4 hasta 4K, o solo el audio en MP3.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Windows 10, Windows 11, Android 8.0 o superior",
+        "url": "https://ksnagapp.vercel.app/",
+        "downloadUrl": "https://ksnagapp.vercel.app/#instalar",
+        "image": "https://ksnagapp.vercel.app/assets/og.png",
+        "inLanguage": "es",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "license": "https://github.com/Kasaco223/K-Snag/blob/master/LICENSE",
+        "author": { "@type": "Person", "name": "Kasaco223", "url": "https://github.com/Kasaco223" },
+        "codeRepository": "https://github.com/Kasaco223/K-Snag"
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/home.css">
   <script defer src="/js/vendor/gsap.min.js"></script>
@@ -65,8 +96,9 @@
           <h1 class="hero-title" id="hero-title">
             <img class="hero-logo" src="/assets/logo.svg" alt="" width="72" height="72">
             <span class="gradient-text">K-Snag</span>
+            <span class="hero-title-sub">Descarga videos de YouTube en 4K o en MP3</span>
           </h1>
-          <p class="hero-lead"><strong>Descarga tus videos favoritos en la mejor calidad.</strong> Gratis, sin anuncios y de código abierto.</p>
+          <p class="hero-lead">Gratis, sin anuncios y de código abierto.</p>
           <div class="hero-actions">
             <a class="hero-scroll" href="#instalar" id="cta-install">
               <span id="cta-install-label">Mira cómo instalarla, paso a paso</span>
@@ -196,7 +228,7 @@
         <div class="section-head center">
           <p class="eyebrow">Instalación paso a paso</p>
           <h2 class="section-title" id="instalar-title">Instálala en 1 minuto</h2>
-          <p class="section-lead">K-Snag es gratis y no está en las tiendas de apps, así que tu equipo te va a preguntar un par de veces si confías en el archivo. <strong>Es normal.</strong> Aquí ves qué tocar en cada aviso. El botón de descarga está al final.</p>
+          <p class="section-lead">Tu equipo te preguntará un par de veces si confías en el archivo. <strong>Es normal:</strong> aquí ves qué tocar en cada aviso. La descarga está al final.</p>
           <ul class="tour-trust">
             <li><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-code"/></svg>Código abierto</li>
             <li><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg>Verificada con SHA-256</li>
@@ -671,100 +703,221 @@
       </div>
     </section>
 
-    <!-- ============ Funciones ============ -->
+    <!-- ============ Cómo funciona (escena animada en js/features.js) ============ -->
+    <section class="section section-alt how" id="como-funciona" aria-labelledby="como-title">
+      <div class="container">
+        <div class="section-head center">
+          <p class="eyebrow">Cómo funciona</p>
+          <h2 class="section-title" id="como-title">Comparte, elige y listo</h2>
+        </div>
+        <div class="how-grid">
+          <ol class="how-steps">
+            <li class="how-step is-current" data-how="1">
+              <span class="how-num" aria-hidden="true">1</span>
+              <span><strong>Comparte o copia el enlace</strong> del video en YouTube, TikTok, Instagram…</span>
+            </li>
+            <li class="how-step" data-how="2">
+              <span class="how-num" aria-hidden="true">2</span>
+              <span><strong>Elige la calidad:</strong> MP4 en 1080p, hasta 4K o solo el audio en MP3.</span>
+            </li>
+            <li class="how-step" data-how="3">
+              <span class="how-num" aria-hidden="true">3</span>
+              <span><strong>Listo:</strong> el archivo queda en <strong>Descargas › K-Snag</strong>.</span>
+            </li>
+          </ol>
+
+          <div class="how-stage">
+            <!-- Android: Compartir › K-Snag -->
+            <div class="scr scr-phone how-scene" data-how-os="android" aria-hidden="true">
+              <div class="scr-screen">
+                <span class="scr-status"><span>9:41</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                <div class="scr-body">
+                  <div class="scr-frame hw-video">
+                    <span class="hw-thumb thumb-bbb"><span class="hw-play"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-play"/></svg></span></span>
+                    <span class="hw-title">Big Buck Bunny 60fps 4K</span>
+                    <span class="hw-channel">Blender · 10:35</span>
+                    <span class="hw-actions">
+                      <span class="hw-chip"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>Me gusta</span>
+                      <span class="hw-chip" data-tap="1" data-step="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-share"/></svg>Compartir</span>
+                    </span>
+                    <span class="w-line"></span>
+                    <span class="w-line is-short"></span>
+                  </div>
+                  <div class="a-sheet hw-share" data-in="1" data-out="2">
+                    <span class="hw-sheet-title">Compartir</span>
+                    <span class="hw-apps">
+                      <span class="hw-app"><i></i>Copiar</span>
+                      <span class="hw-app"><i class="is-green"></i>Chat</span>
+                      <span class="hw-app" data-tap="2" data-step="1"><img src="/assets/logo.svg" alt="" width="36" height="36">K-Snag</span>
+                      <span class="hw-app"><i class="is-blue"></i>Correo</span>
+                    </span>
+                  </div>
+                  <div class="a-sheet hw-formats" data-in="2" data-out="3">
+                    <span class="hw-sheet-title"><img src="/assets/logo.svg" alt="" width="20" height="20">K-Snag</span>
+                    <span class="hw-opt" data-tap="3" data-step="2"><strong>Recomendado</strong>MP4 · 1080p<small>≈ 390 MB</small></span>
+                    <span class="hw-opt"><strong>Máxima</strong>MKV · 4K<small>≈ 1.5 GB</small></span>
+                    <span class="hw-opt"><strong>Solo audio</strong>MP3<small>≈ 19 MB</small></span>
+                  </div>
+                  <div class="a-snack hw-done" data-in="3" data-step="3">
+                    <span class="hw-done-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                    <span class="a-snack-text"><strong>Big Buck Bunny.mp4</strong>Descargas › K-Snag<span class="scr-track"><span class="scr-fill"></span></span></span>
+                  </div>
+                </div>
+                <span class="scr-gesture"></span>
+              </div>
+            </div>
+
+            <!-- Windows: copiar el enlace › Pegar › Descargar -->
+            <div class="scr scr-win how-scene" data-how-os="windows" aria-hidden="true">
+              <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-addr hw-url" data-tap="1" data-step="1">youtube.com/watch?v=aqz-KE-bpKQ</span><span class="hw-copied" data-in="1">Copiado</span></div>
+              <div class="scr-body hw-desk">
+                <span class="hw-app-head"><img src="/assets/logo.svg" alt="" width="18" height="18">K-Snag</span>
+                <span class="hw-field">
+                  <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-link"/></svg>
+                  <span class="hw-field-text">
+                    <span class="hw-placeholder" data-out="2">Pega aquí el enlace del video</span>
+                    <span class="hw-pasted" data-in="2">https://youtu.be/aqz-KE-bpKQ</span>
+                  </span>
+                  <span class="w-btn" data-tap="2" data-step="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-paste"/></svg>Pegar</span>
+                </span>
+                <span class="hw-opts" data-in="2">
+                  <span class="hw-opt" data-tap="3" data-step="2" data-on="3"><strong>Recomendado</strong>MP4 · 1080p</span>
+                  <span class="hw-opt"><strong>Máxima</strong>MKV · 4K</span>
+                  <span class="hw-opt"><strong>Solo audio</strong>MP3</span>
+                </span>
+                <span class="hw-row">
+                  <span class="hw-save" data-in="2"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-folder"/></svg>Descargas › K-Snag</span>
+                  <span class="w-btn is-primary" data-in="2" data-tap="4" data-step="2"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>Descargar</span>
+                </span>
+                <span class="hw-job" data-in="4" data-step="3">
+                  <span class="hw-done-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                  <span class="a-snack-text"><strong>Big Buck Bunny 60fps 4K.mp4</strong>Listo · 392 MB<span class="scr-track"><span class="scr-fill"></span></span></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Funciones (cada tarjeta se anima en js/features.js) ============ -->
     <section class="section" id="funciones" aria-labelledby="funciones-title">
       <div class="container">
         <div class="section-head center">
           <p class="eyebrow">Funciones</p>
           <h2 class="section-title" id="funciones-title">Todo lo que necesitas, nada que te estorbe</h2>
-          <p class="section-lead">Pega un enlace, elige la calidad y listo. K-Snag se encarga de lo difícil.</p>
         </div>
 
-        <ul class="features">
-          <li class="feature feature-wide">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-monitor-play"/></svg></span>
-            <div>
-              <h3>YouTube hasta 4K</h3>
-              <p>MP4 en 1080p que se reproduce en cualquier lado, o la máxima calidad disponible, hasta 4K a 60 fps. Antes de descargar ves la calidad real y el tamaño de cada opción.</p>
-              <p class="quality-ladder" aria-label="Calidades disponibles">
-                <span>360p</span><span>720p</span><span>1080p</span><span>1440p</span><span class="is-top">4K</span>
-              </p>
+        <ul class="fx-grid">
+          <li class="fx fx-wide" data-fx="quality">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxq">
+                <span class="fxq-bar b1"><i></i><em>360p</em></span>
+                <span class="fxq-bar b2"><i></i><em>720p</em></span>
+                <span class="fxq-bar b3"><i></i><em>1080p</em></span>
+                <span class="fxq-bar b4"><i></i><em>1440p</em></span>
+                <span class="fxq-bar b5 is-top"><i></i><em>4K</em></span>
+              </span>
+              <span class="fx-badge fxq-badge">4K · 60 fps</span>
+            </div>
+            <div class="fx-copy">
+              <h3>Videos de YouTube hasta 4K</h3>
+              <p>Ves la calidad real y el tamaño antes de descargar.</p>
             </div>
           </li>
-          <li class="feature">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-headphones"/></svg></span>
-            <h3>Solo audio en MP3</h3>
-            <p>Guarda solo el sonido, con portada y datos del artista. También en M4A.</p>
+          <li class="fx" data-fx="audio">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxa"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="fx-badge fxa-badge"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-headphones"/></svg>MP3</span>
+            </div>
+            <div class="fx-copy">
+              <h3>Solo el audio en MP3</h3>
+              <p>Con portada y datos del artista. También M4A.</p>
+            </div>
           </li>
-          <li class="feature">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-list-video"/></svg></span>
-            <h3>Listas completas</h3>
-            <p>Descarga una lista de reproducción entera o elige solo los videos que quieras.</p>
+          <li class="fx" data-fx="list">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxl">
+                <span class="fxl-row"><i></i><b></b><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                <span class="fxl-row"><i></i><b></b><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                <span class="fxl-row"><i></i><b></b><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                <span class="fxl-row"><i></i><b></b><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+              </span>
+            </div>
+            <div class="fx-copy">
+              <h3>Listas completas</h3>
+              <p>La lista entera o solo los videos que elijas.</p>
+            </div>
           </li>
-          <li class="feature">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-refresh"/></svg></span>
-            <h3>Se actualiza sola</h3>
-            <p>YouTube cambia seguido. La app pone al día su motor de descarga en segundo plano, sin reinstalar nada.</p>
+          <li class="fx" data-fx="update">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxu">
+                <span class="fxu-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-refresh"/></svg></span>
+                <span class="fxu-ver">
+                  <span class="fxu-old">motor 2026.10.29</span>
+                  <span class="fxu-new">motor 2026.11.02<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span>
+                </span>
+              </span>
+            </div>
+            <div class="fx-copy">
+              <h3>Se actualiza sola</h3>
+              <p>Cuando YouTube cambia, su motor se pone al día sin reinstalar.</p>
+            </div>
           </li>
-          <li class="feature">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-message-text"/></svg></span>
-            <h3>Errores explicados en español</h3>
-            <p>Si algo falla, te dice qué pasó en palabras simples y qué puedes hacer. Cuando puede, lo arregla sola.</p>
+          <li class="fx" data-fx="errors">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxe">
+                <span class="fxe-raw">ERROR: HTTP Error 403: Forbidden</span>
+                <span class="fxe-nice"><svg class="icon fxe-spin" aria-hidden="true"><use href="/assets/icons.svg#i-refresh"/></svg><span>YouTube cambió algo. Lo estoy arreglando…</span></span>
+                <span class="fxe-ok"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg><span>Arreglado. Descargando otra vez.</span></span>
+              </span>
+            </div>
+            <div class="fx-copy">
+              <h3>Errores explicados en español</h3>
+              <p>Te dice qué pasó y, si puede, lo arregla sola.</p>
+            </div>
           </li>
-          <li class="feature">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
-            <h3>Sin anuncios ni rastreo</h3>
-            <p>Sin publicidad, sin cuentas y sin enviar tus datos a nadie. Tus descargas se quedan en tu PC.</p>
+          <li class="fx" data-fx="private">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxp">
+                <span class="fxp-ad">Anuncio</span>
+                <span class="fxp-ad">Anuncio</span>
+                <span class="fxp-ad">Anuncio</span>
+                <span class="fxp-shield"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
+              </span>
+            </div>
+            <div class="fx-copy">
+              <h3>Sin anuncios ni rastreo</h3>
+              <p>Sin cuentas. Tus archivos se quedan en tu equipo.</p>
+            </div>
           </li>
-          <li class="feature feature-wide feature-code">
-            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-code"/></svg></span>
-            <div>
+          <li class="fx fx-wide" data-fx="code">
+            <div class="fx-art" aria-hidden="true">
+              <span class="fxc">
+                <span class="fxc-line l1"></span>
+                <span class="fxc-line l2"></span>
+                <span class="fxc-line l3"></span>
+                <span class="fxc-line l4"></span>
+                <span class="fxc-line l5"></span>
+              </span>
+            </div>
+            <div class="fx-copy">
               <h3>Código abierto</h3>
-              <p>Licencia MIT. Puedes revisar cada línea, proponer mejoras o reportar problemas en GitHub.</p>
-              <p class="quality-ladder" aria-label="Hecho con">
-                <span>Python</span><span>yt-dlp</span><span>FFmpeg</span><span>WebView2</span>
-              </p>
-              <a class="feature-link" href="https://github.com/Kasaco223/K-Snag" rel="noopener">
-                Ver el código <svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-right"/></svg>
-              </a>
+              <p>MIT en Windows y GPL-3.0 en Android: cualquiera puede revisar cada línea.</p>
+              <a class="feature-link" href="https://github.com/Kasaco223/K-Snag" rel="noopener">Ver el código <svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-right"/></svg></a>
+            </div>
+          </li>
+          <li class="fx fx-full" data-fx="sites">
+            <div class="fx-copy">
+              <h3>Y más de mil sitios</h3>
+            </div>
+            <div class="fx-art fxs">
+              <span class="fxs-track">
+                <span>YouTube</span><span>YouTube Music</span><span>TikTok</span><span>Instagram</span><span>X</span><span>Facebook</span><span>Vimeo</span><span>SoundCloud</span><span>Twitch</span><span>Dailymotion</span><span>Reddit</span><span>Bandcamp</span>
+              </span>
             </div>
           </li>
         </ul>
-
-        <p class="sites-note">
-          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-globe"/></svg>
-          <span>También funciona con TikTok, Instagram, X, Facebook, Vimeo, SoundCloud y más de mil sitios.</span>
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ Cómo funciona ============ -->
-    <section class="section section-alt" id="como-funciona" aria-labelledby="como-title">
-      <div class="container">
-        <div class="section-head center">
-          <p class="eyebrow">Cómo funciona</p>
-          <h2 class="section-title" id="como-title">Tres pasos y listo</h2>
-        </div>
-        <ol class="steps">
-          <li class="step">
-            <span class="step-num" aria-hidden="true">1</span>
-            <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-link"/></svg></span>
-            <h3>Copia el enlace</h3>
-            <p>Desde la barra de direcciones o el botón Compartir de YouTube, TikTok, Instagram y más.</p>
-          </li>
-          <li class="step">
-            <span class="step-num" aria-hidden="true">2</span>
-            <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-paste"/></svg></span>
-            <h3>Pégalo en K-Snag</h3>
-            <p>Pulsa <strong>Pegar</strong> o usa <kbd>Ctrl</kbd> + <kbd>V</kbd> en cualquier parte. La app te muestra la calidad real y el tamaño de cada opción.</p>
-          </li>
-          <li class="step">
-            <span class="step-num" aria-hidden="true">3</span>
-            <span class="step-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg></span>
-            <h3>Elige y descarga</h3>
-            <p>Recomendado, máxima calidad o solo audio. El archivo queda en tu carpeta <strong>Descargas › K-Snag</strong>.</p>
-          </li>
-        </ol>
       </div>
     </section>
 
@@ -772,15 +925,13 @@
     <section class="section section-alt" id="abrir" aria-labelledby="abrir-title">
       <div class="container">
         <div class="section-head center">
-          <p class="eyebrow">Atajos</p>
+          <p class="eyebrow">Atajos para Windows</p>
           <h2 class="section-title" id="abrir-title">Del navegador a la app en un clic</h2>
-          <p class="section-lead">Si ya tienes K-Snag, puedes mandarle videos sin copiar y pegar.</p>
         </div>
 
         <div class="shortcut-grid">
           <article class="shortcut card" aria-labelledby="marcador-title">
-            <h3 id="marcador-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-bookmark"/></svg>Botón para tu barra de favoritos</h3>
-            <p class="muted">Arrástralo a tu barra de favoritos. Cuando estés viendo un video, haz clic en él y se abrirá en K-Snag.</p>
+            <h3 id="marcador-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-bookmark"/></svg>Arrástralo a tus favoritos</h3>
             <div class="bookmarklet-zone">
               <a class="bookmarklet" id="bookmarklet" href="javascript:location.href='kdownloader://download?url='+encodeURIComponent(location.href)" title="Arrástrame a tu barra de favoritos" aria-describedby="bookmarklet-help">
                 <svg class="icon bookmarklet-grip" aria-hidden="true"><use href="/assets/icons.svg#i-grip"/></svg>
@@ -791,16 +942,14 @@
             </div>
             <p class="bookmarklet-hint" id="bookmarklet-hint" role="status"></p>
             <ol class="mini-steps" id="bookmarklet-help">
-              <li>Muestra la barra de favoritos con <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>.</li>
-              <li>Arrastra el botón de arriba hasta la barra.</li>
-              <li>En la página de un video, haz clic en el favorito y elige <strong class="nowrap">Abrir K-Snag</strong> cuando el navegador pregunte.</li>
+              <li>Muestra la barra de favoritos: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>.</li>
+              <li>Arrastra el botón hasta la barra.</li>
+              <li>En un video, haz clic en el favorito y elige <strong class="nowrap">Abrir K-Snag</strong>.</li>
             </ol>
-            <p class="small muted">Funciona en Chrome, Edge, Firefox y Brave en computadora.</p>
           </article>
 
           <article class="shortcut card" aria-labelledby="ya-tengo-title">
-            <h3 id="ya-tengo-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-zap"/></svg>¿Ya tienes la app?</h3>
-            <p class="muted">Pega un enlace y ábrelo directo en K-Snag. La app siempre te muestra una vista previa antes de descargar.</p>
+            <h3 id="ya-tengo-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-zap"/></svg>¿Ya tienes la app? Pega un enlace</h3>
             <form class="open-form" id="open-form" novalidate>
               <label class="sr-only" for="open-url">Enlace del video</label>
               <div class="open-field">
@@ -814,12 +963,8 @@
               </button>
             </form>
             <div class="open-status" id="open-status" role="status" aria-live="polite"></div>
-            <p class="example-line">¿No tienes un enlace a mano? <button type="button" class="link-button" id="open-example">Prueba con un video libre</button></p>
-            <ul class="open-notes">
-              <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-lock"/></svg><span>El enlace no pasa por ningún servidor: va directo de tu navegador a la app.</span></li>
-              <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-list-video"/></svg><span>Acepta videos, Shorts y listas de YouTube, y enlaces de más de mil sitios.</span></li>
-              <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span>La app nunca descarga nada sin que tú lo confirmes.</span></li>
-            </ul>
+            <p class="example-line">¿Sin enlace a mano? <button type="button" class="link-button" id="open-example">Prueba con un video libre</button></p>
+            <p class="small muted"><svg class="icon icon-sm open-lock" aria-hidden="true"><use href="/assets/icons.svg#i-lock"/></svg>Va directo a la app, sin pasar por ningún servidor. Nunca descarga sin que lo confirmes.</p>
           </article>
         </div>
       </div>
