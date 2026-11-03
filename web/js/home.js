@@ -4,6 +4,7 @@ import { renderReleaseLabel } from './release.js';
 import { initBookmarklet, initExampleButton, initOpenForm } from './open-app.js';
 import { detectPlatform } from './platform.js';
 import { initTour } from './tour.js';
+import { initFeatures } from './features.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -23,6 +24,7 @@ initSite();
 const platform = detectPlatform();
 initPlatformHero(platform);
 initTour(platform);
+initFeatures(platform);
 initOpenForm($('open-form'));
 initExampleButton($('open-example'), $('open-url'));
 initBookmarklet($('bookmarklet'), $('bookmarklet-hint'));

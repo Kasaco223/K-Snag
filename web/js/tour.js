@@ -47,8 +47,12 @@ function cursorSvg() {
   return svg;
 }
 
-/** Línea de tiempo que repite la secuencia de toques de una pantalla. Empieza en pausa. */
-function screenTimeline(gsap, scr) {
+/**
+ * Línea de tiempo que repite la secuencia de toques de una pantalla. Empieza en pausa.
+ * `onStep(n)`: opcional; se llama con el data-step del toque o del elemento que aparece (pasos numerados
+ * junto a la escena, como en «Cómo funciona»).
+ */
+export function screenTimeline(gsap, scr, { onStep } = {}) {
   const phone = scr.classList.contains('scr-phone');
   const pointer = document.createElement('span');
   pointer.className = phone ? 'scr-pointer scr-finger' : 'scr-pointer scr-cursor';
@@ -68,7 +72,11 @@ function screenTimeline(gsap, scr) {
   const later = all('[data-in]').filter((node) => node.dataset.in !== '0');
   const outs = all('[data-out]');
   const fills = all('.scr-fill');
+  const step = (node) => {
+    if (onStep && node?.dataset.step) onStep(node.dataset.step);
+  };
   const reset = () => {
+    step(taps[0]);
     for (const node of all('[data-on]')) node.classList.remove('is-on');
     for (const node of taps) node.classList.remove('is-target');
   };
@@ -100,7 +108,14 @@ function screenTimeline(gsap, scr) {
   for (const target of taps) {
     const n = target.dataset.tap;
     tl.to(pointer, { autoAlpha: 1, duration: 0.25 }, '+=0.35');
-    tl.call(() => target.classList.add('is-target'), null, '<');
+    tl.call(
+      () => {
+        target.classList.add('is-target');
+        step(target);
+      },
+      null,
+      '<',
+    );
     tl.to(pointer, {
       x: () => centerOf(target, scr).x,
       y: () => centerOf(target, scr).y,
@@ -130,6 +145,8 @@ function screenTimeline(gsap, scr) {
     if (leaving.length) tl.to(leaving, { autoAlpha: 0, y: -10, duration: 0.3 }, '<0.1');
     if (coming.length) {
       tl.fromTo(coming, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.4, stagger: 0.12 }, leaving.length ? '<0.15' : '<0.1');
+      const marker = coming.find((node) => node.dataset.step);
+      if (marker) tl.call(() => step(marker), null, '<');
       const comingFills = fillsIn(coming);
       if (comingFills.length) tl.to(comingFills, { scaleX: 1, duration: 1.4, ease: 'power1.inOut' });
     }
