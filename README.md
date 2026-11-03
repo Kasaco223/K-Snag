@@ -160,6 +160,8 @@ El resultado funciona incluso con Smart App Control activado. Lo único que Smar
 2. Ábrelo. La primera vez, Android pide **permitir instalar desde esa fuente**: toca **Configuración**, activa el permiso, vuelve y toca **Instalar**.
 3. Si Google Play Protect avisa, la página explica cada mensaje.
 
+¿Usas [Obtainium](https://github.com/ImranR98/Obtainium)? En [ksnagapp.vercel.app/android#obtainium](https://ksnagapp.vercel.app/android#obtainium) hay un botón que agrega K-Snag ya configurada: solo versiones estables de Android y el APK de tu celular.
+
 **Requisitos:** Android 8.0 o superior. El APK de 64 bits (casi todos los celulares) pesa unos 54 MB, el de 32 bits unos 46 MB y el x86_64 unos 57 MB; ya instalada, con su motor, ocupa unos 230 MB. Están todos en [Releases](https://github.com/Kasaco223/K-Snag/releases?q=android&expanded=true) con sus SHA-256.
 
 > Los archivos se siguen llamando `K-Downloader-Android-<abi>.apk`: las versiones 1.0.0 a 1.0.2 solo se actualizan con ese nombre.

@@ -189,6 +189,20 @@
           </div>
         </div>
         <p class="small muted">Certificado de firma (SHA-256): <code data-android-cert></code>. Todas las versiones y sus notas: <a href="https://github.com/Kasaco223/K-Snag/releases?q=android&amp;expanded=true" data-android-notes rel="noopener">GitHub › Releases</a>.</p>
+
+        <!-- La configuración va en el enlace; tests/test_obtainium_link.py comprueba que siga sirviendo con los títulos de los Releases. -->
+        <div class="support-card obtainium-card" id="obtainium">
+          <span class="support-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-refresh"/></svg></span>
+          <div class="support-text">
+            <h3 id="obtainium-title">¿Usas Obtainium?</h3>
+            <p>Obtainium instala y actualiza apps directo desde GitHub. Toca el botón en tu celular y la app queda agregada y lista: solo versiones estables y el APK que le sirve a tu celular.</p>
+            <p>Si no pasa nada al tocarlo, primero instala <a href="https://github.com/ImranR98/Obtainium/releases/latest" rel="noopener">Obtainium desde su GitHub</a>.</p>
+          </div>
+          <a class="btn btn-secondary" data-obtainium href="obtainium://app/%7B%22id%22%3A%22io.github.kasaco223.kdownloader%22%2C%22url%22%3A%22https%3A%2F%2Fgithub.com%2FKasaco223%2FK-Snag%22%2C%22author%22%3A%22Kasaco223%22%2C%22name%22%3A%22K-Snag%22%2C%22preferredApkIndex%22%3A0%2C%22additionalSettings%22%3A%22%7B%5C%22includePrereleases%5C%22%3Atrue%2C%5C%22fallbackToOlderReleases%5C%22%3Atrue%2C%5C%22filterReleaseTitlesByRegEx%5C%22%3A%5C%22para%20Android%20%5B0-9%5D%2B%5C%5C%5C%5C.%5B0-9%5D%2B%5C%5C%5C%5C.%5B0-9%5D%2B%24%5C%22%2C%5C%22sortMethodChoice%5C%22%3A%5C%22date%5C%22%2C%5C%22versionExtractionRegEx%5C%22%3A%5C%22%5B0-9%5D%2B%5C%5C%5C%5C.%5B0-9%5D%2B%5C%5C%5C%5C.%5B0-9%5D%2B%24%5C%22%2C%5C%22autoApkFilterByArch%5C%22%3Atrue%7D%22%7D">
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-external"/></svg>
+            Agregar a Obtainium
+          </a>
+        </div>
       </div>
     </section>
 
@@ -203,7 +217,7 @@
           </article>
           <article class="guide-card" id="actualizar" aria-labelledby="actualizar-title">
             <h3 id="actualizar-title">¿Cómo se actualiza?</h3>
-            <p>La app te avisa cuando hay una versión nueva, la descarga, comprueba su huella SHA-256 y te pide confirmar. La primera vez, Android te pedirá permitir que K-Snag instale apps. El motor de descarga se pone al día solo, sin reinstalar.</p>
+            <p>La app te avisa cuando hay una versión nueva, la descarga, comprueba su huella SHA-256 y te pide confirmar. La primera vez, Android te pedirá permitir que K-Snag instale apps. El motor de descarga se pone al día solo, sin reinstalar. Si prefieres, también puedes seguirla con <a href="#obtainium">Obtainium</a>.</p>
           </article>
           <article class="guide-card" id="espacio" aria-labelledby="espacio-title">
             <h3 id="espacio-title">¿Cuánto espacio ocupa?</h3>

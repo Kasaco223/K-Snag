@@ -507,6 +507,10 @@
 @media (max-width: 560px) {
   .apk-row { grid-template-columns: 1fr auto; }
 }
+.obtainium-card { margin-top: 32px; }
+.obtainium-card h3 { font-size: 1.125rem; margin-bottom: 6px; }
+.obtainium-card p + p { margin-top: 8px; }
+.obtainium-card .support-icon { background: var(--accent-soft); color: var(--accent-text); }
 
 /* ---------- /donar ---------- */
 .donate-tabs {
