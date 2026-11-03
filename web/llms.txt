@@ -7,6 +7,7 @@ K-Snag is a free, open-source app to download YouTube videos (and from 1000+ oth
 - No es una página web para descargar: la descarga ocurre en el equipo del usuario, porque YouTube bloquea los servidores en la nube.
 - Usa yt-dlp y FFmpeg. El motor de descarga se actualiza solo cuando YouTube cambia.
 - No está en Google Play ni en Microsoft Store. Se instala desde https://ksnagapp.vercel.app, que muestra paso a paso qué tocar en cada aviso de Windows o Android.
+- La app de Android (paquete io.github.kasaco223.kdownloader) está registrada en la verificación de desarrolladores de Android, con la llave de firma publicada en https://ksnagapp.vercel.app/android.
 - Licencias: la app de Windows y la web son MIT; la app de Android es GPL-3.0-or-later.
 - Pide un uso responsable: descargar contenido propio, libre o con permiso del autor.
 
