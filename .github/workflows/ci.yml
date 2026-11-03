@@ -14,6 +14,10 @@ on:
       - ".github/scripts/**"
       - "docs/release-android.md"
       - "web/data/android*.json"
+      # Solo documentación (THIRD_PARTY_NOTICES.md no: va dentro del instalador).
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - "docs/**"
   pull_request:
     paths-ignore:
       - "android/**"
@@ -22,6 +26,10 @@ on:
       - ".github/scripts/**"
       - "docs/release-android.md"
       - "web/data/android*.json"
+      # Solo documentación (THIRD_PARTY_NOTICES.md no: va dentro del instalador).
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - "docs/**"
 
 permissions:
   contents: read
