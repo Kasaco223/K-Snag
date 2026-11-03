@@ -1196,6 +1196,41 @@ html:not(.tour-anim) .scr [data-in]:not([data-in="0"]):not([data-static]) { visi
 }
 .w-check .icon { width: 12px; height: 12px; stroke-width: 3; }
 .w-check.is-on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tour-alt { margin-top: 12px; color: var(--text-muted); font-size: 0.9375rem; }
+/* Explorador con menú contextual y Control de cuentas de usuario */
+.w-explorer { display: grid; align-content: start; gap: 6px; }
+.w-file-row { padding: 8px 10px; border-radius: 8px; background: var(--accent-soft); }
+.w-menu {
+  justify-self: center;
+  display: grid;
+  gap: 2px;
+  min-width: 230px;
+  margin-top: 2px;
+  padding: 6px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+}
+.w-menu-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; }
+.w-menu-item.is-strong { font-weight: 650; }
+.w-menu-item .icon { color: #60a5fa; }
+.w-uac {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #1b4f91;
+  color: #dbe8ff;
+  --scr-ring: rgb(255 255 255 / 0.75);
+}
+.w-uac-head { font-size: 11px; opacity: 0.85; }
+.w-uac-q { color: #fff; font-size: 15px; font-weight: 600; }
+.w-uac-app { color: #fff; font-weight: 600; }
+.w-uac-app small { display: block; color: #dbe8ff; font-weight: 400; }
+.w-uac .w-btn { border-color: rgb(255 255 255 / 0.6); color: #fff; }
+.w-uac .w-btn.is-primary { background: #fff; color: #1b4f91; }
 /* SmartScreen */
 .scr-ss { --scr-ring: rgb(255 255 255 / 0.75); background: #1b4f91; border-color: rgb(255 255 255 / 0.12); }
 .scr-ss .scr-body { padding: 22px; }

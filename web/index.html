@@ -302,22 +302,33 @@
               <li class="tour-step" id="win-3">
                 <span class="tour-num" aria-hidden="true">3</span>
                 <div class="tour-text">
-                  <h4><span class="sr-only">Paso 3: </span>Desbloquéalo</h4>
-                  <p>En tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Propiedades</strong>. Marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</p>
-                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Windows lo pide con los archivos que vienen de internet. Se hace una sola vez. Si no aparece «Desbloquear», no hace falta: sigue al paso 4.</span></p>
+                  <h4><span class="sr-only">Paso 3: </span>Ábrelo como administrador</h4>
+                  <p>En tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Ejecutar como administrador</strong>. Cuando Windows pregunte si quieres permitir cambios, toca <strong>Sí</strong>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Windows no deja abrir con doble clic los archivos <code>.cmd</code> que vienen de internet, pero así sí. K-Snag se instala igual solo para tu usuario.</span></p>
+                  <p class="tour-alt"><strong>¿Tu cuenta no es de administrador?</strong> Clic derecho › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong>, pulsa <strong>Aceptar</strong> y ábrelo con doble clic.</p>
                 </div>
                 <div class="tour-visual">
                   <div class="scr scr-win" aria-hidden="true">
-                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-title">Propiedades: Instalar-K-Snag.cmd</span></div>
+                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-title">Descargas</span></div>
                     <div class="scr-body">
-                      <div class="scr-frame w-props">
-                        <span class="w-tabs"><span class="is-current">General</span><span>Seguridad</span><span>Detalles</span></span>
-                        <span class="w-props-row"><span>Tipo:</span>Script de comandos de Windows</span>
-                        <span class="w-props-row"><span>Seguridad:</span>Este archivo proviene de otro equipo y podría bloquearse para ayudar a proteger el equipo.</span>
-                        <span class="w-check-row" data-tap="1"><span class="w-check" data-on="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span>Desbloquear</span>
+                      <div class="scr-frame w-explorer" data-out="1">
+                        <span class="w-file w-file-row">
+                          <span class="w-file-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-file-code"/></svg></span>
+                          <span class="w-file-info">Instalar-K-Snag.cmd<small>Script de comandos de Windows · 4 KB</small></span>
+                        </span>
+                        <span class="w-menu">
+                          <span class="w-menu-item">Abrir</span>
+                          <span class="w-menu-item is-strong" data-tap="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg>Ejecutar como administrador</span>
+                          <span class="w-menu-item">Propiedades</span>
+                        </span>
+                      </div>
+                      <div class="scr-frame w-uac" data-in="1">
+                        <span class="w-uac-head">Control de cuentas de usuario</span>
+                        <span class="w-uac-q">¿Quieres permitir que esta aplicación haga cambios en el dispositivo?</span>
+                        <span class="w-uac-app">Procesador de comandos de Windows<small>Editor comprobado: Microsoft Windows</small></span>
                         <span class="w-actions">
-                          <span class="w-btn is-primary" data-tap="2">Aceptar</span>
-                          <span class="w-btn">Cancelar</span>
+                          <span class="w-btn is-primary" data-tap="2">Sí</span>
+                          <span class="w-btn">No</span>
                         </span>
                       </div>
                     </div>
@@ -328,8 +339,8 @@
               <li class="tour-step" id="win-4">
                 <span class="tour-num" aria-hidden="true">4</span>
                 <div class="tour-text">
-                  <h4><span class="sr-only">Paso 4: </span>Ábrelo con doble clic</h4>
-                  <p>Si aparece <strong>«Windows protegió tu PC»</strong>, toca <strong>Más información</strong> y luego <strong>Ejecutar de todas formas</strong>.</p>
+                  <h4><span class="sr-only">Paso 4: </span>Si aparece «Windows protegió tu PC»</h4>
+                  <p>Toca <strong>Más información</strong> y luego <strong>Ejecutar de todas formas</strong>.</p>
                   <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Windows lo muestra con cualquier programa nuevo que no paga una firma digital.</span></p>
                 </div>
                 <div class="tour-visual">
@@ -356,7 +367,7 @@
                   <h4><span class="sr-only">Paso 5: </span>¡Listo!</h4>
                   <p>El instalador baja la app desde GitHub, comprueba su huella SHA-256 y la abre. Después la encuentras en el menú Inicio.</p>
                   <ul class="tour-facts">
-                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-user"/></svg>Solo para tu usuario, sin permisos de administrador</li>
+                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-user"/></svg>Se instala solo para tu usuario, aunque lo abras como administrador</li>
                     <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-trash"/></svg>Se desinstala desde Configuración › Aplicaciones</li>
                   </ul>
                 </div>
@@ -393,7 +404,7 @@
             <div class="tour-after" tabindex="-1" hidden>
               <span class="tour-after-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
               <h4>¡Tu descarga empezó!</h4>
-              <p>Ábrela y sigue los avisos: <strong>Conservar</strong> › <strong>Desbloquear</strong> › doble clic › <strong>Ejecutar de todas formas</strong>. <a href="#win-2">Ver los pasos</a></p>
+              <p>Sigue los avisos: <strong>Conservar</strong> › clic derecho › <strong>Ejecutar como administrador</strong> › <strong>Sí</strong>. Si aparece «Windows protegió tu PC»: <strong>Más información</strong> › <strong>Ejecutar de todas formas</strong>. <a href="#win-2">Ver los pasos</a></p>
               <div class="tour-after-donate">
                 <p><strong>¿Te sirve K-Snag?</strong> La hace una sola persona y es gratis para todos. Si quieres que siga al día cada vez que YouTube cambia algo, puedes apoyarla con lo que quieras.</p>
                 <a class="btn btn-primary" href="/donar">
@@ -840,8 +851,8 @@
           <details class="faq-item">
             <summary>El instalador no abre. ¿Tengo que ejecutarlo como administrador?<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></summary>
             <div class="faq-body">
-              <p>No hace falta. Si al abrirlo no pasa nada, Windows lo bloqueó por venir de internet: ve a <strong>Descargas</strong>, clic derecho › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong> y ábrelo con doble clic.</p>
-              <p>Ejecutarlo como administrador también funciona: la app se instala en tu usuario y se abre normal. <a href="/ayuda#desbloquear">Paso a paso</a>.</p>
+              <p>Sí, es lo más fácil. Windows no deja abrir con doble clic los archivos <code>.cmd</code> descargados de internet: ve a <strong>Descargas</strong>, clic derecho en el archivo › <strong>Ejecutar como administrador</strong> y toca <strong>Sí</strong>. La app se instala igual solo para tu usuario.</p>
+              <p>Si tu cuenta no es de administrador: clic derecho › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong>, pulsa <strong>Aceptar</strong> y ábrelo con doble clic. <a href="/ayuda#desbloquear">Paso a paso</a>.</p>
             </div>
           </details>
           <details class="faq-item">
