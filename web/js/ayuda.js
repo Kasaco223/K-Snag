@@ -307,10 +307,8 @@ async function main() {
   initControls();
   const items = await loadData();
   if (!items) {
-    $('error-groups').replaceChildren();
-    $('error-groups').removeAttribute('aria-busy');
-    $('error-load-failed').hidden = false;
-    applyLang();
+    // El HTML ya trae el catálogo en español (scripts/export_web_data.py): se queda, sin buscador ni idiomas.
+    if (!$('error-groups').querySelector('.err-card')) $('error-load-failed').hidden = false;
     goToHash();
     return;
   }

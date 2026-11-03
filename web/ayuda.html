@@ -91,20 +91,179 @@
 
         <div class="missing-code" id="missing-code" role="status" hidden></div>
 
-        <div class="error-groups" id="error-groups" aria-busy="true">
-          <div class="err-skeleton" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <p class="sr-only">Cargando la lista de errores…</p>
+        <div class="error-groups" id="error-groups">
+          <!-- catalogo:inicio (generado por scripts/export_web_data.py; no editar a mano) -->
+          <div class="err-grid">
+            <article class="err-card" id="drm" data-code="drm" aria-labelledby="drm-title">
+              <div class="err-head"><a class="err-code" href="#drm"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>drm</span></a></div>
+              <h3 class="err-title" id="drm-title">Contenido protegido (DRM)</h3>
+              <p class="err-message">Este video tiene protección anticopia y no se puede descargar.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Algunos videos (películas, series o música de tiendas) usan DRM. K-Snag no evade protecciones.</p></div></div>
+            </article>
+            <article class="err-card" id="members_only" data-code="members_only" aria-labelledby="members_only-title">
+              <div class="err-head"><a class="err-code" href="#members_only"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>members_only</span></a></div>
+              <h3 class="err-title" id="members_only-title">Exclusivo para miembros</h3>
+              <p class="err-message">Solo lo pueden ver los miembros del canal.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Si eres miembro, puedes usar un archivo cookies.txt de tu cuenta en Ajustes › Avanzado (con el riesgo que eso implica para la cuenta).</p></div></div>
+            </article>
+            <article class="err-card" id="payment" data-code="payment" aria-labelledby="payment-title">
+              <div class="err-head"><a class="err-code" href="#payment"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>payment</span></a></div>
+              <h3 class="err-title" id="payment-title">Contenido de pago</h3>
+              <p class="err-message">Este video requiere una compra o suscripción.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">El contenido de pago no se puede descargar.</p></div></div>
+            </article>
+            <article class="err-card" id="age_restricted" data-code="age_restricted" aria-labelledby="age_restricted-title">
+              <div class="err-head"><a class="err-code" href="#age_restricted"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>age_restricted</span></a></div>
+              <h3 class="err-title" id="age_restricted-title">Video para mayores de 18</h3>
+              <p class="err-message">YouTube solo lo muestra a cuentas verificadas.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Hoy YouTube solo entrega estos videos en baja calidad sin una sesión iniciada. Puedes intentarlo con un cookies.txt en Ajustes › Avanzado, aunque usar tu cuenta tiene riesgos.</p></div></div>
+            </article>
+            <article class="err-card" id="private" data-code="private" aria-labelledby="private-title">
+              <div class="err-head"><a class="err-code" href="#private"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>private</span></a></div>
+              <h3 class="err-title" id="private-title">Video privado</h3>
+              <p class="err-message">Solo pueden verlo las cuentas invitadas por su autor.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Si tu cuenta tiene acceso, puedes usar un cookies.txt en Ajustes › Avanzado.</p></div></div>
+            </article>
+            <article class="err-card" id="bot_check" data-code="bot_check" aria-labelledby="bot_check-title">
+              <div class="err-head"><a class="err-code" href="#bot_check"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>bot_check</span></a></div>
+              <h3 class="err-title" id="bot_check-title">YouTube pide comprobar que no eres un robot</h3>
+              <p class="err-message">Hubo muchas descargas seguidas desde tu conexión, o estás usando una VPN o red compartida.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Espera unos minutos y vuelve a intentarlo. Si usas VPN, desactívala. La app activará el modo tranquilo para ir más despacio.</p></div></div>
+            </article>
+            <article class="err-card" id="rate_limited" data-code="rate_limited" aria-labelledby="rate_limited-title">
+              <div class="err-head"><a class="err-code" href="#rate_limited"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>rate_limited</span></a></div>
+              <h3 class="err-title" id="rate_limited-title">Demasiadas descargas seguidas</h3>
+              <p class="err-message">El sitio pausó tu sesión por un rato.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">YouTube puede limitar una sesión hasta por una hora. La app activa el modo tranquilo; espera y vuelve a intentarlo.</p></div></div>
+            </article>
+            <article class="err-card" id="login_required" data-code="login_required" aria-labelledby="login_required-title">
+              <div class="err-head"><a class="err-code" href="#login_required"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>login_required</span></a></div>
+              <h3 class="err-title" id="login_required-title">El sitio pide iniciar sesión</h3>
+              <p class="err-message">Este contenido solo se ve con una cuenta.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Puedes usar un archivo cookies.txt de tu cuenta en Ajustes › Avanzado. Usar tu cuenta en descargadores tiene riesgos.</p></div></div>
+            </article>
+            <article class="err-card" id="geo_blocked" data-code="geo_blocked" aria-labelledby="geo_blocked-title">
+              <div class="err-head"><a class="err-code" href="#geo_blocked"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>geo_blocked</span></a></div>
+              <h3 class="err-title" id="geo_blocked-title">No disponible en tu país</h3>
+              <p class="err-message">Su autor lo limitó a ciertos países.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">El autor decidió en qué países se puede ver este video.</p></div></div>
+            </article>
+            <article class="err-card" id="upcoming" data-code="upcoming" aria-labelledby="upcoming-title">
+              <div class="err-head"><a class="err-code" href="#upcoming"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>upcoming</span></a></div>
+              <h3 class="err-title" id="upcoming-title">Todavía no empieza</h3>
+              <p class="err-message">Es un directo o un estreno programado.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Vuelve a intentarlo cuando el video ya esté publicado.</p></div></div>
+            </article>
+            <article class="err-card" id="not_live" data-code="not_live" aria-labelledby="not_live-title">
+              <div class="err-head"><a class="err-code" href="#not_live"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>not_live</span></a></div>
+              <h3 class="err-title" id="not_live-title">El canal no está en vivo</h3>
+              <p class="err-message">No hay ninguna transmisión en curso.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Pega el enlace de un video publicado o espera a que empiece la transmisión.</p></div></div>
+            </article>
+            <article class="err-card" id="removed" data-code="removed" aria-labelledby="removed-title">
+              <div class="err-head"><a class="err-code" href="#removed"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>removed</span></a></div>
+              <h3 class="err-title" id="removed-title">El video ya no existe</h3>
+              <p class="err-message">Su autor lo eliminó o el canal fue cerrado.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Este video ya no está disponible en el sitio.</p></div></div>
+            </article>
+            <article class="err-card" id="copyright" data-code="copyright" aria-labelledby="copyright-title">
+              <div class="err-head"><a class="err-code" href="#copyright"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>copyright</span></a></div>
+              <h3 class="err-title" id="copyright-title">Bloqueado por derechos de autor</h3>
+              <p class="err-message">No está disponible por un reclamo de derechos de autor.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">El dueño de los derechos bloqueó este video.</p></div></div>
+            </article>
+            <article class="err-card" id="format_unavailable" data-code="format_unavailable" aria-labelledby="format_unavailable-title">
+              <div class="err-head"><a class="err-code" href="#format_unavailable"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>format_unavailable</span></a></div>
+              <h3 class="err-title" id="format_unavailable-title">Esa calidad no está disponible</h3>
+              <p class="err-message">Descargamos la mejor calidad que hay.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">El video no tiene la calidad elegida. La app baja automáticamente la mejor disponible y te lo indica.</p></div></div>
+            </article>
+            <article class="err-card" id="http_403" data-code="http_403" aria-labelledby="http_403-title">
+              <div class="err-head"><a class="err-code" href="#http_403"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>http_403</span></a></div>
+              <h3 class="err-title" id="http_403-title">El sitio bloqueó la descarga</h3>
+              <p class="err-message">Suele pasar cuando YouTube cambia algo. Actualizamos el motor y lo intentamos de nuevo.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">La app actualiza su motor (yt-dlp) y reintenta sola. Si sigue fallando, es posible que YouTube haya cambiado algo y la corrección tarde unos días.</p></div></div>
+            </article>
+            <article class="err-card" id="engine_outdated" data-code="engine_outdated" aria-labelledby="engine_outdated-title">
+              <div class="err-head"><a class="err-code" href="#engine_outdated"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>engine_outdated</span></a></div>
+              <h3 class="err-title" id="engine_outdated-title">El motor necesita actualizarse</h3>
+              <p class="err-message">El sitio cambió y el motor quedó atrás. Lo actualizamos y reintentamos.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">La app actualiza el motor y vuelve a intentarlo. Si no hay versión nueva todavía, prueba más tarde.</p></div></div>
+            </article>
+            <article class="err-card" id="unavailable" data-code="unavailable" aria-labelledby="unavailable-title">
+              <div class="err-head"><a class="err-code" href="#unavailable"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>unavailable</span></a></div>
+              <h3 class="err-title" id="unavailable-title">Video no disponible</h3>
+              <p class="err-message">El sitio dice que este video no está disponible.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Ábrelo en el navegador para ver el motivo. Puede haber sido eliminado o restringido.</p></div></div>
+            </article>
+            <article class="err-card" id="ffmpeg_missing" data-code="ffmpeg_missing" aria-labelledby="ffmpeg_missing-title">
+              <div class="err-head"><a class="err-code" href="#ffmpeg_missing"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>ffmpeg_missing</span></a></div>
+              <h3 class="err-title" id="ffmpeg_missing-title">Falta el conversor (FFmpeg)</h3>
+              <p class="err-message">Sin él no se pueden unir audio y video.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Ve a Ajustes › Componentes y pulsa Reparar.</p></div></div>
+            </article>
+            <article class="err-card" id="blocked_by_windows" data-code="blocked_by_windows" aria-labelledby="blocked_by_windows-title">
+              <div class="err-head"><a class="err-code" href="#blocked_by_windows"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>blocked_by_windows</span></a></div>
+              <h3 class="err-title" id="blocked_by_windows-title">Windows bloqueó un componente</h3>
+              <p class="err-message">El control de aplicaciones de Windows no dejó ejecutar un componente del motor.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Ve a Ajustes › Componentes y pulsa Reparar para bajar una versión reconocida por Windows.</p></div></div>
+            </article>
+            <article class="err-card" id="antivirus" data-code="antivirus" aria-labelledby="antivirus-title">
+              <div class="err-head"><a class="err-code" href="#antivirus"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>antivirus</span></a></div>
+              <h3 class="err-title" id="antivirus-title">El antivirus bloqueó un componente</h3>
+              <p class="err-message">Tu antivirus puso en cuarentena un archivo del motor.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Suele ser un falso positivo. Ve a Ajustes › Componentes y pulsa Reparar; si vuelve a pasar, agrega una excepción para la carpeta de K-Snag.</p></div></div>
+            </article>
+            <article class="err-card" id="merge_failed" data-code="merge_failed" aria-labelledby="merge_failed-title">
+              <div class="err-head"><a class="err-code" href="#merge_failed"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>merge_failed</span></a></div>
+              <h3 class="err-title" id="merge_failed-title">No pudimos terminar el archivo</h3>
+              <p class="err-message">Falló la unión de audio y video.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Vuelve a intentarlo. Si sigue fallando, elige la opción Máxima calidad (MKV).</p></div></div>
+            </article>
+            <article class="err-card" id="disk_full" data-code="disk_full" aria-labelledby="disk_full-title">
+              <div class="err-head"><a class="err-code" href="#disk_full"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>disk_full</span></a></div>
+              <h3 class="err-title" id="disk_full-title">Tu disco está lleno</h3>
+              <p class="err-message">No queda espacio para guardar el archivo.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Libera espacio o elige otra carpeta de descargas en Ajustes.</p></div></div>
+            </article>
+            <article class="err-card" id="permission" data-code="permission" aria-labelledby="permission-title">
+              <div class="err-head"><a class="err-code" href="#permission"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>permission</span></a></div>
+              <h3 class="err-title" id="permission-title">No pudimos guardar el archivo</h3>
+              <p class="err-message">La carpeta está protegida o el archivo está abierto en otro programa.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Cierra el reproductor si tiene el archivo abierto, o elige otra carpeta. La protección contra ransomware de Windows puede bloquear Documentos y Videos.</p></div></div>
+            </article>
+            <article class="err-card" id="ssl" data-code="ssl" aria-labelledby="ssl-title">
+              <div class="err-head"><a class="err-code" href="#ssl"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>ssl</span></a></div>
+              <h3 class="err-title" id="ssl-title">No se pudo verificar la conexión segura</h3>
+              <p class="err-message">Revisa la fecha y hora de tu PC o tu antivirus.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Una fecha incorrecta o un antivirus que inspecciona conexiones puede causar esto.</p></div></div>
+            </article>
+            <article class="err-card" id="network" data-code="network" aria-labelledby="network-title">
+              <div class="err-head"><a class="err-code" href="#network"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>network</span></a></div>
+              <h3 class="err-title" id="network-title">Problema de conexión</h3>
+              <p class="err-message">No pudimos comunicarnos con el sitio.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Revisa tu conexión a internet y vuelve a intentarlo.</p></div></div>
+            </article>
+            <article class="err-card" id="unsupported_url" data-code="unsupported_url" aria-labelledby="unsupported_url-title">
+              <div class="err-head"><a class="err-code" href="#unsupported_url"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>unsupported_url</span></a></div>
+              <h3 class="err-title" id="unsupported_url-title">Ese enlace no es compatible</h3>
+              <p class="err-message">Cópialo desde la barra de direcciones o el botón Compartir.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">K-Snag funciona con YouTube, TikTok, Instagram, X, Facebook, Vimeo y más de mil sitios.</p></div></div>
+            </article>
+            <article class="err-card" id="unknown" data-code="unknown" aria-labelledby="unknown-title">
+              <div class="err-head"><a class="err-code" href="#unknown"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-hash"/></svg><span>unknown</span></a></div>
+              <h3 class="err-title" id="unknown-title">Algo salió mal</h3>
+              <p class="err-message">No pudimos completar la descarga.</p>
+              <div class="err-help"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg><div><span class="err-help-label">Qué puedes hacer</span><p class="err-help-text">Vuelve a intentarlo. Si sigue fallando, copia los detalles técnicos y repórtalo en GitHub.</p></div></div>
+            </article>
+          </div>
+          <!-- catalogo:fin -->
         </div>
         <p class="error-empty" id="error-empty" role="status" hidden></p>
         <div class="callout warning" id="error-load-failed" hidden>
           <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
           <p>No pudimos cargar la lista de errores. Recarga la página o consúltala en <a href="https://github.com/Kasaco223/K-Snag/blob/master/src/kdownloader/engine/errors_catalog.json" rel="noopener">GitHub</a>.</p>
         </div>
-        <noscript>
-          <div class="callout warning">
-            <p>Activa JavaScript para ver la lista de errores, o consúltala en <a href="https://github.com/Kasaco223/K-Snag/blob/master/src/kdownloader/engine/errors_catalog.json">GitHub</a>.</p>
-          </div>
-        </noscript>
       </div>
     </section>
 

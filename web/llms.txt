@@ -1,0 +1,28 @@
+# K-Snag
+
+> K-Snag es una app gratis y de código abierto para descargar videos de YouTube y de más de mil sitios (TikTok, Instagram, X, Facebook, Vimeo, SoundCloud…) en MP4 hasta 4K, o solo el audio en MP3 o M4A. Hay versión para Windows 10 y 11 (64 bits) y para Android 8 o superior. No tiene anuncios, cuentas ni rastreo, y explica los errores en español. Antes se llamaba K-Downloader.
+
+K-Snag is a free, open-source app to download YouTube videos (and from 1000+ other sites) as MP4 up to 4K or as MP3/M4A audio, for Windows 10/11 and Android 8+. No ads, no accounts, no tracking.
+
+- No es una página web para descargar: la descarga ocurre en el equipo del usuario, porque YouTube bloquea los servidores en la nube.
+- Usa yt-dlp y FFmpeg. El motor de descarga se actualiza solo cuando YouTube cambia.
+- No está en Google Play ni en Microsoft Store. Se instala desde https://ksnagapp.vercel.app, que muestra paso a paso qué tocar en cada aviso de Windows o Android.
+- Licencias: la app de Windows y la web son MIT; la app de Android es GPL-3.0-or-later.
+- Pide un uso responsable: descargar contenido propio, libre o con permiso del autor.
+
+## Descargar e instalar
+
+- [Página principal y guía de instalación](https://ksnagapp.vercel.app/#instalar): pasos animados para Windows y Android; el botón de descarga está al final de la guía.
+- [K-Snag para Android](https://ksnagapp.vercel.app/android): APK, versiones para 32 bits y Chromebook, huellas SHA-256 y certificado de firma.
+- [Versiones y novedades](https://github.com/Kasaco223/K-Snag/releases): todas las versiones publicadas en GitHub.
+
+## Ayuda
+
+- [Centro de ayuda](https://ksnagapp.vercel.app/ayuda): qué significa cada mensaje de error de la app (por ejemplo HTTP 403, «confirma que no eres un bot», video privado o con restricción de edad, disco lleno) y cómo resolverlo, y qué hacer con los avisos de Windows al instalar (SmartScreen, Control inteligente de aplicaciones, Desbloquear).
+- [Uso responsable](https://ksnagapp.vercel.app/uso-responsable)
+- [Reportar un problema](https://github.com/Kasaco223/K-Snag/issues)
+
+## Proyecto
+
+- [Código fuente en GitHub](https://github.com/Kasaco223/K-Snag)
+- [Apoyar el proyecto](https://ksnagapp.vercel.app/donar): donaciones por Bre-B (Colombia), PayPal o cripto.
