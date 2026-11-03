@@ -15,6 +15,7 @@ K-Snag is a free, open-source app to download YouTube videos (and from 1000+ oth
 
 - [Página principal y guía de instalación](https://ksnagapp.vercel.app/#instalar): pasos animados para Windows y Android; el botón de descarga está al final de la guía.
 - [K-Snag para Android](https://ksnagapp.vercel.app/android): APK, versiones para 32 bits y Chromebook, huellas SHA-256 y certificado de firma.
+- [K-Snag en Obtainium](https://ksnagapp.vercel.app/android#obtainium): botón para agregarla a Obtainium, que la instala y actualiza desde GitHub.
 - [Versiones y novedades](https://github.com/Kasaco223/K-Snag/releases): todas las versiones publicadas en GitHub.
 
 ## Ayuda
