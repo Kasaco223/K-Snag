@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>K-Snag · Descarga tus videos en la mejor calidad</title>
-  <meta name="description" content="Descarga tus videos favoritos de YouTube y más de mil sitios en la mejor calidad, hasta 4K, o solo el audio en MP3. Gratis, sin anuncios y de código abierto. Para Windows 10 y 11.">
+  <meta name="description" content="Descarga tus videos favoritos de YouTube y más de mil sitios en la mejor calidad, hasta 4K, o solo el audio en MP3. Gratis, sin anuncios y de código abierto. Para Windows y Android.">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#101218" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
@@ -25,6 +25,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/home.css">
+  <script defer src="/js/vendor/gsap.min.js"></script>
+  <script defer src="/js/vendor/ScrollTrigger.min.js"></script>
   <script type="module" src="/js/home.js"></script>
 </head>
 <body>
@@ -38,7 +40,6 @@
       </a>
       <nav class="site-nav" aria-label="Principal">
         <a class="nav-optional" href="#funciones">Funciones</a>
-        <a class="nav-optional" href="#instalar">Instalar</a>
         <a class="nav-optional" href="/android">Android</a>
         <a class="nav-optional" href="/ayuda">Ayuda</a>
         <a class="nav-donate" href="/donar">
@@ -49,7 +50,7 @@
           <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-github"/></svg>
           <span class="nav-github-label">GitHub</span>
         </a>
-        <a class="btn btn-primary btn-sm" href="/descargar">Descargar</a>
+        <a class="nav-optional" href="#instalar">Cómo instalar</a>
       </nav>
     </div>
   </header>
@@ -67,13 +68,9 @@
           </h1>
           <p class="hero-lead"><strong>Descarga tus videos favoritos en la mejor calidad.</strong> Gratis, sin anuncios y de código abierto.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary btn-lg" href="/descargar" id="cta-download">
-              <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>
-              Descargar para Windows
-            </a>
-            <a class="btn btn-secondary btn-lg" href="/android" id="cta-android">
-              <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-smartphone"/></svg>
-              Descargar para Android
+            <a class="hero-scroll" href="#instalar" id="cta-install">
+              <span id="cta-install-label">Mira cómo instalarla, paso a paso</span>
+              <span class="hero-scroll-arrow" aria-hidden="true"><svg class="icon"><use href="/assets/icons.svg#i-arrow-down"/></svg></span>
             </a>
             <a class="hero-link" href="https://github.com/Kasaco223/K-Snag/releases" rel="noopener">
               <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-github"/></svg>
@@ -81,11 +78,11 @@
             </a>
           </div>
           <p class="hero-meta">
-            <span id="release-label" data-fallback="Windows 10 y 11">Windows 10 y 11</span>
+            <span>Windows 10 y 11</span>
             <span class="hero-meta-sep" aria-hidden="true"></span>
-            <span>Sin permisos de administrador</span>
+            <span>Android 8 o superior</span>
           </p>
-          <p class="hero-note" id="hero-note">Se descarga <code>Instalar-K-Snag.cmd</code>, un archivo pequeño. <a href="#instalar">¿Cómo se instala?</a></p>
+          <p class="hero-note" id="hero-note">Te mostramos qué tocar en cada paso. Toma 1 minuto.</p>
           <p class="hero-note" id="hero-ios" hidden>En iPhone y iPad no es posible instalarla: Apple solo permite apps de su App Store. Úsala en Android o en Windows.</p>
         </div>
 
@@ -193,6 +190,476 @@
       </div>
     </section>
 
+    <!-- ============ Instalar: guía paso a paso (animada con GSAP en js/tour.js) ============ -->
+    <section class="section tour" id="instalar" aria-labelledby="instalar-title">
+      <div class="container">
+        <div class="section-head center">
+          <p class="eyebrow">Instalación paso a paso</p>
+          <h2 class="section-title" id="instalar-title">Instálala en 1 minuto</h2>
+          <p class="section-lead">K-Snag es gratis y no está en las tiendas de apps, así que tu equipo te va a preguntar un par de veces si confías en el archivo. <strong>Es normal.</strong> Aquí ves qué tocar en cada aviso. El botón de descarga está al final.</p>
+          <ul class="tour-trust">
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-code"/></svg>Código abierto</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg>Verificada con SHA-256</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-ban"/></svg>Sin anuncios ni rastreo</li>
+          </ul>
+        </div>
+
+        <div class="tour-switch" hidden>
+          <div class="tour-tabs" role="tablist" aria-label="¿Dónde la vas a instalar?">
+            <button class="tour-tab" type="button" role="tab" id="tab-windows" aria-controls="instalar-windows" aria-selected="true">
+              <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-monitor"/></svg>Windows
+            </button>
+            <button class="tour-tab" type="button" role="tab" id="tab-android" aria-controls="instalar-android" aria-selected="false" tabindex="-1">
+              <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-smartphone"/></svg>Android
+            </button>
+          </div>
+        </div>
+
+        <!-- ============ Windows ============ -->
+        <div class="tour-panel" id="instalar-windows" data-os="windows">
+          <h3 class="tour-os-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-monitor"/></svg>En Windows 10 y 11</h3>
+          <p class="callout tour-elsewhere" data-show-on="android ios" hidden>
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
+            <span>Estos pasos son para una <strong>PC con Windows</strong>. Si vas a instalarla en este celular, elige <strong>Android</strong> arriba.</span>
+          </p>
+          <details class="tour-why">
+            <summary><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-help"/></svg>¿Por qué tantos avisos?<svg class="icon icon-sm tour-why-chevron" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></summary>
+            <div class="tour-why-body">
+              <p>Windows y los navegadores avisan con cualquier programa que no tenga una <strong>firma digital</strong>. Esa firma cuesta cientos de dólares al año, algo que un proyecto gratuito no puede pagar. Los avisos no quieren decir que hayan encontrado algo malo.</p>
+              <p>Por eso K-Snag no trae un <code>.exe</code>: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation. El instalador es un archivo de texto: puedes abrirlo con el Bloc de notas y ver exactamente qué hace. <a href="/ayuda#control-inteligente">Más detalles en la ayuda</a>.</p>
+            </div>
+          </details>
+
+          <div class="tour-track">
+            <span class="tour-rail" aria-hidden="true"><span class="tour-rail-fill"></span></span>
+            <ol class="tour-steps">
+              <li class="tour-step" id="win-1">
+                <span class="tour-num" aria-hidden="true">1</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 1: </span>Toca «Descargar para Windows»</h4>
+                  <p>Está al final de estos pasos. Se baja <code>Instalar-K-Snag.cmd</code>, un archivo de texto de pocos KB.</p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-win" aria-hidden="true">
+                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-addr">ksnagapp.vercel.app</span></div>
+                    <div class="scr-body">
+                      <div class="scr-frame w-page">
+                        <span class="w-brand"><img src="/assets/logo.svg" alt="" width="18" height="18">K-Snag</span>
+                        <span class="w-line"></span>
+                        <span class="w-line is-short"></span>
+                        <span class="w-btn is-primary" data-tap="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>Descargar para Windows</span>
+                      </div>
+                      <div class="w-flyout" data-in="1">
+                        <span class="w-flyout-title">Descargas recientes</span>
+                        <span class="w-file">
+                          <span class="w-file-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-file-code"/></svg></span>
+                          <span class="w-file-info">Instalar-K-Snag.cmd<span class="scr-track"><span class="scr-fill"></span></span></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="win-2">
+                <span class="tour-num" aria-hidden="true">2</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 2: </span>Si el navegador avisa, elige «Conservar»</h4>
+                  <p>Abre el aviso de la descarga y toca <strong>Conservar</strong>. En Edge puede pedirte <strong>… › Conservar › Mostrar más › Conservar de todos modos</strong>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Chrome y Edge lo dicen con todos los archivos <code>.cmd</code>, no porque hayan encontrado algo.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-win" aria-hidden="true">
+                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-addr">ksnagapp.vercel.app</span></div>
+                    <div class="scr-body">
+                      <div class="scr-frame w-page is-dim">
+                        <span class="w-brand"><img src="/assets/logo.svg" alt="" width="18" height="18">K-Snag</span>
+                        <span class="w-line"></span>
+                        <span class="w-line is-short"></span>
+                        <span class="w-line is-short"></span>
+                      </div>
+                      <div class="w-flyout" data-out="1">
+                        <span class="w-warn">
+                          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
+                          <span><strong>Instalar-K-Snag.cmd</strong>Este tipo de archivo puede dañar tu equipo.</span>
+                        </span>
+                        <span class="w-actions">
+                          <span class="w-btn">Eliminar</span>
+                          <span class="w-btn is-primary" data-tap="1">Conservar</span>
+                        </span>
+                      </div>
+                      <div class="w-flyout" data-in="1">
+                        <span class="w-file">
+                          <span class="w-file-icon is-ok"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+                          <span class="w-file-info">Instalar-K-Snag.cmd<small>4 KB · Listo</small></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="win-3">
+                <span class="tour-num" aria-hidden="true">3</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 3: </span>Desbloquéalo</h4>
+                  <p>En tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Propiedades</strong>. Marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Windows lo pide con los archivos que vienen de internet. Se hace una sola vez. Si no aparece «Desbloquear», no hace falta: sigue al paso 4.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-win" aria-hidden="true">
+                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-title">Propiedades: Instalar-K-Snag.cmd</span></div>
+                    <div class="scr-body">
+                      <div class="scr-frame w-props">
+                        <span class="w-tabs"><span class="is-current">General</span><span>Seguridad</span><span>Detalles</span></span>
+                        <span class="w-props-row"><span>Tipo:</span>Script de comandos de Windows</span>
+                        <span class="w-props-row"><span>Seguridad:</span>Este archivo proviene de otro equipo y podría bloquearse para ayudar a proteger el equipo.</span>
+                        <span class="w-check-row" data-tap="1"><span class="w-check" data-on="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span>Desbloquear</span>
+                        <span class="w-actions">
+                          <span class="w-btn is-primary" data-tap="2">Aceptar</span>
+                          <span class="w-btn">Cancelar</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="win-4">
+                <span class="tour-num" aria-hidden="true">4</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 4: </span>Ábrelo con doble clic</h4>
+                  <p>Si aparece <strong>«Windows protegió tu PC»</strong>, toca <strong>Más información</strong> y luego <strong>Ejecutar de todas formas</strong>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Windows lo muestra con cualquier programa nuevo que no paga una firma digital.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-win scr-ss" aria-hidden="true">
+                    <div class="scr-body">
+                      <div class="scr-frame w-ss">
+                        <span class="w-ss-title">Windows protegió tu PC</span>
+                        <span class="w-ss-text">SmartScreen de Microsoft Defender impidió que se iniciara una aplicación no reconocida.</span>
+                        <span class="w-ss-link" data-tap="1">Más información</span>
+                        <span class="w-ss-details" data-in="1" data-static>Aplicación: Instalar-K-Snag.cmd<br>Editor: Editor desconocido</span>
+                        <span class="w-actions">
+                          <span class="w-ss-btn" data-in="1" data-static data-tap="2">Ejecutar de todas formas</span>
+                          <span class="w-ss-btn">No ejecutar</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="win-5">
+                <span class="tour-num" aria-hidden="true">5</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 5: </span>¡Listo!</h4>
+                  <p>El instalador baja la app desde GitHub, comprueba su huella SHA-256 y la abre. Después la encuentras en el menú Inicio.</p>
+                  <ul class="tour-facts">
+                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-user"/></svg>Solo para tu usuario, sin permisos de administrador</li>
+                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-trash"/></svg>Se desinstala desde Configuración › Aplicaciones</li>
+                  </ul>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-win scr-console" aria-hidden="true">
+                    <div class="scr-bar"><span class="scr-dots"><i></i><i></i><i></i></span><span class="scr-title">Instalar K-Snag</span></div>
+                    <div class="scr-body">
+                      <div class="scr-frame w-console">
+                        <span data-in="0">Descargando K-Snag…</span>
+                        <span data-in="0">Comprobando la huella SHA-256… <b>OK</b></span>
+                        <span data-in="0">Creando el acceso directo… <b>OK</b></span>
+                        <span class="w-app" data-in="0"><img src="/assets/logo.svg" alt="" width="22" height="22">K-Snag está lista</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tour-finish">
+            <div class="tour-cta">
+              <p class="tour-cta-kicker">¿Listo? Ya sabes qué tocar.</p>
+              <a class="btn btn-primary btn-xl" href="/descargar" id="cta-download" data-tour-download data-no-thanks>
+                <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>
+                Descargar para Windows
+              </a>
+              <p class="tour-cta-meta"><span id="release-label" data-fallback="Windows 10 y 11 de 64 bits">Windows 10 y 11 de 64 bits</span> · Gratis</p>
+              <a class="btn btn-secondary tour-donate" href="/donar">
+                <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+                Apoyar con una donación
+              </a>
+            </div>
+            <div class="tour-after" tabindex="-1" hidden>
+              <span class="tour-after-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+              <h4>¡Tu descarga empezó!</h4>
+              <p>Ábrela y sigue los avisos: <strong>Conservar</strong> › <strong>Desbloquear</strong> › doble clic › <strong>Ejecutar de todas formas</strong>. <a href="#win-2">Ver los pasos</a></p>
+              <div class="tour-after-donate">
+                <p><strong>¿Te sirve K-Snag?</strong> La hace una sola persona y es gratis para todos. Si quieres que siga al día cada vez que YouTube cambia algo, puedes apoyarla con lo que quieras.</p>
+                <a class="btn btn-primary" href="/donar">
+                  <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+                  Donar
+                </a>
+              </div>
+              <p class="tour-after-retry">¿No empezó? <a href="/descargar" data-no-thanks>Descárgala otra vez</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============ Android ============ -->
+        <div class="tour-panel" id="instalar-android" data-os="android">
+          <h3 class="tour-os-title"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-smartphone"/></svg>En Android 8 o superior</h3>
+          <p class="callout tour-elsewhere" data-show-on="windows other" hidden>
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
+            <span>El APK se instala en el celular, no en la PC. Abre <strong>ksnagapp.vercel.app</strong> en tu celular Android o envíate este enlace.</span>
+          </p>
+          <p class="callout tour-elsewhere" data-show-on="ios" hidden>
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
+            <span><strong>En iPhone y iPad no es posible:</strong> Apple solo permite apps de su App Store. Úsala en un celular Android o en una PC con Windows.</span>
+          </p>
+          <details class="tour-why">
+            <summary><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-help"/></svg>¿Por qué tantos avisos?<svg class="icon icon-sm tour-why-chevron" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></summary>
+            <div class="tour-why-body">
+              <p>Google Play no acepta apps que descargan videos de YouTube, así que K-Snag se instala desde aquí, como muchas apps de código abierto. Android pide que confirmes cada vez que instalas una app de fuera de la tienda. Los avisos no quieren decir que haya encontrado algo malo.</p>
+              <p>Las versiones salen de GitHub y van firmadas con la llave de K-Snag. <a href="/android">Más detalles, huellas y otras versiones</a>.</p>
+            </div>
+          </details>
+
+          <div class="tour-track">
+            <span class="tour-rail" aria-hidden="true"><span class="tour-rail-fill"></span></span>
+            <ol class="tour-steps">
+              <li class="tour-step" id="and-1">
+                <span class="tour-num" aria-hidden="true">1</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 1: </span>Toca «Descargar para Android»</h4>
+                  <p>Está al final de estos pasos. Si Chrome pregunta, elige <strong>Descargar de todos modos</strong>. El archivo se llama <code>K-Downloader-Android….apk</code>: es el nombre anterior de K-Snag.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Chrome lo pregunta con cualquier APK que no venga de Google Play.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:41</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <span class="a-urlbar">ksnagapp.vercel.app</span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-page">
+                          <span class="w-brand"><img src="/assets/logo.svg" alt="" width="18" height="18">K-Snag</span>
+                          <span class="w-line"></span>
+                          <span class="w-line is-short"></span>
+                          <span class="a-download" data-in="1"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg><span>Descargando…<span class="scr-track"><span class="scr-fill"></span></span></span></span>
+                        </div>
+                        <div class="a-sheet" data-in="0" data-out="1">
+                          <span class="a-sheet-file"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-file-code"/></svg>K-Downloader-Android-arm64-v8a.apk</span>
+                          <p>Este tipo de archivo puede dañar tu dispositivo. ¿Quieres descargarlo de todos modos?</p>
+                          <span class="a-actions">
+                            <span class="a-btn">Cancelar</span>
+                            <span class="a-btn is-filled" data-tap="1">Descargar de todos modos</span>
+                          </span>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="and-2">
+                <span class="tour-num" aria-hidden="true">2</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 2: </span>Ábrelo</h4>
+                  <p>Cuando termine, toca <strong>Abrir</strong> en el aviso de la descarga. Si se cerró, búscalo en la app <strong>Archivos › Descargas</strong>.</p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:42</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <span class="a-urlbar">ksnagapp.vercel.app</span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-page">
+                          <span class="w-brand"><img src="/assets/logo.svg" alt="" width="18" height="18">K-Snag</span>
+                          <span class="w-line"></span>
+                          <span class="w-line is-short"></span>
+                        </div>
+                        <div class="a-snack" data-in="0">
+                          <span class="a-snack-text"><strong>Descarga completa</strong>K-Downloader-Android-arm64-v8a.apk</span>
+                          <span class="a-btn" data-tap="1">Abrir</span>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="and-3">
+                <span class="tour-num" aria-hidden="true">3</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 3: </span>Permite instalar desde Chrome</h4>
+                  <p>Android dice que por seguridad no puede instalar apps de esa fuente. Toca <strong>Configuración</strong> y activa <strong>Permitir de esta fuente</strong>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> El permiso es solo para Chrome y puedes apagarlo cuando termines: <a href="/android#fuentes-desconocidas">así se hace</a>.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:42</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-center" data-out="1">
+                          <div class="a-dialog">
+                            <span class="a-dialog-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
+                            <p>Por tu seguridad, el teléfono no puede instalar apps desconocidas de esta fuente.</p>
+                            <span class="a-actions">
+                              <span class="a-btn">Cancelar</span>
+                              <span class="a-btn" data-tap="1">Configuración</span>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="scr-frame a-settings" data-in="1">
+                          <span class="a-settings-head"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-left"/></svg>Instalar apps desconocidas</span>
+                          <span class="a-settings-app"><span class="a-app-dot"></span>Chrome</span>
+                          <span class="a-settings-row" data-tap="2">Permitir de esta fuente<span class="a-toggle" data-on="2"></span></span>
+                          <span class="a-settings-note">Tu teléfono y tus datos son más vulnerables a los ataques de apps desconocidas.</span>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="and-4">
+                <span class="tour-num" aria-hidden="true">4</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 4: </span>Vuelve y toca «Instalar»</h4>
+                  <p>Toca atrás (<strong>←</strong>) y luego <strong>Instalar</strong>. Si ya estaba permitido, este aviso sale directo.</p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:43</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-center">
+                          <div class="a-dialog" data-in="0">
+                            <span class="a-dialog-app"><img src="/assets/logo.svg" alt="" width="28" height="28">K-Snag</span>
+                            <p>¿Quieres instalar esta app?</p>
+                            <span class="a-actions">
+                              <span class="a-btn">Cancelar</span>
+                              <span class="a-btn" data-tap="1">Instalar</span>
+                            </span>
+                            <span class="a-installing" data-in="1">Instalando…<span class="scr-track"><span class="scr-fill"></span></span></span>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="and-5">
+                <span class="tour-num" aria-hidden="true">5</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 5: </span>Si Play Protect avisa</h4>
+                  <p>Toca <strong>Más detalles</strong> y luego <strong>Instalar de todas formas</strong>. Si te ofrece analizarla, toca <strong>Analizar app</strong> y espera. <a href="/android#play-protect">Otros avisos posibles</a>.</p>
+                  <p class="tour-calm"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg><span><strong>Es normal.</strong> Play Protect revisa las apps que no vienen de Google Play. El aviso no quiere decir que haya encontrado algo malo.</span></p>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:43</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-center">
+                          <div class="a-dialog" data-in="0">
+                            <span class="a-dialog-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
+                            <span class="a-dialog-title">App no reconocida</span>
+                            <p>Play Protect no reconoce al desarrollador de esta app.</p>
+                            <span class="a-link" data-tap="1">Más detalles<svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></span>
+                            <span class="a-link" data-in="1" data-static data-tap="2">Instalar de todas formas</span>
+                            <span class="a-actions"><span class="a-btn">Aceptar</span></span>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+
+              <li class="tour-step" id="and-6">
+                <span class="tour-num" aria-hidden="true">6</span>
+                <div class="tour-text">
+                  <h4><span class="sr-only">Paso 6: </span>¡Listo!</h4>
+                  <p>Abre K-Snag y permite las notificaciones para ver el progreso. Para descargar un video, en YouTube toca <strong>Compartir › K-Snag</strong>.</p>
+                  <ul class="tour-facts">
+                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-zap"/></svg>La primera vez prepara su motor: mejor con wifi</li>
+                    <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-refresh"/></svg>Te avisa cuando hay una versión nueva</li>
+                  </ul>
+                </div>
+                <div class="tour-visual">
+                  <div class="scr scr-phone" aria-hidden="true">
+                    <div class="scr-screen">
+                      <span class="scr-status"><span>9:44</span><span class="scr-status-icons"><i></i><i></i></span></span>
+                      <div class="scr-body">
+                        <div class="scr-frame a-home" data-out="1">
+                          <span class="a-apps">
+                            <i></i><i></i><i></i><i></i>
+                            <i></i><i></i><i></i>
+                            <span class="a-app-ksnag" data-tap="1"><img src="/assets/logo.svg" alt="" width="34" height="34">K-Snag</span>
+                          </span>
+                        </div>
+                        <div class="scr-frame a-center" data-in="1">
+                          <div class="a-dialog">
+                            <span class="a-dialog-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-bell"/></svg></span>
+                            <p>¿Permitir que <strong>K-Snag</strong> te envíe notificaciones?</p>
+                            <span class="a-stack">
+                              <span class="a-btn is-filled" data-tap="2">Permitir</span>
+                              <span class="a-btn">No permitir</span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="scr-gesture"></span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="tour-finish">
+            <div class="tour-cta">
+              <p class="callout warning tour-inapp" data-inapp-tip hidden>
+                <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
+                <span><strong>¿No empieza la descarga?</strong> Estás en el navegador de otra app (Instagram, Facebook, TikTok…). Toca <strong>⋮</strong> y elige <strong>Abrir en Chrome</strong>.</span>
+              </p>
+              <p class="tour-cta-kicker">¿Listo? Ya sabes qué tocar.</p>
+              <a class="btn btn-primary btn-xl" href="/android/descargar" id="cta-android" data-tour-download data-no-thanks>
+                <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>
+                Descargar para Android
+              </a>
+              <p class="tour-cta-meta"><span data-android-meta>Android 8 o superior</span></p>
+              <a class="btn btn-secondary tour-donate" href="/donar">
+                <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+                Apoyar con una donación
+              </a>
+              <p class="tour-cta-alt"><a href="/android#otras-versiones">¿Celular antiguo o Chromebook? Otras versiones</a></p>
+            </div>
+            <div class="tour-after" tabindex="-1" hidden>
+              <span class="tour-after-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-circle-check"/></svg></span>
+              <h4>¡Tu APK se está descargando!</h4>
+              <p>Cuando termine: <strong>Abrir</strong> › <strong>Configuración</strong> › <strong>Permitir de esta fuente</strong> › atrás › <strong>Instalar</strong>. <a href="#and-1">Ver los pasos</a></p>
+              <div class="tour-after-donate">
+                <p><strong>¿Te sirve K-Snag?</strong> La hace una sola persona y es gratis para todos. Si quieres que siga al día cada vez que YouTube cambia algo, puedes apoyarla con lo que quieras.</p>
+                <a class="btn btn-primary" href="/donar">
+                  <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
+                  Donar
+                </a>
+              </div>
+              <p class="tour-after-retry">¿No empezó? <a href="/android/descargar" data-no-thanks data-apk="arm64-v8a">Descárgala otra vez</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Funciones ============ -->
     <section class="section" id="funciones" aria-labelledby="funciones-title">
       <div class="container">
@@ -287,102 +754,6 @@
             <p>Recomendado, máxima calidad o solo audio. El archivo queda en tu carpeta <strong>Descargas › K-Snag</strong>.</p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- ============ Instalar ============ -->
-    <section class="section" id="instalar" aria-labelledby="instalar-title">
-      <div class="container">
-        <div class="section-head">
-          <p class="eyebrow">Instalación</p>
-          <h2 class="section-title" id="instalar-title">Instalar en 1 minuto</h2>
-          <p class="section-lead">La descarga es un archivo pequeño, <code>Instalar-K-Snag.cmd</code>, que instala la app solo para tu usuario. No necesitas permisos de administrador.</p>
-        </div>
-
-        <div class="install-grid">
-          <ol class="install-steps">
-            <li class="install-step">
-              <div class="install-text">
-                <h3>Descarga el instalador</h3>
-                <p>Pulsa <strong>Descargar para Windows</strong>. Se baja <code>Instalar-K-Snag.cmd</code>, un archivo de texto de pocos KB.</p>
-              </div>
-              <div class="illus illus-file" aria-hidden="true">
-                <span class="illus-file-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-file-code"/></svg></span>
-                <span class="illus-file-name">Instalar-K-Snag.cmd</span>
-                <span class="illus-file-size">Archivo de comandos · pocos KB</span>
-              </div>
-            </li>
-            <li class="install-step">
-              <div class="install-text">
-                <h3>Si el navegador avisa, elige «Conservar»</h3>
-                <p>Los navegadores advierten sobre cualquier archivo <code>.cmd</code>. Abre el aviso de la descarga y elige <strong>Conservar</strong> (<span lang="en">Keep</span>). En Edge quizá tengas que pulsar <strong>Mostrar más › Conservar de todos modos</strong>.</p>
-              </div>
-              <div class="illus illus-browser" aria-hidden="true">
-                <span class="illus-browser-row">
-                  <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-alert"/></svg>
-                  <span><strong>Instalar-K-Snag.cmd</strong><br>Este tipo de archivo puede dañar tu equipo.</span>
-                </span>
-                <span class="illus-buttons">
-                  <span class="illus-btn">Eliminar</span>
-                  <span class="illus-btn is-primary">Conservar</span>
-                </span>
-              </div>
-            </li>
-            <li class="install-step">
-              <div class="install-text">
-                <h3>Desbloquéalo</h3>
-                <p>Windows no deja abrir los archivos <code>.cmd</code> que vienen de internet, y por eso no se abre desde el navegador. Ve a tu carpeta <strong>Descargas</strong>, haz clic derecho en <code>Instalar-K-Snag.cmd</code> › <strong>Propiedades</strong>, marca <strong>Desbloquear</strong> y pulsa <strong>Aceptar</strong>.</p>
-                <p class="install-alt"><strong>Otra opción:</strong> clic derecho › <strong>Ejecutar como administrador</strong> y acepta el aviso de Windows. También funciona, pero si tu cuenta no es de administrador, mejor usa «Desbloquear».</p>
-              </div>
-              <div class="illus illus-props" aria-hidden="true">
-                <span class="illus-props-title">Propiedades: Instalar-K-Snag.cmd</span>
-                <span class="illus-props-text"><strong>Seguridad:</strong> Este archivo proviene de otro equipo y podría bloquearse para ayudar a proteger el equipo.</span>
-                <span class="illus-props-check"><span class="illus-checkbox"><svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span>Desbloquear</span>
-                <span class="illus-buttons">
-                  <span class="illus-btn is-primary">Aceptar</span>
-                </span>
-              </div>
-            </li>
-            <li class="install-step">
-              <div class="install-text">
-                <h3>Ábrelo con doble clic</h3>
-                <p>Si aparece <strong>«Windows protegió tu PC»</strong>, pulsa <strong>Más información</strong> y luego <strong>Ejecutar de todas formas</strong>. Windows lo muestra con cualquier programa nuevo que todavía no conoce.</p>
-              </div>
-              <div class="illus illus-smartscreen" aria-hidden="true">
-                <span class="illus-ss-title">Windows protegió tu PC</span>
-                <span class="illus-ss-text">SmartScreen de Microsoft Defender impidió que se iniciara una aplicación no reconocida.</span>
-                <span class="illus-ss-link">Más información</span>
-                <span class="illus-ss-btn">Ejecutar de todas formas</span>
-              </div>
-            </li>
-            <li class="install-step">
-              <div class="install-text">
-                <h3>¡Listo!</h3>
-                <p>El instalador baja la app desde GitHub, comprueba su huella SHA-256 y la abre. La encontrarás en el menú Inicio.</p>
-              </div>
-              <ul class="install-facts">
-                <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-user"/></svg>Solo para tu usuario</li>
-                <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-lock"/></svg>Sin permisos de administrador</li>
-                <li><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-trash"/></svg>Se desinstala desde Configuración › Aplicaciones</li>
-              </ul>
-            </li>
-          </ol>
-
-          <aside class="why-cmd" aria-labelledby="why-cmd-title">
-            <span class="why-cmd-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-shield-check"/></svg></span>
-            <h3 id="why-cmd-title">¿Por qué un <code>.cmd</code> y no un <code>.exe</code>?</h3>
-            <p>Windows 11 incluye el <strong>Control inteligente de aplicaciones</strong>, que bloquea cualquier programa nuevo sin firma digital. Esa firma cuesta cientos de dólares al año, algo que un proyecto gratuito no puede pagar.</p>
-            <p>Por eso K-Snag no trae un <code>.exe</code> propio: funciona sobre <strong>Python oficial</strong>, firmado por la Python Software Foundation, y así corre incluso con esa protección activada.</p>
-            <p>Lo único que esa protección frena es abrir el instalador recién descargado. Para eso es el paso de <strong>Desbloquear</strong>, que se hace una sola vez.</p>
-            <p>El instalador es un archivo de texto: puedes abrirlo con el Bloc de notas y ver exactamente qué hace.</p>
-            <a class="why-cmd-link" href="/ayuda#control-inteligente">Más detalles en la ayuda <svg class="icon icon-sm" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-right"/></svg></a>
-          </aside>
-        </div>
-
-        <p class="requirements">
-          <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-info"/></svg>
-          <span><strong>Requisitos:</strong> Windows 10 u 11 de 64 bits y conexión a internet. En el primer uso, la app prepara sus componentes (el motor yt-dlp y el conversor FFmpeg) desde sus fuentes oficiales.</span>
-        </p>
       </div>
     </section>
 
@@ -504,7 +875,7 @@
           <details class="faq-item">
             <summary>¿Funciona en Mac, Linux o el celular?<svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-chevron-down"/></svg></summary>
             <div class="faq-body">
-              <p>Por ahora solo en Windows 10 y 11 de 64 bits.</p>
+              <p>Funciona en Windows 10 y 11 de 64 bits y en celulares <a href="/android">Android</a> 8 o superior. En Mac, Linux, iPhone y iPad, por ahora no.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -517,33 +888,16 @@
       </div>
     </section>
 
-    <!-- ============ Apoyo ============ -->
-    <section class="support-band" aria-labelledby="apoyo-title">
-      <div class="container">
-        <div class="support-card">
-          <span class="support-icon"><svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg></span>
-          <div class="support-text">
-            <h2 id="apoyo-title">¿Te sirve K-Snag?</h2>
-            <p>Lo hace una sola persona y es gratis para todos, sin anuncios ni funciones de pago. Si quieres que siga al día cada vez que YouTube cambia algo, puedes apoyarlo con lo que quieras: Bre-B desde Colombia, PayPal o cripto desde cualquier país.</p>
-          </div>
-          <a class="btn btn-secondary" href="/donar">
-            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-heart"/></svg>
-            Apoyar el proyecto
-          </a>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ Llamado final ============ -->
     <section class="final-cta" aria-labelledby="final-title">
       <div class="container">
         <div class="final-card">
           <img src="/assets/logo.svg" alt="" width="56" height="56">
           <h2 id="final-title">Tus videos, en la mejor calidad</h2>
-          <p>Gratis, sin anuncios y de código abierto. Para Windows 10 y 11.</p>
-          <a class="btn btn-primary btn-lg" href="/descargar">
-            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-download"/></svg>
-            Descargar para Windows
+          <p>Gratis, sin anuncios y de código abierto. Para Windows y Android.</p>
+          <a class="btn btn-primary btn-lg" href="#instalar">
+            Ver cómo instalarla
+            <svg class="icon" aria-hidden="true"><use href="/assets/icons.svg#i-arrow-down"/></svg>
           </a>
         </div>
       </div>
@@ -582,7 +936,7 @@
       </div>
       <div class="footer-legal">
         <p>© 2026 Kasaco223 · Código abierto con licencia MIT.</p>
-        <p>No afiliado a YouTube ni a Google. YouTube es una marca de Google LLC. Íconos de <a href="/assets/icons-LICENSE.txt">Lucide</a> (ISC).</p>
+        <p>No afiliado a YouTube ni a Google. YouTube es una marca de Google LLC. Íconos de <a href="/assets/icons-LICENSE.txt">Lucide</a> (ISC). Animaciones con <a href="/js/vendor/GSAP-LICENSE.txt">GSAP</a>.</p>
       </div>
     </div>
   </footer>
