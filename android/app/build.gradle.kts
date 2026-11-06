@@ -10,9 +10,10 @@ plugins {
 }
 
 // ---- Versión: android/version.properties es la única fuente ------------------------------------------
-val kdVersionName: String = Properties().apply {
+val versionProps: Properties = Properties().apply {
     load(StringReader(providers.fileContents(rootProject.layout.projectDirectory.file("version.properties")).asText.get()))
-}.getProperty("VERSION_NAME")?.trim() ?: error("Falta VERSION_NAME en android/version.properties")
+}
+val kdVersionName: String = versionProps.getProperty("VERSION_NAME")?.trim() ?: error("Falta VERSION_NAME en android/version.properties")
 
 val versionParts = Regex("""(0|[1-9]\d?)\.(0|[1-9]\d?)\.(0|[1-9]\d?)(?:-rc\.([1-9]\d?))?""")
     .matchEntire(kdVersionName)?.destructured
@@ -24,6 +25,10 @@ require(rcNumber == null || rcNumber <= 98) { "VERSION_NAME: en X.Y.Z-rc.N, N va
 // versionCode = base × 10 + dígito de ABI. Las rc quedan por debajo de su versión estable:
 // 1.0.0-rc.1 → 10000011 / 10000013 / 10000014; 1.0.0 → 10000991 / 10000993 / 10000994.
 val baseCode = vMajor.toInt() * 1_000_000 + vMinor.toInt() * 10_000 + vPatch.toInt() * 100 + (rcNumber ?: 99)
+// VERSION_CODE va escrito en version.properties (F-Droid lo lee para detectar versiones) y tiene que coincidir.
+require(versionProps.getProperty("VERSION_CODE")?.trim() == baseCode.toString()) {
+    "VERSION_CODE en android/version.properties debe ser $baseCode para VERSION_NAME=$kdVersionName"
+}
 val abiDigit = mapOf("armeabi-v7a" to 1, "arm64-v8a" to 3, "x86_64" to 4) // 0 = APK sin dividir
 val devAbi: String? = providers.gradleProperty("kdl.devAbi").orNull?.also {
     require(it in abiDigit) { "kdl.devAbi debe ser una de ${abiDigit.keys}" }

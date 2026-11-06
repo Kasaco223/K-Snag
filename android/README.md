@@ -35,7 +35,7 @@ próximos PR.
 ```text
 android/
   settings.gradle.kts, build.gradle.kts, gradle.properties
-  version.properties          VERSION_NAME: la única fuente de la versión
+  version.properties          VERSION_NAME y VERSION_CODE: la única fuente de la versión
   engine-pins.properties      yt-dlp y cacert.pem que van en el APK (URL y SHA-256)
   gradle/libs.versions.toml   catálogo de versiones
   gradle/verification-metadata.xml  SHA-256 de cada dependencia (Gradle rechaza cualquier otra)
@@ -175,7 +175,7 @@ docker compose -f android/tools/docker/compose.yaml run --rm kdl :core:test :app
 | Tipos de build | `debug` (`.debug`), `qa` (como release, con R8, firmado con la llave de debug; `.qa`) y `release` (sin firmar: se firma aparte). |
 | SDK | minSdk 26 (Android 8), targetSdk 36, compileSdk 37 (`platforms;android-37.0`). |
 | ABI | Un APK por ABI: `arm64-v8a`, `armeabi-v7a` y `x86_64`. Sin APK universal. `-Pkdl.devAbi=<abi>` arma un solo APK. |
-| Versión | `version.properties` → `VERSION_NAME`: `X.Y.Z` o `X.Y.Z-rc.N` (X, Y y Z de 0 a 99; N de 1 a 98). |
+| Versión | `version.properties` → `VERSION_NAME`: `X.Y.Z` o `X.Y.Z-rc.N` (X, Y y Z de 0 a 99; N de 1 a 98), y `VERSION_CODE` = X·1000000 + Y·10000 + Z·100 + (N, o 99 si es estable). El build comprueba que coincidan. |
 | versionCode | `(X·1 000 000 + Y·10 000 + Z·100 + (rc ? N : 99))·10 + ABI`, con armeabi-v7a = 1, arm64-v8a = 3 y x86_64 = 4 (0 = sin dividir). 1.0.0-rc.1 → 10000011/3/4; 1.0.0 → 10000991/3/4. |
 
 - **Llave de debug**: `app/debug.keystore` (PKCS12, alias `androiddebugkey`, contraseña `android`; SHA-256

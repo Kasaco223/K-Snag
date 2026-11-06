@@ -62,7 +62,7 @@ La llave firma todas las versiones. **Si se pierde, nadie puede actualizar la ap
 
 ## 3. Cada versión
 
-1. **Preparar** (PR): `VERSION_NAME` en `android/version.properties` (`X.Y.Z` o `X.Y.Z-rc.N`) y la sección `## X.Y.Z - AAAA-MM-DD` en `android/CHANGELOG.md`, en español e inglés. La primera vez, haz antes un **ensayo**: Actions › «Android Release» › *Run workflow* desde la rama. Firma con una llave temporal y no crea nada.
+1. **Preparar** (PR): `VERSION_NAME` y `VERSION_CODE` en `android/version.properties` (`X.Y.Z` o `X.Y.Z-rc.N`; por ejemplo 1.0.4 → `1000499`) y la sección `## X.Y.Z - AAAA-MM-DD` en `android/CHANGELOG.md`, en español e inglés. La primera vez, haz antes un **ensayo**: Actions › «Android Release» › *Run workflow* desde la rama. Firma con una llave temporal y no crea nada.
 2. **Merge** con «Android CI» y «Workflows y scripts» en verde.
 3. **Tag**:
 
