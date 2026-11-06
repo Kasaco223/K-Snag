@@ -1,0 +1,13 @@
+<p>K-Snag downloads videos from YouTube and 1,000+ other sites (TikTok, Instagram, X, Facebook, Vimeo, SoundCloud…) so you can watch them offline. Paste a link or share it from the app you are watching in, pick a format, and you're done.</p>
+
+<ul>
+<li>MP4 up to 1080p that plays everywhere, maximum quality up to 4K (MKV), or audio only as MP3 or M4A with cover art.</li>
+<li>Shows the real quality and an estimated file size before downloading.</li>
+<li>Playlists, background downloads and dark theme.</li>
+<li>Explains errors in plain language and tells you how to fix them.</li>
+<li>No ads, no accounts, no tracking: everything happens on your phone.</li>
+</ul>
+
+<p>Built on yt-dlp and FFmpeg. In the F-Droid version, automatic yt-dlp updates are off by default: turn them on in Settings › "Update the engine automatically", or update it manually when YouTube changes something.</p>
+
+<p>Only download content you own, that is freely licensed, or that you have permission to save. K-Snag does not circumvent DRM.</p>

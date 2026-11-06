@@ -90,7 +90,17 @@ android {
 
     flavorDimensions += "distribution"
     productFlavors {
-        create("github") { dimension = "distribution" } // Releases de GitHub; "foss" (F-Droid) queda reservado
+        create("github") { // Releases de GitHub y Obtainium: la app se actualiza sola
+            dimension = "distribution"
+            buildConfigField("boolean", "SELF_UPDATE", "true")
+            buildConfigField("boolean", "ENGINE_AUTO_UPDATE_DEFAULT", "true")
+        }
+        create("fdroid") { // F-Droid compila desde el código y entrega las actualizaciones: sin actualizador propio
+            dimension = "distribution"
+            buildConfigField("boolean", "SELF_UPDATE", "false")
+            // yt-dlp se actualiza desde GitHub: en F-Droid queda apagado de inicio y se enciende en Ajustes (como Seal)
+            buildConfigField("boolean", "ENGINE_AUTO_UPDATE_DEFAULT", "false")
+        }
     }
 
     splits {

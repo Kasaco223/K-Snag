@@ -61,7 +61,7 @@ class KdlApp : Application() {
      * descargas, buscar una versión nueva de yt-dlp. Con «Solo con Wi-Fi», la búsqueda espera una red sin límite.
      */
     fun onForeground() {
-        if (uiPrefs.autoUpdateApp.value) updater.checkIfDue()
+        if (BuildConfig.SELF_UPDATE && uiPrefs.autoUpdateApp.value) updater.checkIfDue()
         appScope.launch(Dispatchers.IO) {
             hints.refreshIfDue()
             val channel = uiPrefs.engineChannel.value
