@@ -31,7 +31,7 @@ class UiPrefs(context: Context) {
     private val _wifiOnly = bool(KEY_WIFI_ONLY, false)
     val wifiOnly: StateFlow<Boolean> = _wifiOnly.asStateFlow()
 
-    private val _autoUpdateEngine = bool(KEY_AUTO_UPDATE_ENGINE, true)
+    private val _autoUpdateEngine = bool(KEY_AUTO_UPDATE_ENGINE, io.github.kasaco223.kdownloader.BuildConfig.ENGINE_AUTO_UPDATE_DEFAULT)
     val autoUpdateEngine: StateFlow<Boolean> = _autoUpdateEngine.asStateFlow()
 
     private val _engineChannel = string(KEY_ENGINE_CHANNEL, CHANNELS)

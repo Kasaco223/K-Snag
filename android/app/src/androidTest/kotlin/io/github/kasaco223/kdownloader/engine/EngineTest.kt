@@ -57,7 +57,12 @@ class EngineTest {
     @Test
     fun t1_preparesFromScratchAndVerifiesEverything() {
         val versions = ready().versions
-        assertEquals(BuildConfig.YTDLP_BUNDLED_VERSION, versions.ytdlp)
+        // KdlApp puede actualizar el motor al arrancar si ya salió un nightly más nuevo que el incluido:
+        // vale el incluido o uno posterior (las versiones son AAAA.MM.DD.HHMMSS, de ancho fijo).
+        assertTrue(
+            "yt-dlp ${versions.ytdlp} es anterior al incluido ${BuildConfig.YTDLP_BUNDLED_VERSION}",
+            versions.ytdlp >= BuildConfig.YTDLP_BUNDLED_VERSION,
+        )
         val dirs = engine.dirs
         assertEquals(BuildConfig.CACERT_SHA256, EngineStore.sha256(dirs.caFile.inputStream()))
         // Los enlaces sin versión que taparían a las bibliotecas del sistema no existen (youtubedl-android #318).

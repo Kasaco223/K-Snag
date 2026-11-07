@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Kasaco223 y colaboradores de K-Snag -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Variante de F-Droid: las actualizaciones las entrega F-Droid, así que la app no instala APK por su cuenta. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove" />
+
+    <application>
+        <receiver android:name=".update.InstallResultReceiver" tools:node="remove" />
+    </application>
+</manifest>

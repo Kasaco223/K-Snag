@@ -84,12 +84,13 @@ jobs:
         with:
           cache-provider: basic
 
-      - name: Pruebas, lint y APK (debug, qa minificado y pruebas instrumentadas)
+      - name: Pruebas, lint y APK (debug, qa minificado, pruebas instrumentadas y variante de F-Droid)
         working-directory: android
         run: >-
           ./gradlew --stacktrace
           :core:test :app:testGithubDebugUnitTest :app:lintGithubDebug
           :app:assembleGithubDebug :app:assembleGithubQa :app:assembleGithubDebugAndroidTest
+          :app:lintFdroidDebug :app:assembleFdroidRelease
 
       - name: Páginas de 16 KB en las bibliotecas nativas (APK qa)
         run: python3 android/scripts/check_elf_alignment.py android/app/build/outputs/apk/github/qa/*.apk
