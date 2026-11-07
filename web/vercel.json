@@ -26,22 +26,22 @@
     },
     {
       "source": "/android/descargar",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.3/K-Downloader-Android-arm64-v8a.apk",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.4/K-Downloader-Android-arm64-v8a.apk",
       "permanent": false
     },
     {
       "source": "/android/descargar/arm64-v8a",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.3/K-Downloader-Android-arm64-v8a.apk",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.4/K-Downloader-Android-arm64-v8a.apk",
       "permanent": false
     },
     {
       "source": "/android/descargar/armeabi-v7a",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.3/K-Downloader-Android-armeabi-v7a.apk",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.4/K-Downloader-Android-armeabi-v7a.apk",
       "permanent": false
     },
     {
       "source": "/android/descargar/x86_64",
-      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.3/K-Downloader-Android-x86_64.apk",
+      "destination": "https://github.com/Kasaco223/K-YoutubeVideoDownloaderHD/releases/download/android-v1.0.4/K-Downloader-Android-x86_64.apk",
       "permanent": false
     }
   ],
