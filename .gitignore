@@ -49,3 +49,7 @@ android/app/release/
 *.pk8
 *.keystore
 !android/app/debug.keystore
+
+# Instalador .exe (packaging/installer/exe): salidas de dotnet
+packaging/installer/exe/bin/
+packaging/installer/exe/obj/

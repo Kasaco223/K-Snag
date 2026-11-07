@@ -18,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  actions: read # SignPath descarga el .exe sin firmar desde los artefactos de este run
 
 concurrency:
   group: release-${{ github.ref }}
@@ -102,6 +103,49 @@ jobs:
           KD_BASE_URL: ${{ steps.meta.outputs.base_url }}
         run: ./packaging/build.ps1 -Version $env:KD_VERSION -BaseUrl $env:KD_BASE_URL
 
+      # Firma de Instalar-K-Snag.exe con SignPath Foundation. Apagada hasta que SignPath apruebe el proyecto y
+      # se carguen sus datos (docs/release.md, «Firma con SignPath»). Solo en publicaciones reales, no en ensayos:
+      # cada firma la aprueba el maintainer en SignPath.
+      - name: Subir Instalar-K-Snag.exe sin firmar (para SignPath)
+        id: unsigned-exe
+        if: steps.meta.outputs.publish == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: instalador-exe-sin-firmar-${{ steps.meta.outputs.tag }}
+          path: dist/Instalar-K-Snag.exe
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Firmar Instalar-K-Snag.exe con SignPath
+        if: steps.meta.outputs.publish == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ steps.unsigned-exe.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: signed
+
+      - name: Usar el .exe firmado y actualizar SHA256SUMS.txt
+        if: steps.meta.outputs.publish == 'true' && vars.SIGNPATH_ORGANIZATION_ID != ''
+        shell: pwsh
+        run: |
+          $signed = Join-Path 'signed' 'Instalar-K-Snag.exe'
+          if (-not (Test-Path $signed)) { throw 'SignPath no devolvió Instalar-K-Snag.exe' }
+          $sig = Get-AuthenticodeSignature -FilePath $signed
+          if ($sig.Status -ne 'Valid') { throw "La firma de Instalar-K-Snag.exe no es válida: $($sig.Status) $($sig.StatusMessage)" }
+          Write-Host "Firmado por: $($sig.SignerCertificate.Subject)"
+          Copy-Item $signed 'dist/Instalar-K-Snag.exe' -Force
+          $hash = (Get-FileHash -Algorithm SHA256 'dist/Instalar-K-Snag.exe').Hash.ToLowerInvariant()
+          $lines = Get-Content 'dist/SHA256SUMS.txt' | ForEach-Object {
+            if ($_ -match '^[0-9a-fA-F]{64}\s+\*?Instalar-K-Snag\.exe\s*$') { "$hash  Instalar-K-Snag.exe" } else { $_ }
+          }
+          [IO.File]::WriteAllText((Resolve-Path 'dist/SHA256SUMS.txt'), (($lines -join "`n") + "`n"))
+
       - name: Comprobar dist/ (latest.json y SHA256SUMS.txt)
         shell: python
         env:
@@ -131,7 +175,7 @@ jobs:
                       h.update(chunk)
               return h.hexdigest()
 
-          for name in [*names.values(), "latest.json", "SHA256SUMS.txt"]:
+          for name in [*names.values(), "Instalar-K-Snag.exe", "latest.json", "SHA256SUMS.txt"]:
               if not (dist / name).is_file():
                   problems.append(f"falta dist/{name}")
           if problems:
@@ -159,7 +203,7 @@ jobs:
                   problems.append(f"SHA256SUMS.txt menciona {name}, que no está en dist/")
               elif sha256(path) != digest:
                   problems.append(f"SHA256SUMS.txt: el hash de {name} no coincide")
-          for name in names.values():
+          for name in [*names.values(), "Instalar-K-Snag.exe"]:
               if name not in listed:
                   problems.append(f"SHA256SUMS.txt no incluye {name}")
 
@@ -167,6 +211,9 @@ jobs:
               print("Problemas en dist/:", *problems, sep="\n  - ")
               sys.exit(1)
           print("dist/ OK:", json.dumps(hashes, indent=2))
+
+      - name: Instalar-K-Snag.exe instala el mismo bundle que el .cmd
+        run: python packaging/check_installer_exe.py dist
 
       - name: Prueba de instalación (smoke test)
         shell: pwsh
@@ -182,6 +229,11 @@ jobs:
           }
           & (Join-Path $root 'runtime\python.exe') (Join-Path $root 'launch.pyw') --selftest
           if ($LASTEXITCODE -ne 0) { throw "--selftest terminó con código $LASTEXITCODE" }
+
+      # La descarga real se salta: el Release de esta versión todavía no existe.
+      - name: Pruebas de Instalar-K-Snag.exe
+        shell: pwsh
+        run: ./packaging/smoke_installer_exe.ps1 -Dist dist -SkipDownload
 
       - name: Guardar dist/ como artefacto del workflow
         uses: actions/upload-artifact@v7
@@ -205,6 +257,7 @@ jobs:
           files=(
             "dist/Instalar-K-Snag.cmd"
             "dist/Instalar-K-Downloader.cmd"
+            "dist/Instalar-K-Snag.exe"
             "dist/kd-bundle-${VERSION}.zip"
             "dist/kd-app-${VERSION}.zip"
             "dist/latest.json"
