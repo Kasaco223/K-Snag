@@ -47,15 +47,15 @@
     {
       "id": "yt-dlp",
       "name": "yt-dlp",
-      "version": "2026.10.29.232701",
+      "version": "2026.11.04.232659",
       "spdx": "Unlicense",
       "mirror": false,
       "homepage": "https://github.com/yt-dlp/yt-dlp",
       "sources": [
         {
-          "url": "https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.10.29.232701/yt-dlp",
+          "url": "https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/download/2026.11.04.232659/yt-dlp",
           "file": "yt-dlp",
-          "sha256": "966308057aa5f79ed09fead7609e46c8cf8fd89b23aeb2ef96989c6695a14724"
+          "sha256": "21f87ead735de22248806d9a55202eefbff98da25ed3a054ee03ae55878920ac"
         }
       ],
       "files": [

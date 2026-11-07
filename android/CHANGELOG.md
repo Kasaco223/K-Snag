@@ -6,6 +6,16 @@ Hasta la 1.0.2 la app se llamaba K-Downloader.
 
 Cada versión tiene su sección `## X.Y.Z - AAAA-MM-DD`; el pipeline de publicación la copia a las notas del Release.
 
+## 1.0.4 - 2026-11-06
+
+**Español**
+- El motor que trae la app (yt-dlp) pasa a la versión 2026.11.04. Si ya lo tenías actualizado, no cambia nada.
+- Primera versión preparada para F-Droid. Allá la app se actualiza por F-Droid y el motor no se actualiza solo a menos que lo actives en Ajustes. La versión de GitHub sigue igual que siempre.
+
+**English**
+- The engine bundled with the app (yt-dlp) moves to 2026.11.04. If yours was already up to date, nothing changes.
+- First version ready for F-Droid. There, F-Droid handles app updates and the engine only updates itself if you turn it on in Settings. The GitHub version works the same as before.
+
 ## 1.0.3 - 2026-11-02
 
 **Español**
