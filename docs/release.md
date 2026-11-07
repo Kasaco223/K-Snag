@@ -79,12 +79,15 @@ El workflow **Release** arranca solo con el tag y hace esto:
 
 1. Comprueba que el tag coincide con `__version__`.
 2. Ejecuta `packaging/build.ps1 -Version 2.0.1 -BaseUrl https://github.com/Kasaco223/K-Snag/releases/download/v2.0.1`, con ruff y pytest incluidos.
-3. Comprueba que `latest.json` y `SHA256SUMS.txt` coinciden con los archivos de `dist/`.
-4. Instala en limpio en el runner:
+3. Si SignPath está configurado (ver [Firma con SignPath](#firma-con-signpath)), manda `Instalar-K-Snag.exe` a firmar y **espera tu aprobación en SignPath**. Después usa el `.exe` firmado y actualiza su línea en `SHA256SUMS.txt`.
+4. Comprueba que `latest.json` y `SHA256SUMS.txt` coinciden con los archivos de `dist/`, y que `Instalar-K-Snag.exe` y `Instalar-K-Snag.cmd` traen el mismo bundle (`packaging/check_installer_exe.py`).
+5. Instala en limpio en el runner:
    - `Instalar-K-Snag.cmd --local … --root $RUNNER_TEMP\kd --no-registry --quiet`;
-   - luego `runtime\python.exe launch.pyw --selftest`.
-5. Crea el Release **como borrador**, con notas generadas automáticamente y estos 5 archivos:
-   - `Instalar-K-Snag.cmd`
+   - luego `runtime\python.exe launch.pyw --selftest`;
+   - y las pruebas de `Instalar-K-Snag.exe` (`packaging/smoke_installer_exe.ps1`): instalación nueva, reinstalación encima, hash equivocado y que la ventana abra.
+6. Crea el Release **como borrador**, con notas generadas automáticamente y estos 7 archivos:
+   - `Instalar-K-Snag.cmd` (y su copia `Instalar-K-Downloader.cmd`, el nombre anterior)
+   - `Instalar-K-Snag.exe`: el mismo instalador como `.exe`. Sin firmar, Smart App Control lo bloquea igual que al `.cmd`; la web sigue ofreciendo el `.cmd` hasta que el `.exe` salga firmado.
    - `kd-bundle-2.0.1.zip`
    - `kd-app-2.0.1.zip`
    - `latest.json`
@@ -111,7 +114,8 @@ Desde una rama siempre es un ensayo. Los archivos quedan como artefacto del work
 
 En **GitHub → Releases**, abre el borrador `K-Snag 2.0.1` y revisa:
 
-- [ ] Están los **5 archivos** de la lista anterior.
+- [ ] Están los **7 archivos** de la lista anterior.
+- [ ] Si SignPath está configurado: en las propiedades de `Instalar-K-Snag.exe` (*Firmas digitales*) aparece la firma de SignPath Foundation.
 - [ ] El título es `K-Snag 2.0.1`, el tag `v2.0.1` y apunta al commit correcto de `master`.
 - [ ] *Set as a pre-release* está marcado **solo** si la versión lleva `-rc`.
 - [ ] Descarga `latest.json` y ábrelo:
@@ -180,6 +184,34 @@ Después del deploy, comprueba:
 - [ ] `/ayuda` muestra los códigos de error actuales.
   - Si cambiaste `errors_catalog.json`, primero ejecuta `python scripts/export_web_data.py` y haz commit de `web/data/errors.json`.
 
+## Firma con SignPath
+
+`Instalar-K-Snag.exe` (código en `packaging/installer/exe`, C# con .NET Framework 4.8) es el mismo instalador que el `.cmd`, pero se puede firmar. La firma la da gratis [SignPath Foundation](https://signpath.org) a proyectos de código abierto. El paso de firma de `release.yml` está **apagado** hasta que SignPath apruebe el proyecto: solo se activa si existe la variable `SIGNPATH_ORGANIZATION_ID`.
+
+**Mientras SignPath no apruebe el proyecto, no pongas en la web ni en el README que K-Snag está firmado.**
+
+Cuando lo aprueben, una sola vez:
+
+1. En SignPath, con la verificación en dos pasos activada:
+   - crea (o confirma) el proyecto, conectado a este repositorio de GitHub, y anota su *slug*;
+   - crea una *artifact configuration* para un único archivo PE, `Instalar-K-Snag.exe`, firmado con Authenticode. Si el artefacto llega como `.zip`, la configuración es un `<zip-file>` con un `<pe-file path="Instalar-K-Snag.exe">` dentro;
+   - usa la *signing policy* `release-signing` (o la que te asignen), con **aprobación manual**: tú apruebas cada firma;
+   - crea un usuario de CI (*CI user*) con permiso para enviar solicitudes a esa política y copia su *API token*.
+2. En GitHub → **Settings → Secrets and variables → Actions**:
+   - secreto `SIGNPATH_API_TOKEN` = el *API token* del usuario de CI (lo pegas tú, nunca en un chat);
+   - variables:
+     - `SIGNPATH_ORGANIZATION_ID`: el ID de la organización (Settings en SignPath);
+     - `SIGNPATH_PROJECT_SLUG`: el *slug* del proyecto;
+     - `SIGNPATH_SIGNING_POLICY_SLUG`: por ejemplo `release-signing`;
+     - `SIGNPATH_ARTIFACT_CONFIGURATION_SLUG`: el *slug* de la configuración del paso 1 (vacío = la predeterminada).
+3. En SignPath, conecta el *Trusted Build System* de GitHub Actions al proyecto, como indica su guía.
+4. Prueba con una versión de prueba (`vX.Y.Z-rc.1`): el run se detiene en **Firmar Instalar-K-Snag.exe con SignPath** hasta que apruebas la solicitud en SignPath. Luego revisa la firma en el borrador (*Propiedades → Firmas digitales*).
+5. Con la firma comprobada, en otro PR:
+   - la web (`/descargar` y la guía de instalación) pasa a ofrecer `Instalar-K-Snag.exe`;
+   - el README y la página de política de firma que pide SignPath dicen que los instaladores los firma SignPath Foundation.
+
+En cada versión, la firma la apruebas tú en SignPath, igual que la de Android en GitHub.
+
 ## Si una versión salió mal
 
 - **La app se rompe al abrirse:**
@@ -188,4 +220,4 @@ Después del deploy, comprueba:
 - **YouTube cambió algo y el motor falla:** no hace falta publicar la app. Usa las pistas de [`engine.json`](engine-hints.md).
 - **Nunca borres ni muevas un tag publicado:**
   - las instalaciones guardan la URL y el SHA-256 de esa versión;
-  - el instalador `.cmd` de esa versión trae incrustado el hash de su bundle.
+  - los instaladores `.cmd` y `.exe` de esa versión traen incrustado el hash de su bundle.

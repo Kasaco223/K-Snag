@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Instalar-K-Snag.exe: el mismo instalador que Instalar-K-Snag.cmd, pero como un .exe que se puede firmar
+    (SignPath). .NET Framework 4.8 viene con Windows 10 y 11: el .exe no necesita nada más.
+
+    packaging/build.ps1 lo compila con los datos del bundle de cada versión:
+      dotnet publish packaging/installer/exe/Instalar-K-Snag.csproj -c Release -o <carpeta>
+        -p:KdVersion=X.Y.Z -p:KdBundleUrl=... -p:KdBundleSha256=... -p:KdBundleName=... -p:KdBundleSize=...
+    Sin esos datos queda como plantilla sin procesar y se niega a instalar.
+  -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>Instalar-K-Snag</AssemblyName>
+    <RootNamespace>KSnagInstaller</RootNamespace>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\assets\K-Downloader.ico</ApplicationIcon>
+    <Deterministic>true</Deterministic>
+    <DebugType>none</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SatelliteResourceLanguages>es</SatelliteResourceLanguages>
+    <!-- La ruta del código fuente no debe quedar dentro del .exe. -->
+    <PathMap>$(MSBuildProjectDirectory)=/src</PathMap>
+
+    <KdVersion Condition="'$(KdVersion)' == ''">{{VERSION}}</KdVersion>
+    <KdBundleUrl Condition="'$(KdBundleUrl)' == ''">{{BUNDLE_URL}}</KdBundleUrl>
+    <KdBundleSha256 Condition="'$(KdBundleSha256)' == ''">{{BUNDLE_SHA256}}</KdBundleSha256>
+    <KdBundleName Condition="'$(KdBundleName)' == ''">{{BUNDLE_NAME}}</KdBundleName>
+    <KdBundleSize Condition="'$(KdBundleSize)' == ''">0</KdBundleSize>
+
+    <!-- Recurso de versión (Propiedades > Detalles del archivo). -->
+    <Product>K-Snag</Product>
+    <Company>Kasaco223</Company>
+    <Authors>Kasaco223</Authors>
+    <AssemblyTitle>Instalador de K-Snag</AssemblyTitle>
+    <Description>Instalador de K-Snag para Windows</Description>
+    <Copyright>Copyright (c) 2026 Kasaco223. Licencia MIT.</Copyright>
+    <NeutralLanguage>es</NeutralLanguage>
+    <KdNumericVersion>0.0.0</KdNumericVersion>
+    <KdNumericVersion Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(KdVersion)', '^\d+\.\d+\.\d+$'))">$(KdVersion)</KdNumericVersion>
+    <Version>$(KdNumericVersion)</Version>
+    <FileVersion>$(KdNumericVersion).0</FileVersion>
+    <AssemblyVersion>$(KdNumericVersion).0</AssemblyVersion>
+    <InformationalVersion>$(KdVersion)</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="KdVersion" Value="$(KdVersion)" />
+    <AssemblyMetadata Include="KdBundleUrl" Value="$(KdBundleUrl)" />
+    <AssemblyMetadata Include="KdBundleSha256" Value="$(KdBundleSha256)" />
+    <AssemblyMetadata Include="KdBundleName" Value="$(KdBundleName)" />
+    <AssemblyMetadata Include="KdBundleSize" Value="$(KdBundleSize)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+  </ItemGroup>
+</Project>

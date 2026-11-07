@@ -205,6 +205,13 @@ jobs:
           & (Join-Path $root 'runtime\python.exe') (Join-Path $root 'launch.pyw') --selftest
           if ($LASTEXITCODE -ne 0) { throw "--selftest terminó con código $LASTEXITCODE" }
 
+      - name: Instalar-K-Snag.exe instala el mismo bundle que el .cmd
+        run: python packaging/check_installer_exe.py dist
+
+      - name: Pruebas de Instalar-K-Snag.exe
+        shell: pwsh
+        run: ./packaging/smoke_installer_exe.ps1 -Dist dist
+
       - name: Subir dist/
         uses: actions/upload-artifact@v7
         with:

@@ -1,9 +1,9 @@
 ﻿<#
 .SYNOPSIS
-    Construye la distribución de K-Snag: kd-bundle, kd-app, el instalador .cmd, latest.json y SHA256SUMS.txt.
+    Construye la distribución de K-Snag: kd-bundle, kd-app, los instaladores .cmd y .exe, latest.json y SHA256SUMS.txt.
 
 .DESCRIPTION
-    No genera ningún .exe propio: Smart App Control bloquea los .exe nuevos sin firma. El bundle lleva el
+    La app no lleva ningún .exe propio: Smart App Control bloquea los .exe nuevos sin firma. El bundle lleva el
     Python embeddable oficial (firmado por la PSF) con las dependencias en Lib\site-packages, el código
     de la app en app\<versión>\ y el lanzador launch.pyw (ver docs/architecture.md §3 y §8).
 
@@ -15,7 +15,8 @@
          uninstall.cmd, K-Downloader.ico y licenses\.
       4. Verifica el runtime: importa las dependencias, revisa que no falte ninguna y corre --selftest.
       5. Genera en -OutDir: kd-bundle-<v>.zip, kd-app-<v>.zip, Instalar-K-Snag.cmd (y su copia
-         Instalar-K-Downloader.cmd, el nombre anterior), latest.json y SHA256SUMS.txt.
+         Instalar-K-Downloader.cmd, el nombre anterior), Instalar-K-Snag.exe (el mismo instalador en C#,
+         para firmarlo; necesita el SDK de .NET), latest.json y SHA256SUMS.txt.
 
 .PARAMETER Version
     Versión a construir. Por defecto, __version__ de src/kdownloader/__init__.py (si se pasa, debe coincidir).
@@ -389,6 +390,7 @@ try {
     $bundleName = 'kd-bundle-{0}.zip' -f $Version
     $appName = 'kd-app-{0}.zip' -f $Version
     $installerName = 'Instalar-K-Snag.cmd'
+    $exeInstallerName = 'Instalar-K-Snag.exe'
     # Copia con el nombre de antes del cambio de nombre (K-Downloader): los enlaces viejos a
     # releases/latest/download/Instalar-K-Downloader.cmd siguen funcionando.
     $legacyInstallerName = 'Instalar-K-Downloader.cmd'
@@ -422,6 +424,18 @@ try {
     Copy-Item -LiteralPath $installerPath -Destination (Join-Path $Out $legacyInstallerName) -Force
     $installerSha = Get-Sha256 $installerPath
 
+    # Instalar-K-Snag.exe: el mismo instalador en C# (.NET Framework 4.8), con los mismos datos del bundle.
+    # Es el que se firmará con SignPath; mientras tanto se publica junto al .cmd.
+    $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
+    if (-not $dotnet) { throw 'Falta el SDK de .NET (dotnet) para compilar Instalar-K-Snag.exe: https://dot.net' }
+    $exeBuild = Join-Path $BuildDir 'installer-exe'
+    Remove-Tree $exeBuild
+    Invoke-Native $dotnet.Source @(
+        'publish', (Join-Path $PackagingDir 'installer\exe\Instalar-K-Snag.csproj'), '-c', 'Release', '-o', $exeBuild, '-nologo',
+        ('-p:KdVersion=' + $Version), ('-p:KdBundleUrl=' + $bundleUrl), ('-p:KdBundleSha256=' + $bundleSha),
+        ('-p:KdBundleName=' + $bundleName), ('-p:KdBundleSize=' + $bundleSize)) 'dotnet publish'
+    Copy-Item -LiteralPath (Join-Path $exeBuild $exeInstallerName) -Destination (Join-Path $Out $exeInstallerName) -Force
+
     $latest = [ordered]@{
         version   = $Version
         runtime   = $rt.runtime_id
@@ -434,7 +448,7 @@ try {
     Write-TextFile $latestPath ((ConvertTo-KdJson $latest) + "`n")
 
     $sumsPath = Join-Path $Out 'SHA256SUMS.txt'
-    $sums = foreach ($name in @($installerName, $legacyInstallerName, $appName, $bundleName, 'latest.json')) {
+    $sums = foreach ($name in @($installerName, $legacyInstallerName, $exeInstallerName, $appName, $bundleName, 'latest.json')) {
         '{0}  {1}' -f (Get-Sha256 (Join-Path $Out $name)), $name
     }
     Write-TextFile $sumsPath (($sums -join "`n") + "`n")
@@ -445,7 +459,7 @@ try {
     Write-Step ('Listo en {0:N0} s' -f $Clock.Elapsed.TotalSeconds)
     Write-Info ('Instalado ocupa {0} en {1} archivos (runtime {2})' -f (Format-Size $stageBytes), $stageFiles.Count,
         (Format-Size ((Get-ChildItem -LiteralPath $RuntimeDir -Recurse -File -Force | Measure-Object -Property Length -Sum).Sum)))
-    foreach ($name in @($installerName, $bundleName, $appName, 'latest.json', 'SHA256SUMS.txt')) {
+    foreach ($name in @($installerName, $exeInstallerName, $bundleName, $appName, 'latest.json', 'SHA256SUMS.txt')) {
         $item = Get-Item -LiteralPath (Join-Path $Out $name)
         Write-Info ('{0,-28} {1,12:N0} bytes  {2,9}  {3}' -f $name, $item.Length, (Format-Size $item.Length), (Get-Sha256 $item.FullName))
     }
